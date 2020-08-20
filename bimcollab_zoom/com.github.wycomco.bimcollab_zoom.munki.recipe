@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Munki process and import recipe for Kubus' BIMcollab ZOOM.</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.bimcollab_zoom.munki</string>
+	<key>Input</key>
+	<dict>
+		<key>APPLICATIONS_PATH</key>
+		<string>/Applications</string>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%</string>
+		<key>NAME</key>
+		<string>BIMCollabZoom</string>
+		<key>PKGPAYLOAD_DIR</key>
+		<string>pkgpayload</string>
+		<key>PKGROOT_DIR</key>
+		<string>pkgroot</string>
+		<key>RELATIVE_APP_PATH</key>
+		<string>%APPLICATIONS_PATH%/BIMcollab ZOOM/BIMcollab ZOOM.app</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Graphics and Design</string>
+			<key>description</key>
+			<string>The world's most intuitive model validation and clash detection tool
+
+BIMcollab ZOOM brings IFC model viewing and validating fully integrated into the issue management workflow. ZOOM is the perfect tool to discuss issues in design review meetings, helps to analyse data to find design flaws and to verify solutions. Navigation is fast, intuitive and smooth, even with large models. Now with clash detection!</string>
+			<key>developer</key>
+			<string>Kubus</string>
+			<key>display_name</key>
+			<string>BIMcollab ZOOM</string>
+			<key>minimum_os_version</key>
+			<string>10.12</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+			<key>uninstall_method</key>
+			<string>uninstall_script</string>
+			<key>uninstall_script</key>
+			<string>#!/bin/sh
+# find and delete any BIMcollab ZOOM Installation
+# preinstall script from the original package.
+rm -rf "/Applications/BIMcollab ZOOM/"
+</string>
+		</dict>
+	</dict>
+	<key>MiniumumVersion</key>
+	<string>0.3.1</string>
+	<key>ParentRecipe</key>
+	<string>com.github.wycomco.bimcollab_zoom.pkg</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>faux_root</key>
+				<string>%RECIPE_CACHE_DIR%/%PKGPAYLOAD_DIR%</string>
+				<key>installs_item_paths</key>
+				<array>
+					<string>%RELATIVE_APP_PATH%</string>
+				</array>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiInstallsItemsCreator</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>path_list</key>
+				<array>
+					<string>%RECIPE_CACHE_DIR%/%PKGROOT_DIR%</string>
+					<string>%RECIPE_CACHE_DIR%/%PKGPAYLOAD_DIR%</string>
+				</array>
+			</dict>
+			<key>Processor</key>
+			<string>PathDeleter</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict/>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>version</key>
+					<string>%version%</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%.pkg</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
+</dict>
+</plist>
