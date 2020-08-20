@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Imports the latest update build of ARCHICAD into munki which has been downloaded by its parent based on the override-able parameters: MAJOR_VERSION, LOCALIZATION, and RELEASE_TYPE
+The installation target can be changed by setting INSTALL_DIR to a different location. Useful e.g. if multiple language versions should be available on a Mac.
+
+MAJOR_VERSION options include:  20, 21, 22, 23, and 24
+LOCALIZATION options include:  INT (international english, part of many other licenses), AUS, AUT, BRA, CHE, CHI, CZE, FIN, FRA, GER, GRE, HUN, ITA, JPN, KOR, NED, NOR, NZE, POL, POR, RUS, SPA, SWE, TAI, TUR, UKI, UKR, and USA
+RELEASE_TYPE options include:  AC (for full version), SOLO, and START</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.ARCHICADUpdate.munki</string>
+	<key>Input</key>
+	<dict>
+		<key>INSTALL_DIR</key>
+		<string>/Applications/GRAPHISOFT/ARCHICAD %MAJOR_VERSION%</string>
+		<key>LOCALIZATION</key>
+		<string>INT</string>
+		<key>MAJOR_VERSION</key>
+		<string>23</string>
+		<key>MINIMUM_OS_VERSION</key>
+		<string>10.11</string>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/graphisoft/ARCHICAD%MAJOR_VERSION%_%LOCALIZATION%</string>
+		<key>NAME</key>
+		<string>ARCHICAD%MAJOR_VERSION%_%LOCALIZATION%_update</string>
+		<key>RELEASE_TYPE</key>
+		<string>AC</string>
+		<key>UPDATE_FOR</key>
+		<string>archicad_%MAJOR_VERSION%_%LOCALIZATION%</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Graphics and Design</string>
+			<key>description</key>
+			<string>ARCHICAD is an architectural BIM CAD software for Macintosh and Windows developed by the Hungarian company Graphisoft. ARCHICAD offers computer aided solutions for handling all common aspects of aesthetics and engineering during the whole design process of the built environment — buildings, interiors, urban areas, etc. </string>
+			<key>developer</key>
+			<string>GRAPHISOFT</string>
+			<key>installer_type</key>
+			<string>copy_from_dmg</string>
+			<key>unattended_install</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.3.1</string>
+	<key>ParentRecipe</key>
+	<string>com.github.wycomco.download.ARCHICADUpdate</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pattern</key>
+				<string>%pathname%/*.app</string>
+			</dict>
+			<key>Processor</key>
+			<string>FileFinder</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>display_name</key>
+					<string>ARCHICAD %MAJOR_VERSION% %LOCALIZATION% Update %version%</string>
+					<key>installs</key>
+					<array>
+						<dict>
+							<key>CFBundleVersion</key>
+							<string>%version%</string>
+							<key>path</key>
+							<string>%INSTALL_DIR%/ARCHICAD %MAJOR_VERSION%.app</string>
+							<key>type</key>
+							<string>application</string>
+							<key>version_comparison_key</key>
+							<string>CFBundleVersion</string>
+						</dict>
+					</array>
+					<key>minimum_os_version</key>
+					<string>%MINIMUM_OS_VERSION%</string>
+					<key>name</key>
+					<string>%NAME%</string>
+					<key>postinstall_script</key>
+					<string>#!/bin/bash
+# Run the InstallBuilder installer of the update in silent mode. Install into custom directory if
+# specified
+INSTALLER="/var/tmp/%dmg_found_filename%"
+TARGET_DIR="%INSTALL_DIR%"
+
+if [ -n "$TARGET_DIR" ]; then
+    "$INSTALLER/Contents/MacOS/osx-x86_64" --mode unattended --installdir "$TARGET_DIR"
+else
+    "$INSTALLER/Contents/MacOS/osx-x86_64" --mode unattended
+fi
+rm -rf "$INSTALLER"
+</string>
+					<key>preinstall_script</key>
+					<string>#!/bin/bash
+# Remove installer from install_tmp_dir. Be careful with this!
+INSTALLER="/var/tmp/%dmg_found_filename%"
+rm -rf "$INSTALLER"
+</string>
+					<key>uninstallable</key>
+					<false/>
+					<key>update_for</key>
+					<array>
+						<string>%UPDATE_FOR%</string>
+					</array>
+					<key>version</key>
+					<string>%version%</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_makepkginfo_options</key>
+				<array>
+					<string>--destinationpath=/var/tmp/</string>
+				</array>
+				<key>pkg_path</key>
+				<string>%pathname%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
+</dict>
+</plist>
