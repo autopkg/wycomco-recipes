@@ -51,7 +51,7 @@ RELEASE_TYPE options include:  AC (for full version), SOLO, and START</string>
 				<key>input_path</key>
 				<string>%pathname%/*.app</string>
 				<key>requirement</key>
-				<string>identifier "com.graphisoft.installer" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "3E9E9FN277"</string>
+				<string>(identifier "com.graphisoft.GSLauncher" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "3E9E9FN277") or (identifier "com.graphisoft.installer" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "3E9E9FN277")</string>
 			</dict>
 			<key>Processor</key>
 			<string>CodeSignatureVerifier</string>
