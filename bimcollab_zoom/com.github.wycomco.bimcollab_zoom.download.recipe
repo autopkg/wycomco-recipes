@@ -5,7 +5,7 @@
 	<key>Description</key>
 	<string>Download recipe for the latest version of Kubus' BIMcollab ZOOM.</string>
 	<key>Identifier</key>
-	<string>com.github.wycomco.bimcollab_zoom.download</string>
+	<string>com.github.wycomco.download.bimcollab_zoom</string>
 	<key>Input</key>
 	<dict/>
 	<key>MiniumumVersion</key>
