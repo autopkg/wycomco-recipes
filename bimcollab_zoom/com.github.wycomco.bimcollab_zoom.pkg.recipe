@@ -5,13 +5,13 @@
 	<key>Description</key>
 	<string>PKG check and processing recipe for Kubus' BIMcollab ZOOM. This will create an Installsarray before the temporary directories are removed.</string>
 	<key>Identifier</key>
-	<string>com.github.wycomco.bimcollab_zoom.pkg</string>
+	<string>com.github.wycomco.pkg.bimcollab_zoom</string>
 	<key>Input</key>
 	<dict/>
 	<key>MiniumumVersion</key>
 	<string>0.3.1</string>
 	<key>ParentRecipe</key>
-	<string>com.github.wycomco.bimcollab_zoom.download</string>
+	<string>com.github.wycomco.download.bimcollab_zoom</string>
 	<key>Process</key>
 	<array>
 		<dict>

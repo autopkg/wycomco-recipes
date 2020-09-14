@@ -5,7 +5,7 @@
 	<key>Description</key>
 	<string>Munki process and import recipe for Kubus' BIMcollab ZOOM.</string>
 	<key>Identifier</key>
-	<string>com.github.wycomco.bimcollab_zoom.munki</string>
+	<string>com.github.wycomco.munki.bimcollab_zoom</string>
 	<key>Input</key>
 	<dict>
 		<key>APPLICATIONS_PATH</key>
@@ -57,7 +57,7 @@ rm -rf "/Applications/BIMcollab ZOOM/"
 	<key>MiniumumVersion</key>
 	<string>0.3.1</string>
 	<key>ParentRecipe</key>
-	<string>com.github.wycomco.bimcollab_zoom.pkg</string>
+	<string>com.github.wycomco.pkg.bimcollab_zoom</string>
 	<key>Process</key>
 	<array>
 		<dict>
