@@ -9,7 +9,7 @@ MAJOR_VERSION options include:  20, 21, 22, 23, and 24
 LOCALIZATION options include:  INT (international english, part of many other licenses), AUS, AUT, BRA, CHE, CHI, CZE, FIN, FRA, GER, GRE, HUN, ITA, JPN, KOR, NED, NOR, NZE, POL, POR, RUS, SPA, SWE, TAI, TUR, UKI, UKR, and USA
 RELEASE_TYPE options include:  AC (for full version), SOLO, and START</string>
 	<key>Identifier</key>
-	<string>com.github.wycomco.ARCHICADUpdate.download</string>
+	<string>com.github.wycomco.download.ARCHICADUpdate</string>
 	<key>Input</key>
 	<dict>
 		<key>LOCALIZATION</key>

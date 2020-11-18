@@ -50,7 +50,7 @@ RELEASE_TYPE options include:  AC (for full version), SOLO, and START</string>
 	<key>MinimumVersion</key>
 	<string>0.3.1</string>
 	<key>ParentRecipe</key>
-	<string>com.github.wycomco.ARCHICADUpdate.download</string>
+	<string>com.github.wycomco.download.ARCHICADUpdate</string>
 	<key>Process</key>
 	<array>
 		<dict>
