@@ -16,6 +16,8 @@ RELEASE_TYPE options include:  AC (for full version), SOLO, and START</string>
 		<string>INT</string>
 		<key>MAJOR_VERSION</key>
 		<string>23</string>
+		<key>NAME</key>
+		<string>ARCHICAD%MAJOR_VERSION%_%LOCALIZATION%_update</string>
 		<key>RELEASE_TYPE</key>
 		<string>AC</string>
 	</dict>
