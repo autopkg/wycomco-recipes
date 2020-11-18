@@ -39,7 +39,7 @@
 		</dict>
 	</dict>
 	<key>ParentRecipe</key>
-	<string>com.github.wycomco.dmg.sipgate-softphone</string>
+	<string>com.github.wycomco.download.sipgate-softphone</string>
 	<key>Process</key>
 	<array>
 		<dict>
