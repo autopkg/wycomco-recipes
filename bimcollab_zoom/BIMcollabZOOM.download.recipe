@@ -7,7 +7,20 @@
 	<key>Identifier</key>
 	<string>com.github.wycomco.download.bimcollab_zoom</string>
 	<key>Input</key>
-	<dict/>
+	<dict>
+		<key>APPLICATIONS_PATH</key>
+		<string>/Applications</string>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%</string>
+		<key>NAME</key>
+		<string>BIMcollabZoom</string>
+		<key>PKGPAYLOAD_DIR</key>
+		<string>pkgpayload</string>
+		<key>PKGROOT_DIR</key>
+		<string>pkgroot</string>
+		<key>RELATIVE_APP_PATH</key>
+		<string>%APPLICATIONS_PATH%/BIMcollab ZOOM/BIMcollab ZOOM.app</string>
+	</dict>
 	<key>MiniumumVersion</key>
 	<string>0.2.9</string>
 	<key>Process</key>
