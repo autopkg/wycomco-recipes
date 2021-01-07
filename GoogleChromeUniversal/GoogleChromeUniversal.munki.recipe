@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads the latest Google Chrome disk image and imports into Munki. Override NAME and BUILD to your own preferences but be aware that BUILD will be attached to the downloaded file in the parent recipe (com.github.rtrouton.download.googlechromeuniversal).</string>
+	<string>Downloads the latest Google Chrome disk image and imports into Munki. Override NAME and BUILD to your own preferences but be aware that BUILD will be attached to the downloaded filename in the parent recipe (com.github.rtrouton.download.googlechromeuniversal).</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.googlechromeuniversal</string>
 	<key>Input</key>
