@@ -46,6 +46,11 @@
 				<key>repo_subdirectory</key>
 				<string>%MUNKI_REPO_SUBDIR%</string>
 			</dict>
+			<key>DeprecationWarning</key>
+			<dict>
+				<key>warning_message</key>
+				<string>This recipe is deprecated and will not be fixed, updated or maintained in any way. Please use GoogleChrome from the autopkg/recipes repo. This recipe will be removed on 01.02.2021.</string>
+			</dict>
 			<key>Processor</key>
 			<string>MunkiImporter</string>
 		</dict>
