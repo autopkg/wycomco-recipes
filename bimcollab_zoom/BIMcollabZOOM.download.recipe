@@ -19,7 +19,7 @@
 		<key>RELATIVE_APP_PATH</key>
 		<string>%APPLICATIONS_PATH%/BIMcollab ZOOM/BIMcollab ZOOM.app</string>
 	</dict>
-	<key>MiniumumVersion</key>
+	<key>MinimumVersion</key>
 	<string>0.2.9</string>
 	<key>Process</key>
 	<array>

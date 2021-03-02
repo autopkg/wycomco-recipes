@@ -54,7 +54,7 @@ rm -rf "/Applications/BIMcollab ZOOM/"
 </string>
 		</dict>
 	</dict>
-	<key>MiniumumVersion</key>
+	<key>MinimumVersion</key>
 	<string>0.3.1</string>
 	<key>ParentRecipe</key>
 	<string>com.github.wycomco.pkg.bimcollab_zoom</string>
