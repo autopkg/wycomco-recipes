@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Comment</key>
+	<string>Created with Recipe Robot v1.1.2 (https://github.com/homebysix/recipe-robot)</string>
+	<key>Description</key>
+	<string>Downloads the latest version of GoToMeeting Scheduler and imports it into Munki.</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.munki.GoToMeetingScheduler</string>
+	<key>Input</key>
+	<dict>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%</string>
+		<key>NAME</key>
+		<string>GoToMeeting Scheduler</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>blocking_applications</key>
+			<array>
+				<string>GoToMeeting Scheduler.app</string>
+				<string>GoToMeetingSchedulerAutoupdater.app</string>
+			</array>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>description</key>
+			<string>The GoToMeeting Scheduler is used to schedule meetings from your Microsoft Outlook application on your Mac. With the GoToMeeting scheduler, you can perform the following tasks:
+• Add GoToMeeting to your event with just one click
+• Invite attendees through your email contacts
+• Sync meetings, even while you edit them</string>
+			<key>developer</key>
+			<string>LogMeIn</string>
+			<key>display_name</key>
+			<string>GoToMeeting Scheduler</string>
+			<key>category</key>
+			<string>Productivity</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>1.0.0</string>
+	<key>ParentRecipe</key>
+	<string>com.github.wycomco.download.GoToMeetingScheduler</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>dmg_path</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
+				<key>dmg_root</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%</string>
+			</dict>
+			<key>Processor</key>
+			<string>DmgCreator</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%dmg_path%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
+</dict>
+</plist>
