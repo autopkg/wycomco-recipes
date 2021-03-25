@@ -8,7 +8,9 @@ The installation target can be changed by setting INSTALL_DIR to a different loc
 
 MAJOR_VERSION options include:  20, 21, 22, 23, and 24
 LOCALIZATION options include:  INT (international english, part of many other licenses), AUS, AUT, BRA, CHE, CHI, CZE, FIN, FRA, GER, GRE, HUN, ITA, JPN, KOR, NED, NOR, NZE, POL, POR, RUS, SPA, SWE, TAI, TUR, UKI, UKR, and USA
-RELEASE_TYPE options include:  AC (for full version), SOLO, and START</string>
+RELEASE_TYPE options include:  AC (for full version), SOLO, and START
+MINIMUM_OS_VERSION: AC 20: 10.9, AC 21: 10.10, AC 22: 10.11, AC 23: 10.13, AC 24: 10.13. These are the absolute minimum versions as stated by GRAPHISOFT. Some are listed as "untested but should run".
+</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.ARCHICADUpdate</string>
 	<key>Input</key>
@@ -20,7 +22,7 @@ RELEASE_TYPE options include:  AC (for full version), SOLO, and START</string>
 		<key>MAJOR_VERSION</key>
 		<string>23</string>
 		<key>MINIMUM_OS_VERSION</key>
-		<string>10.11</string>
+		<string>10.13</string>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/graphisoft/ARCHICAD%MAJOR_VERSION%_%LOCALIZATION%</string>
 		<key>NAME</key>
