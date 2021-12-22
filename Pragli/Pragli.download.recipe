@@ -48,7 +48,7 @@ Due to dynamic JavaScript encoding of the dmg path, URLTextSearcher cannot be us
 			<key>Arguments</key>
 			<dict>
 				<key>input_plist_path</key>
-				<string>%pathname%/Pragli.app/Contents/Info.plist</string>
+				<string>%pathname%/Pesto (Pragli).app/Contents/Info.plist</string>
 				<key>plist_version_key</key>
 				<string>CFBundleShortVersionString</string>
 			</dict>
