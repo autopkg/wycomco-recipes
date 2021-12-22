@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Comment</key>
-	<string>Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)</string>
+	<string>Pragli has been renamed to "Pesto (Pragli)". To allow updates, the internal name remains "Pragli".</string>
 	<key>Description</key>
 	<string>Downloads the latest version of Pragli and imports it into Munki.</string>
 	<key>Identifier</key>
@@ -27,7 +27,7 @@
             <key>category</key>
 	        <string>Social Media</string>
 			<key>display_name</key>
-			<string>Pragli</string>
+			<string>Pesto</string>
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>
