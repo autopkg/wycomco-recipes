@@ -2,18 +2,41 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>Comment</key>
+	<string>There seems to be a versionint discrepancy: the cuurent version ist named 1.5 but has a ShortVersionString of 1.11.8. Since the latter is stated on the website, it will be used for the munki version.</string>
 	<key>Description</key>
 	<string>Downloads the latest version of Clip Studio Paint and imports it into Munki.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.ClipStudioPaint</string>
 	<key>Input</key>
 	<dict>
-		<key>MUNKI_NAME</key>
-		<string>Clip Studio Paint</string>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/%NAME%</string>
 		<key>NAME</key>
 		<string>ClipStudioPaint</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Graphics and Design</string>
+			<key>description</key>
+			<string>Clip Studio Paint is a versatile digital painting program that is ideal for rendering and inking with its many useful and unique features.</string>
+			<key>developer</key>
+			<string>Celsys</string>
+			<key>display_name</key>
+			<string>Clip Studio Paint</string>
+			<key>minimum_os_version</key>
+			<string></string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>1.0.0</string>
@@ -68,63 +91,8 @@
 		<dict>
 			<key>Arguments</key>
 			<dict>
-				<key>pattern</key>
-				<string>%RECIPE_CACHE_DIR%/appPackage/*</string>
-			</dict>
-			<key>Processor</key>
-			<string>FileFinder</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>find</key>
-				<string>%RECIPE_CACHE_DIR%/appPackage/CLIP STUDIO </string>
-				<key>input_string</key>
-				<string>%found_filename%</string>
-				<key>replace</key>
-				<string></string>
-			</dict>
-			<key>Processor</key>
-			<string>com.github.homebysix.FindAndReplace/FindAndReplace</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>additional_pkginfo</key>
-				<dict>
-					<key>display_name</key>
-					<string>Clip Studio Paint %output_string%</string>
-				</dict>
-				<key>pkginfo</key>
-				<dict>
-					<key>catalogs</key>
-					<array>
-						<string>testing</string>
-					</array>
-					<key>category</key>
-					<string>Graphics and Design</string>
-					<key>description</key>
-					<string>Clip Studio Paint is a versatile digital painting program that is ideal for rendering and inking with its many useful and unique features.</string>
-					<key>developer</key>
-					<string>Celsys</string>
-					<key>minimum_os_version</key>
-					<string></string>
-					<key>name</key>
-					<string>%NAME%</string>
-					<key>unattended_install</key>
-					<true/>
-					<key>unattended_uninstall</key>
-					<true/>
-				</dict>
-			</dict>
-			<key>Processor</key>
-			<string>MunkiPkginfoMerger</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
 				<key>munkiimport_appname</key>
-				<string>%MUNKI_NAME% %output_string%</string>
+				<string>%MUNKI_NAME%</string>
 				<key>pkg_path</key>
 				<string>%pathname%</string>
 				<key>repo_subdirectory</key>
