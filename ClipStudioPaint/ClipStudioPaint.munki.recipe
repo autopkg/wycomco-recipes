@@ -3,13 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>Comment</key>
-	<string>There seems to be a versionint discrepancy: the cuurent version ist named 1.5 but has a ShortVersionString of 1.11.8. Since the latter is stated on the website, it will be used for the munki version.</string>
+	<string>Even though the current version ist named 1.5 it has a ShortVersionString of 1.11.8.</string>
 	<key>Description</key>
-	<string>Downloads the latest version of Clip Studio Paint and imports it into Munki.</string>
+	<string>Downloads, repackages the latest version of Clip Studio Paint and imports it into Munki. The language can be selected by setting the LANGUAGE variable to german, english, spanish, or french, japanese, korean, or chinese_tc.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.ClipStudioPaint</string>
 	<key>Input</key>
 	<dict>
+		<key>LANGUAGE</key>
+		<string>english</string>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/%NAME%</string>
 		<key>NAME</key>
@@ -29,9 +31,9 @@
 			<key>display_name</key>
 			<string>Clip Studio Paint</string>
 			<key>minimum_os_version</key>
-			<string></string>
+			<string>10.13.0</string>
 			<key>name</key>
-			<string>%NAME%</string>
+			<string>%NAME%_%LANGUAGE%</string>
 			<key>unattended_install</key>
 			<true/>
 			<key>unattended_uninstall</key>
@@ -39,62 +41,16 @@
 		</dict>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>1.0.0</string>
+	<string>0.2.0</string>
 	<key>ParentRecipe</key>
-	<string>com.github.wycomco.download.ClipStudioPaint</string>
+	<string>com.github.wycomco.pkg.ClipStudioPaint</string>
 	<key>Process</key>
 	<array>
 		<dict>
 			<key>Arguments</key>
 			<dict>
-				<key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/package</string>
-				<key>flat_pkg_path</key>
-				<string>%pathname%</string>
-				<key>purge_destination</key>
-				<true/>
-			</dict>
-			<key>Processor</key>
-			<string>FlatPkgUnpacker</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/appPackage</string>
-				<key>pkg_payload_path</key>
-				<string>%RECIPE_CACHE_DIR%/package/clipStudioPaint.pkg/Payload</string>
-				<key>purge_destination</key>
-				<true/>
-			</dict>
-			<key>Processor</key>
-			<string>PkgPayloadUnpacker</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>pattern</key>
-				<string>%RECIPE_CACHE_DIR%/appPackage/*/App/*.app</string>
-			</dict>
-			<key>Processor</key>
-			<string>FileFinder</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>input_plist_path</key>
-				<string>%found_filename%/Contents/Info.plist</string>
-			</dict>
-			<key>Processor</key>
-			<string>Versioner</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>munkiimport_appname</key>
-				<string>%MUNKI_NAME%</string>
 				<key>pkg_path</key>
-				<string>%pathname%</string>
+				<string>%RECIPE_CACHE_DIR%/ClipStudioPaint_%LANGUAGE%.pkg</string>
 				<key>repo_subdirectory</key>
 				<string>%MUNKI_REPO_SUBDIR%</string>
 			</dict>
