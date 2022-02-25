@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Comment</key>
+	<string>Even though the current version ist named 1.5 it has a ShortVersionString of 1.11.8.</string>
+	<key>Description</key>
+	<string>Downloads, repackages the latest version of Clip Studio Paint and imports it into Munki. The language can be selected by setting the LANGUAGE variable to german, english, spanish, or french, japanese, korean, or chinese_tc.</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.munki.ClipStudioPaint</string>
+	<key>Input</key>
+	<dict>
+		<key>LANGUAGE</key>
+		<string>english</string>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%</string>
+		<key>NAME</key>
+		<string>ClipStudioPaint</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Graphics and Design</string>
+			<key>description</key>
+			<string>Clip Studio Paint is a versatile digital painting program that is ideal for rendering and inking with its many useful and unique features.</string>
+			<key>developer</key>
+			<string>Celsys</string>
+			<key>display_name</key>
+			<string>Clip Studio Paint</string>
+			<key>minimum_os_version</key>
+			<string>10.13.0</string>
+			<key>name</key>
+			<string>%NAME%_%LANGUAGE%</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.2.0</string>
+	<key>ParentRecipe</key>
+	<string>com.github.wycomco.pkg.ClipStudioPaint</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%_%LANGUAGE%.pkg</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
+</dict>
+</plist>
