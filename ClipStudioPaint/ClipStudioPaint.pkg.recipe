@@ -12,6 +12,8 @@
 		<string>english</string>
 		<key>NAME</key>
 		<string>ClipStudioPaint</string>
+		<key>PKG_NAME</key>
+		<string>%NAME%</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>0.2.3</string>
@@ -228,7 +230,7 @@
 					<key>id</key>
 					<string>jp.co.CELSYS.ClipStudioPaint.%LANGUAGE%</string>
 					<key>pkgname</key>
-					<string>%NAME%_%LANGUAGE%</string>
+					<string>%PKG_NAME%</string>
 					<key>pkgroot</key>
 					<string>%RECIPE_CACHE_DIR%/pkgroot</string>
 					<key>pkgtype</key>
