@@ -228,7 +228,7 @@
 					<key>id</key>
 					<string>jp.co.CELSYS.ClipStudioPaint.%LANGUAGE%</string>
 					<key>pkgname</key>
-					<string>ClipStudioPaint_%LANGUAGE%</string>
+					<string>%NAME%_%LANGUAGE%</string>
 					<key>pkgroot</key>
 					<string>%RECIPE_CACHE_DIR%/pkgroot</string>
 					<key>pkgtype</key>
