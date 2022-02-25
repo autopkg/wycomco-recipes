@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>Comment</key>
+	<string>The original pkg-install process handles the language selection and copies many party of the application into almost common paths. This is recreated in the pkg-recipe. Therfore the quite complex unpacking and repackaging of the application.</string>
 	<key>Description</key>
 	<string>Repackages Clip Studio Paint to remove the language selection step from the installation. The language can be chosen by setting the LANGUAGE variable to german, english, spanish, or french, japanese, korean, or chinese_tc.</string>
 	<key>Identifier</key>
