@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Comment</key>
-	<string>The original pkg-install process handles the language selection and copies many party of the application into almost common paths. This is recreated in the pkg-recipe. Therfore the quite complex unpacking and repackaging of the application.</string>
+	<string>Instead of the official version number, the ShortVersionString is used for the application version for consistency.</string>
 	<key>Description</key>
 	<string>Downloads, repackages the latest version of Clip Studio Paint and imports it into Munki. The language can be selected by setting the LANGUAGE variable to german, english, spanish, or french, japanese, korean, or chinese_tc.</string>
 	<key>Identifier</key>
