@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads the latest version of airprint_ppd and imports it into Munki. The language can be selected by setting the LANGUAGE variable to german, english, spanish, or french, japanese, korean, or chinese_tc.</string>
+	<string>Downloads the latest version of airprint_ppd and imports it into Munki.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.airprint-ppd</string>
 	<key>Input</key>
