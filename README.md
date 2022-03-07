@@ -13,6 +13,7 @@ autopkg repo-add wycomco-recipes
 Please be aware that some recipes might be dependent on other peoples fantastic work.
 
 * DeepL: [autopkg/andredb90-recipes](https://github.com/autopkg/andredb90-recipes) `autopkg repo-add andredb90-recipes`
+* MicrosoftOffice365: [autopkg/rtrouton-recipes](https://github.com/autopkg/rtrouton-recipes) `autopkg repo-add rtrouton-recipes`
 
 ## Issues
 Before opening an issue please check if it already exists.
