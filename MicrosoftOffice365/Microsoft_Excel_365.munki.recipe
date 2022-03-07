@@ -5,7 +5,9 @@
 	<key>Description</key>
 	<string>Downloads the latest Microsoft Excel installer package for Office 365 and imports into Munki.
     This recipe is a fork of com.github.rtrouton.munki.microsoftexcel365 and supports the automatic identification
-    of the minimum_os_version and a proper installs array.</string>
+    of the minimum_os_version and creates a proper installs array.
+    You may also want to change the attributeSetting for com.microsoft.autoupdate in installer_choices_xml to "0"
+    to prevent Microsoft's own updater to be installed (line 47 in this recipe).</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.microsoftexcel365</string>
 	<key>Input</key>
@@ -30,6 +32,33 @@
 			<string>See your data in new, intuitive ways. Powerful charts, graphs, and keyboard shortcuts turn columns of numbers into valuable information, so you can work easier.</string>
 			<key>display_name</key>
 			<string>Microsoft Excel 365</string>
+			<key>installer_choices_xml</key>
+			<array>
+				<dict>
+					<key>attributeSetting</key>
+					<integer>1</integer>
+					<key>choiceAttribute</key>
+					<string>selected</string>
+					<key>choiceIdentifier</key>
+					<string>com.microsoft.excel</string>
+				</dict>
+				<dict>
+					<key>attributeSetting</key>
+					<integer>1</integer>
+					<key>choiceAttribute</key>
+					<string>selected</string>
+					<key>choiceIdentifier</key>
+					<string>com.microsoft.autoupdate</string>
+				</dict>
+				<dict>
+					<key>attributeSetting</key>
+					<integer>1</integer>
+					<key>choiceAttribute</key>
+					<string>selected</string>
+					<key>choiceIdentifier</key>
+					<string>com.microsoft.licensing</string>
+				</dict>
+			</array>
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>
