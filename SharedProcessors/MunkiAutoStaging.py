@@ -88,7 +88,7 @@ class MunkiAutoStaging(Processor):
                 "Amount of days to keep a new item in staging catalog. Defaults to 5"
             ),
             "required": False,
-            "default": "5",
+            "default": 5,
         },
         "NAME": {
             "description": (
@@ -131,8 +131,7 @@ class MunkiAutoStaging(Processor):
 
     def _find_pkginfo_files_in_repo(self, pkginfo, file_extension="plist"):
         """Returns the full path to pkginfo file in the repo."""
-        # less error checking because we copy the installer_item
-        # first and bail if it fails...
+        
         destination_path = os.path.join(
             self.env["MUNKI_REPO"], "pkgsinfo"
         )
@@ -152,10 +151,12 @@ class MunkiAutoStaging(Processor):
         return file_list
 
     def _find_items_to_promote(self, repo_library):
+        """Find and returns all pkginfo files which may be promoted to production catalog"""
 
         items = self._find_matching_item(repo_library, self.env["NAME"])
 
         items_to_promote = []
+
         for item in items:
             if "catalogs" not in item:
                 continue
@@ -185,6 +186,8 @@ class MunkiAutoStaging(Processor):
         return items_to_promote
 
     def promote_items(self, repo_library):
+        """Promotes all pkginfo items matching the given criteria to production catalog"""
+        
         files = self._find_items_to_promote(repo_library)
 
         versions_promoted = []
@@ -258,18 +261,10 @@ class MunkiAutoStaging(Processor):
                         "versions": ", ".join(versions_promoted)
                     },
                 }
-            
+
             else:
-                self.env["munki_repo_changed"] = False
-                
-                self.env["munki_autostaging_summary_result"] = {
-                    "summary_text": f"The following new items were promoted to catalog \"{self.env['MUNKI_PRODUCTION_CATALOG']}\":",
-                    "report_fields": [
-                        "name",
-                        "versions",
-                    ],
-                    "data": {},
-                }
+                if "munki_repo_changed" not in self.env:
+                    self.env["munki_repo_changed"] = False
             
         except Exception as err:
             # handle unexpected errors here
