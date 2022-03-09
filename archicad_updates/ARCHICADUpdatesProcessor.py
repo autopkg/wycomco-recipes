@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # Copyright 2019 Zack T (mlbz521)
 # Fixed and ammended by jutonium for wycomco, copyright Aug 2020
@@ -25,8 +26,7 @@ __all__ = ["ARCHICADUpdatesProcessor"]
 
 
 class ARCHICADUpdatesProcessor(URLGetter):
-    """This processor finds the URL for the desired version, localization, and type of ARCHICAD.
-    """
+    """This processor finds the URL for the desired version, localization, and type of ARCHICAD."""
 
     input_variables = {
         "major_version": {
@@ -45,9 +45,11 @@ class ARCHICADUpdatesProcessor(URLGetter):
     # Amended to output build number and version (jutonium)
     output_variables = {
         "url": {"description": "Returns the url to download."},
-        "build": {"build":  "Returns the build number."},
-        "version": {"description": "Returns the version computed from major_version "
-                    "and build number. Same as CFBundleVersion."},
+        "build": {"build": "Returns the build number."},
+        "version": {
+            "description": "Returns the version computed from major_version "
+            "and build number. Same as CFBundleVersion."
+        },
     }
 
     description = __doc__
@@ -77,13 +79,17 @@ class ARCHICADUpdatesProcessor(URLGetter):
                     json_object.get("version") == major_version,
                     json_object.get("localization") == localization,
                     json_object.get("type") == release_type,
-                    json_object.get("build")
+                    json_object.get("build"),
                 )
             ):
                 # Handling of new internal structure (jutonium)
-                mac_link = json_object.get("downloadLinks", dict()).get("mac", dict()).get("url")
+                mac_link = (
+                    json_object.get("downloadLinks", dict())
+                    .get("mac", dict())
+                    .get("url")
+                )
                 if mac_link:
-                    mac_link = 'https://dl.graphisoft.com' + mac_link[3:]
+                    mac_link = "https://dl.graphisoft.com" + mac_link[3:]
                     available_builds[json_object.get("build")] = mac_link
 
         # Get the latest version.
