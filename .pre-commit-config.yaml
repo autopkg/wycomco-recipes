@@ -1,3 +1,4 @@
+# See https://www.elliotjordan.com/posts/pre-commit-02-autopkg/ for more information
 repos:
   - repo: https://github.com/homebysix/pre-commit-macadmin
     rev: v1.10.1
