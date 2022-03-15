@@ -244,6 +244,8 @@ class MunkiAutoStaging(Processor):
         return versions_promoted
 
     def main(self):
+        """Will promote all pkginfo file to production catalog which have
+        been in testing catalog for the given amount of days"""
         try:
             library = _fetch_repo_library(
                 self.env["MUNKI_REPO"],
