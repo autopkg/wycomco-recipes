@@ -33,7 +33,7 @@ __all__ = ["MunkiAutoStaging"]
 
 
 def _find_matching_item(repo_library, name):
-    """Looks through all catalog for items matching the named one.
+    """Searches all catalogs for items matching the named one.
     Returns a list of all matching items if found."""
 
     pkgdb = repo_library.make_catalog_db()
@@ -107,9 +107,9 @@ class MunkiAutoStaging(Processor):
             "required": False,
             "default": "plist",
         },
-        "MUNKI_TESTING_CATALOG": {
+        "MUNKI_STAGING_CATALOG": {
             "description": (
-                "Name of the testing catalog. Defaults to testing"
+                "Name of the staging catalog. Defaults to testing"
             ),
             "required": False,
             "default": "testing",
@@ -186,7 +186,7 @@ class MunkiAutoStaging(Processor):
             if "catalogs" not in item:
                 continue
 
-            if self.env["MUNKI_TESTING_CATALOG"] not in item["catalogs"]:
+            if self.env["MUNKI_STAGING_CATALOG"] not in item["catalogs"]:
                 continue
 
             files = self._find_pkginfo_files_in_repo(
@@ -199,7 +199,7 @@ class MunkiAutoStaging(Processor):
                     file_handler.close()
 
                 if ("catalogs" not in pkginfo) or (
-                    self.env["MUNKI_TESTING_CATALOG"]
+                    self.env["MUNKI_STAGING_CATALOG"]
                     not in pkginfo["catalogs"]
                 ):
                     continue
@@ -230,7 +230,7 @@ class MunkiAutoStaging(Processor):
                 pkginfo = plistlib.load(file_handler)
                 file_handler.close()
 
-            pkginfo["catalogs"].remove(self.env["MUNKI_TESTING_CATALOG"])
+            pkginfo["catalogs"].remove(self.env["MUNKI_STAGING_CATALOG"])
             pkginfo["catalogs"].append(self.env["MUNKI_PRODUCTION_CATALOG"])
             pkginfo["_metadata"]["promoted_by"] = os.getlogin()
             pkginfo["_metadata"]["promotion_date"] = datetime.now()
@@ -245,7 +245,7 @@ class MunkiAutoStaging(Processor):
 
     def main(self):
         """Will promote all pkginfo file to production catalog which have
-        been in testing catalog for the given amount of days"""
+        been in staging catalog for the given amount of days"""
         try:
             library = _fetch_repo_library(
                 self.env["MUNKI_REPO"],
