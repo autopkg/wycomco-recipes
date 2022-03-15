@@ -13,13 +13,13 @@ name with a slash:
 
 &lt;dict&gt;
     &lt;key&gt;Processor&lt;/key&gt;
-    &lt;string&gt;com.github.autopkg.wycomco.SharedProcessors/SampleSharedProcessor&lt;/string&gt;
+    &lt;string&gt;com.github.wycomco.SharedProcessors/SampleSharedProcessor&lt;/string&gt;
 &lt;/dict&gt;
 
 ..assuming that this recipe is in one of AutoPkg's search dirs.
     </string>
     <key>Identifier</key>
-    <string>com.github.autopkg.wycomco.SharedProcessors</string>
+    <string>com.github.wycomco.SharedProcessors</string>
     <key>Input</key>
     <dict/>
     <key>MinimumVersion</key>
