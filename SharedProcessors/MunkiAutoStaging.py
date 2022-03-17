@@ -157,7 +157,7 @@ class MunkiAutoStaging(Processor):
 
         if not os.path.exists(destination_path):
             raise ProcessorError(
-                f"Did not found pkgsinfo directory at {destination_path}"
+                f"Did not find pkgsinfo directory at {destination_path}"
             )
 
         if len(file_extension) > 0:
@@ -175,7 +175,7 @@ class MunkiAutoStaging(Processor):
         return file_list
 
     def _find_items_to_promote(self, repo_library):
-        """Find and returns all pkginfo files which may be promoted to
+        """Finds and returns all pkginfo files which may be promoted to
         production catalog"""
 
         items = _find_matching_item(repo_library, self.env["NAME"])
