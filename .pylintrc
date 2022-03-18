@@ -1,0 +1,6 @@
+[MASTER]
+init-hook='import sys; sys.path.append("/Library/AutoPkg")'
+
+[BASIC]
+# Naming style matching correct module names.
+module-naming-style=PascalCase
