@@ -23,6 +23,7 @@ import plistlib
 import glob
 
 from datetime import datetime
+from datetime import timedelta
 from distutils.version import StrictVersion
 
 from autopkglib import Processor, ProcessorError
@@ -123,11 +124,15 @@ class MunkiAutoStaging(Processor):
         },
         "MUNKI_STAGING_DAYS": {
             "description": (
-                "Amount of days to keep a new item in staging catalog. "
-                "Defaults to 5"
+                "Amount of days as float to keep a new item in the staging"
+                "catalog."
+                "Staging depends on the timestamp of the munki import. To "
+                "allow some wiggle room for varying runtimes use e.g. 4.9 "
+                "instead of 5 days."
+                "Defaults to 5.0"
             ),
             "required": False,
-            "default": 5,
+            "default": 5.0,
         },
         "NAME": {
             "description": ("Name of the Munki item to be checked."),
@@ -209,9 +214,10 @@ class MunkiAutoStaging(Processor):
                 ):
                     continue
 
+                period = timedelta(float(self.env["MUNKI_STAGING_DAYS"]))
                 delta = datetime.now() - pkginfo["_metadata"]["creation_date"]
 
-                if delta.days > int(self.env["MUNKI_STAGING_DAYS"]):
+                if delta > period:
                     self.output(f"Found item to promote at {file}")
                     items_to_promote.append(file)
 
