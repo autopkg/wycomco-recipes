@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Comment</key>
-	<string>Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)</string>
+	<string>Initially created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)</string>
 	<key>Description</key>
 	<string>Downloads the latest version of Unclack and imports it into Munki.</string>
 	<key>Identifier</key>
@@ -21,7 +21,9 @@
 				<string>testing</string>
 			</array>
 			<key>description</key>
-			<string>Mute your microphone while you’re typing.</string>
+			<string>Mute your microphone while you're typing.
+After launching Unclack for the first time, you need to follow the steps
+described in the menu as "Enable Unclack Access"</string>
 			<key>developer</key>
 			<string>Base11 Studios</string>
 			<key>display_name</key>
@@ -29,6 +31,8 @@
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
 			<true/>
 		</dict>
 	</dict>
@@ -38,6 +42,32 @@
 	<string>com.github.wycomco.download.Unclack</string>
 	<key>Process</key>
 	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>info_path</key>
+				<string>%pathname%/Unclack.app</string>
+				<key>plist_keys</key>
+				<dict>
+					<key>LSMinimumSystemVersion</key>
+					<string>minimum_os_version</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>PlistReader</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>minimum_os_version</key>
+					<string>%minimum_os_version%</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
 		<dict>
 			<key>Arguments</key>
 			<dict>
