@@ -22,8 +22,7 @@
 			</array>
 			<key>description</key>
 			<string>Mute your microphone while you're typing.
-After launching Unclack for the first time, you need to follow the steps
-described in the menu as "Enable Unclack Access"</string>
+After launching Unclack for the first time, you need to follow the steps described in the menu as "Enable Unclack Access".</string>
 			<key>developer</key>
 			<string>Base11 Studios</string>
 			<key>display_name</key>
