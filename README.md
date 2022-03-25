@@ -1,5 +1,5 @@
 # wycomco-recipes
-Public repository with [AutoPKG](https://github.com/autopkg) recipes by [wycomco](https://wycomco.de) / Berlin.
+Public repository with [AutoPKG](https://github.com/autopkg) recipes by [wycomco](https://www.wycomco.de/?mtm_campaign=community-posts&mtm_source=github&mtm_content=autopkg-recipes-readme), an [Apple Consultant Network](https://consultants.apple.com) partner from [Berlin](https://maps.apple.com/?address=Berlin,%20Deutschland&auid=3539789365695356771&ll=52.517780,13.409839&lsp=7618&q=Berlin&_ext=CiAKBQgEEIEBCgQIBRADCgUIBhCCAQoECAoQAwoECFUQAhImKbtva8FBIEpAMUxRLo1fzClAOVf46S4/YkpAQfghJSzgzCtAUAw%3D).
 
 If you like and use our recipes give us a ![Star](README-images/star.png) of appreciation.
 
@@ -9,6 +9,12 @@ First install AutoPkg and git, then add this repo by:
 ```
 autopkg repo-add wycomco-recipes
 ```
+
+## SharedProcessors
+Currently we offer one shared processor:
+
+* [MunkiAutoStaging](https://github.com/autopkg/wycomco-recipes/blob/master/SharedProcessors/MunkiAutoStaging.py): Automatically promote Munki packages from a staging catalog to a production catalog, [here](https://medium.com/@choules/staging-munki-updates-with-autopkg-da58d2f79020) you may find a short introduction.
+
 ## Dependencies
 Please be aware that some recipes might be dependent on other peoples fantastic work.
 
