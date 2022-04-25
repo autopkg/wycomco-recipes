@@ -38,14 +38,14 @@ After launching Unclack for the first time, you need to follow the steps describ
 	<key>MinimumVersion</key>
 	<string>1.0.0</string>
 	<key>ParentRecipe</key>
-	<string>com.github.wycomco.download.Unclack</string>
+	<string>com.github.wycomco.dmg.Unclack</string>
 	<key>Process</key>
 	<array>
 		<dict>
 			<key>Arguments</key>
 			<dict>
 				<key>info_path</key>
-				<string>%pathname%/Unclack.app</string>
+				<string>%RECIPE_CACHE_DIR%/unclack.dmg/Unclack.app</string>
 				<key>plist_keys</key>
 				<dict>
 					<key>LSMinimumSystemVersion</key>
@@ -71,7 +71,7 @@ After launching Unclack for the first time, you need to follow the steps describ
 			<key>Arguments</key>
 			<dict>
 				<key>pkg_path</key>
-				<string>%pathname%</string>
+				<string>%RECIPE_CACHE_DIR%/unclack.dmg</string>
 				<key>repo_subdirectory</key>
 				<string>%MUNKI_REPO_SUBDIR%</string>
 			</dict>
