@@ -304,7 +304,7 @@ class MunkiRepoTeamsNotifier(Processor):
         nice_name = self.env.get("NAME") or ""
         teams_webhook_url = self.env.get("teams_webhook_url")
         teams_username = self.env.get("teams_username") or "AutoPkg"
-        verbosity = self.env.get("verbosity") or 0
+        verbosity = int(self.env.get("verbosity")) or 0
         teams_icon_url = self.env.get("teams_icon_url") or \
             "https://munkibuilds.org/logo.jpg"
         munki_repo_changed = self.env.get("munki_repo_changed") or False
