@@ -331,7 +331,7 @@ class MunkiRepoTeamsNotifier(Processor):
             else:
                 name = munki_name
         elif munki_repo_changed and autostaging_summary:
-            self.set_activity_subtitle(message, AutoStaging)
+            self.set_activity_subtitle(message, "MunkiAutoStaging")
             (message, staging_name) = self.staging_message(message,
                                                            autostaging_summary,
                                                            verbosity)
