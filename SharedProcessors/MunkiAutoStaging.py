@@ -277,16 +277,20 @@ class MunkiAutoStaging(Processor):
 
                 self.env["munki_autostaging_summary_result"] = {
                     "summary_text": (
-                        "The following new items were promoted to catalog "
-                        f"\"{self.env['MUNKI_PRODUCTION_CATALOG']}\":"
+                        "The following new items were promoted:"
                     ),
                     "report_fields": [
                         "name",
                         "versions",
+                        "staging_catalog",
+                        "production_catalog"
                     ],
                     "data": {
                         "name": self.env["NAME"],
                         "versions": ", ".join(versions_promoted),
+                        "staging_catalog": self.env["MUNKI_STAGING_CATALOG"],
+                        "production_catalog":
+                            self.env["MUNKI_PRODUCTION_CATALOG"]
                     },
                 }
 
