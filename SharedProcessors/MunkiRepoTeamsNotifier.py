@@ -272,10 +272,8 @@ class MunkiRepoTeamsNotifier(Processor):
         data = autostaging_summary.get("data")
         name = data.get("name")
         versions = data.get("versions")
-        munki_staging_catalog = data.get("munki_staging_catalog")
-        munki_production_catalog = data.get(
-            "munki_production_catalog"
-        )
+        munki_staging_catalog = data.get("staging_catalog")
+        munki_production_catalog = data.get("production_catalog")
         self.output(f"                    AutoStaging name: {name}")
         self.output(f"                AutoStaging versions: {versions}")
         self.output(
