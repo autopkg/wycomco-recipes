@@ -1,14 +1,14 @@
 # See https://www.elliotjordan.com/posts/pre-commit-02-autopkg/ for more information
 repos:
   - repo: https://github.com/homebysix/pre-commit-macadmin
-    rev: v1.10.1
+    rev: v1.12.2
     hooks:
       - id: check-autopkg-recipes
         args: ["--recipe-prefix=com.github.wycomco.", "--strict", "--"]
       - id: forbid-autopkg-overrides
       - id: forbid-autopkg-trust-info
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.2.0
     hooks:
       - id: check-added-large-files
         args: ["--maxkb=20"]
@@ -27,7 +27,7 @@ repos:
       - id: trailing-whitespace
         args: ["--markdown-linebreak-ext=md"]
   - repo: https://github.com/ambv/black
-    rev: 21.6b0
+    rev: 22.3.0
     hooks:
       - id: black
   - repo: https://gitlab.com/pycqa/flake8
@@ -35,6 +35,6 @@ repos:
     hooks:
       - id: flake8
   - repo: https://github.com/PyCQA/pylint
-    rev: v2.8.3
+    rev: v2.13.5
     hooks:
       - id: pylint
