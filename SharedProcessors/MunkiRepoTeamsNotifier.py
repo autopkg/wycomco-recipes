@@ -1,8 +1,9 @@
 #!/usr/local/autopkg/python
+# -*- coding: utf-8 -*-
 
 """
 Copyright 2022 bock@wycomco.de
-Inspiration taken from and loosley based on JamfUploaderTeamsNotifier.py by
+Inspiration taken from and looseley based on JamfUploaderTeamsNotifier.py by
 Graham Pugh, Jacob Burley
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,7 +57,7 @@ class MunkiRepoTeamsNotifier(Processor):
 
         "munki_repo_changed": {
             "required": False,
-            "description": ("Indicates if an item was importet by "
+            "description": ("Indicates if an item was imported by "
                             "MunkiImporter or modified by MunkiAutoStaging."),
             "default": False,
         },
@@ -99,11 +100,11 @@ class MunkiRepoTeamsNotifier(Processor):
         except (IOError, OSError) as error:
             raise ProcessorError(error)
         if proc.returncode != 0 or err:
-            raise ProcessorError("curl returned and error while sending teams "\
+            raise ProcessorError("curl returned an error while sending teams "\
                                  "message via webhook.",
                                  f"returncode: {proc.returncode}",
                                  f"stdout: {out}", f"stderr: {err}")
-            self.output("curl returned and error while sending teams message"
+            self.output("curl returned an error while sending teams message"
                         "via webhook.")
             self.output(f"returncode: {proc.returncode}")
             self.output(f"stdout: {out}")
@@ -208,7 +209,7 @@ class MunkiRepoTeamsNotifier(Processor):
     def set_activity_image(self, message, activity_image=""):
         '''
         Set activityImage in an existing Teams message dictionary. If no image
-        link is given or any other value that is considered False is given the
+        link is given or any other value that is considered False is given, the
         image will be removed.
         '''
         if activity_image:
@@ -222,7 +223,7 @@ class MunkiRepoTeamsNotifier(Processor):
             except KeyError:
                 pass
         return message
-    
+
     def add_fact(self, message, name, value):
         '''
         Adds a facts dictionary to a Teams message dictionary.
@@ -338,7 +339,7 @@ class MunkiRepoTeamsNotifier(Processor):
             self.output("Nothing to report to Teams")
             return
         self.set_activity_title(message, name)
-        
+
         self.send_teams_message(teams_webhook_url, message)
 
 if __name__ == "__main__":
