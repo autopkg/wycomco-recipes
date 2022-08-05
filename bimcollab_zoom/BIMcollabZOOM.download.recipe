@@ -27,11 +27,11 @@
 			<key>Arguments</key>
 			<dict>
 				<key>re_pattern</key>
-				<string>https://info\.kubusinfo\.nl/downloads/BIMcollab ZOOM\D.*\.dmg</string>
+				<string>https://download\.bimcollab\.com/BIMcollab ZOOM\D.*\.dmg</string>
 				<key>result_output_var_name</key>
 				<string>url</string>
 				<key>url</key>
-				<string>https://support.bimcollab.com/en/zoom/free-ifc-viewer</string>
+				<string>https://www.bimcollab.com/en/support/downloads</string>
 			</dict>
 			<key>Processor</key>
 			<string>URLTextSearcher</string>
