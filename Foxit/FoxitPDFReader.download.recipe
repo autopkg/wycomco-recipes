@@ -5,7 +5,7 @@
 	<key>Description</key>
 	<string>Download recipe for the latest version of Foxit PDF Reader.</string>
 	<key>Identifier</key>
-	<string>com.github.wycomco.download.foxit-pdf-reader</string>
+	<string>com.github.wycomco.download.FoxitPDFReader</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
@@ -93,20 +93,6 @@
 			</dict>
 			<key>Processor</key>
 			<string>Versioner</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>info_path</key>
-				<string>%found_filename%/Contents/Info.plist</string>
-				<key>plist_keys</key>
-				<dict>
-					<key>LSMinimumSystemVersion</key>
-					<string>minimum_os_version</string>
-				</dict>
-			</dict>
-			<key>Processor</key>
-			<string>PlistReader</string>
 		</dict>
 	</array>
 </dict>
