@@ -41,7 +41,6 @@
 /bin/launchctl unload /Library/LaunchDaemons/com.foxit.PDFReaderUpdateService.plist
 /bin/rm "/Library/Preferences/com.foxit-software.Foxit PDF Reader.plist"
 exit 0</string>
-<key>unattended_install</key>
 			<key>unattended_install</key>
 			<true/>
 			<key>unattended_uninstall</key>
