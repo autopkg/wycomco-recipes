@@ -14,6 +14,8 @@
 		<string>Foxit PDF Reader</string>
 		<key>pkginfo</key>
 		<dict>
+			<key>blocking_applications</key>
+			<array/>
 			<key>catalogs</key>
 			<array>
 				<string>testing</string>
@@ -34,6 +36,12 @@
 /usr/bin/defaults write "/Library/Preferences/com.foxit-software.Foxit PDF Reader" ReaderLite_UpdateMode -bool FALSE
 # Do not use splash screen
 /usr/bin/defaults write "/Library/Preferences/com.foxit-software.Foxit PDF Reader" Preferences.General.bShowStartPage -bool FALSE</string>
+<key>postuninstall_script</key>
+<string>#!/bin/sh
+/bin/launchctl unload /Library/LaunchDaemons/com.foxit.PDFReaderUpdateService.plist
+/bin/rm "/Library/Preferences/com.foxit-software.Foxit PDF Reader.plist"
+exit 0</string>
+<key>unattended_install</key>
 			<key>unattended_install</key>
 			<true/>
 			<key>unattended_uninstall</key>
