@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Imports the latest version of Foxit PDF Reader into you Munki repository.</string>
+	<string>Imports the latest version of Foxit PDF Reader into your Munki repository. Auto updates and splash screen will be disabled.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.FoxitPDFReader</string>
 	<key>Input</key>
@@ -28,6 +28,12 @@
 			<string>Foxit PDF Reader</string>
 			<key>name</key>
 			<string>%NAME%</string>
+			<key>postinstall_script</key>
+			<string>#!/bin/sh
+# Disable automatic in-updates
+/usr/bin/defaults write "/Library/Preferences/com.foxit-software.Foxit PDF Reader" ReaderLite_UpdateMode -bool FALSE
+# Do not use splash screen
+/usr/bin/defaults write "/Library/Preferences/com.foxit-software.Foxit PDF Reader" Preferences.General.bShowStartPage -bool FALSE</string>
 			<key>unattended_install</key>
 			<true/>
 			<key>unattended_uninstall</key>
