@@ -36,7 +36,7 @@
 /usr/bin/defaults write "/Library/Preferences/com.foxit-software.Foxit PDF Reader" ReaderLite_UpdateMode -bool FALSE
 # Do not use splash screen
 /usr/bin/defaults write "/Library/Preferences/com.foxit-software.Foxit PDF Reader" Preferences.General.bShowStartPage -bool FALSE</string>
-<key>postuninstall_script</key>
+<key>preuninstall_script</key>
 <string>#!/bin/sh
 /bin/launchctl unload /Library/LaunchDaemons/com.foxit.PDFReaderUpdateService.plist
 /bin/rm "/Library/Preferences/com.foxit-software.Foxit PDF Reader.plist"
