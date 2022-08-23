@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Imports the latest version of Foxit PDF Reader into your Munki repository. Auto updates and splash screen will be disabled.</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.munki.FoxitPDFReader</string>
+	<key>Input</key>
+	<dict>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%</string>
+		<key>NAME</key>
+		<string>Foxit PDF Reader</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>blocking_applications</key>
+			<array/>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Utilities</string>
+			<key>description</key>
+			<string>Industry's most powerful PDF reader. View, annotate, form fill, and sign PDF across desktop, mobile, and web – no matter if you're at the office, home, or on the go.</string>
+			<key>developer</key>
+			<string>Foxit Software Inc.</string>
+			<key>display_name</key>
+			<string>Foxit PDF Reader</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>postinstall_script</key>
+			<string>#!/bin/sh
+# Disable automatic in-updates
+/usr/bin/defaults write "/Library/Preferences/com.foxit-software.Foxit PDF Reader" ReaderLite_UpdateMode -bool FALSE
+# Do not use splash screen
+/usr/bin/defaults write "/Library/Preferences/com.foxit-software.Foxit PDF Reader" Preferences.General.bShowStartPage -bool FALSE</string>
+<key>preuninstall_script</key>
+<string>#!/bin/sh
+/bin/launchctl unload /Library/LaunchDaemons/com.foxit.PDFReaderUpdateService.plist
+/bin/rm "/Library/Preferences/com.foxit-software.Foxit PDF Reader.plist"
+exit 0</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.2.5</string>
+	<key>ParentRecipe</key>
+	<string>com.github.wycomco.download.FoxitPDFReader</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>info_path</key>
+				<string>%found_filename%/Contents/Info.plist</string>
+				<key>plist_keys</key>
+				<dict>
+					<key>LSMinimumSystemVersion</key>
+					<string>minimum_os_version</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>PlistReader</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>installs_item_paths</key>
+				<array>
+					<string>/Applications/%found_basename%</string>
+				</array>
+				<key>faux_root</key>
+				<string>%RECIPE_CACHE_DIR%/extracted_pkg/payload</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiInstallsItemsCreator</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>minimum_os_version</key>
+					<string>%minimum_os_version%</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>version</key>
+					<string>%version%</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%pathname%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
+</dict>
+</plist>
