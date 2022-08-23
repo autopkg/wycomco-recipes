@@ -25,19 +25,17 @@ from autopkglib import Processor, ProcessorError
 
 __all__ = ["MunkiRepoTeamsNotifier"]
 
+
 class MunkiRepoTeamsNotifier(Processor):
     description = (
         "Posts changes to Teams via webhook based on output of a MunkiImporter "
         "or MunkiAutoStaging process."
     )
     input_variables = {
-        "NAME": {
-            "required": False,
-            "description": ("Generic product name.")
-        },
+        "NAME": {"required": False, "description": ("Generic product name.")},
         "teams_webhook_url": {
             "required": True,
-            "description": ("Teams webhook.")
+            "description": ("Teams webhook."),
         },
         "teams_username": {
             "required": False,
@@ -54,17 +52,19 @@ class MunkiRepoTeamsNotifier(Processor):
             "description": ("Teams display icon URL."),
             "default": "https://munkibuilds.org/logo.jpg",
         },
-
         "munki_repo_changed": {
             "required": False,
-            "description": ("Indicates if an item was imported by "
-                            "MunkiImporter or modified by MunkiAutoStaging."),
+            "description": (
+                "Indicates if an item was imported by "
+                "MunkiImporter or modified by MunkiAutoStaging."
+            ),
             "default": False,
         },
         "munki_importer_summary_result": {
             "required": False,
-            "description": ("The pkginfo property list. Empty if item was not "
-                            "imported."),
+            "description": (
+                "The pkginfo property list. Empty if item was not " "imported."
+            ),
         },
         "munki_autostaging_summary_result": {
             "required": False,
@@ -76,36 +76,42 @@ class MunkiRepoTeamsNotifier(Processor):
     __doc__ = description
 
     def _curl_json_poster(self, message_json, teams_webhook_url):
-        '''
+        """
         Sends a JSON formatted message via curl through a teams webhook.
-        '''
+        """
         # curl -H "Content-Type: application/json" -d "${JSON}" "${WEBHOOK_URL}"
         curl_cmd = [
             "/usr/bin/curl",
             "--silent",
             "--show-error",
             "--fail-with-body",
-            "-H"
-            "Content-Type: application/json",
+            "-H" "Content-Type: application/json",
             "-d",
             message_json,
-            teams_webhook_url
+            teams_webhook_url,
         ]
         try:
             proc = subprocess.Popen(
-                curl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                universal_newlines=True
+                curl_cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
             )
             (out, err) = proc.communicate()
         except (IOError, OSError) as error:
             raise ProcessorError(error)
         if proc.returncode != 0 or err:
-            raise ProcessorError("curl returned an error while sending teams "\
-                                 "message via webhook.",
-                                 f"returncode: {proc.returncode}",
-                                 f"stdout: {out}", f"stderr: {err}")
-            self.output("curl returned an error while sending teams message"
-                        "via webhook.")
+            raise ProcessorError(
+                "curl returned an error while sending teams "
+                "message via webhook.",
+                f"returncode: {proc.returncode}",
+                f"stdout: {out}",
+                f"stderr: {err}",
+            )
+            self.output(
+                "curl returned an error while sending teams message"
+                "via webhook."
+            )
             self.output(f"returncode: {proc.returncode}")
             self.output(f"stdout: {out}")
             self.output(f"stderr: {err}")
@@ -113,14 +119,15 @@ class MunkiRepoTeamsNotifier(Processor):
         return True
 
     def send_teams_message(self, teams_webhook_url, message):
-        '''
+        """
         Converts a Teams message-dictionary to a JSON formatted string and
         invokes _curl_json_poster to send it to teams.
-        '''
+        """
         message_json = json.dumps(message)
-        for count in range(1,6):
-            self.output("Teams webhook post attempt {}".format(count),
-                        verbose_level=2)
+        for count in range(1, 6):
+            self.output(
+                "Teams webhook post attempt {}".format(count), verbose_level=2
+            )
             success = self._curl_json_poster(message_json, teams_webhook_url)
             if success:
                 break
@@ -128,49 +135,51 @@ class MunkiRepoTeamsNotifier(Processor):
         else:
             self.output("Giving up posting to Teams:")
             self.output("Teams webhook send did not succeed after 5 attempts")
-            raise ProcessorError("ERROR: Teams webhook failed to send 5 times.")
+            raise ProcessorError(
+                "ERROR: Teams webhook failed to send 5 times."
+            )
 
-    def new_message(self, title="", activity_title="", activity_subtitle="",
-                    activity_image=""):
-        '''
+    def new_message(
+        self,
+        title="",
+        activity_title="",
+        activity_subtitle="",
+        activity_image="",
+    ):
+        """
         Creates an empty Teams activity message dictionary. This empty
         dictionary is accepted when sent to teams.
         Optional parameters like titles can be set / changed through named
         methods of this module.
-        '''
+        """
         message = {
             "type": "message",
-            "attachments":
-            [
+            "attachments": [
                 {
-                    "contentType":
-                        "application/vnd.microsoft.teams.card.o365connector",
-                    "content":
-                    {
+                    "contentType": "application/vnd.microsoft.teams.card.o365connector",
+                    "content": {
                         "$schema": "https://schema.org/extensions",
-                        "sections":
-                        [
+                        "sections": [
                             {
                                 # "activityImage":
-                                    # "https://munkibuilds.org/logo.jpg",
+                                # "https://munkibuilds.org/logo.jpg",
                                 "activitySubtitle": activity_subtitle,
                                 "activityTitle": activity_title,
-                                "facts":
-                                [
+                                "facts": [
                                     # {
                                     #     "name": "foo",
                                     #     "value": "bar"
                                     # }
-                                ]
+                                ],
                             }
                         ],
                         "summary": title,
                         "themeColor": "778eb1",
                         "title": title,
-                        "type": "MessageCard"
-                    }
+                        "type": "MessageCard",
+                    },
                 }
-            ]
+            ],
         }
 
         if activity_image:
@@ -181,37 +190,37 @@ class MunkiRepoTeamsNotifier(Processor):
         return message
 
     def set_title(self, message, title):
-        '''
+        """
         Set summary and title in an existing Teams message dictionary.
-        '''
+        """
         message["attachments"][0]["content"]["summary"] = title
         message["attachments"][0]["content"]["title"] = title
         return message
 
     def set_activity_title(self, message, activity_title):
-        '''
+        """
         Set activityTitle in an existing Teams message dictionary.
-        '''
+        """
         message["attachments"][0]["content"]["sections"][0][
             "activityTitle"
         ] = activity_title
         return message
 
     def set_activity_subtitle(self, message, activity_subtitle):
-        '''
+        """
         Set activitySubtitle in an existing Teams message dictionary.
-        '''
+        """
         message["attachments"][0]["content"]["sections"][0][
             "activitySubtitle"
         ] = activity_subtitle
         return message
 
     def set_activity_image(self, message, activity_image=""):
-        '''
+        """
         Set activityImage in an existing Teams message dictionary. If no image
         link is given or any other value that is considered False is given, the
         image will be removed.
-        '''
+        """
         if activity_image:
             message["attachments"][0]["content"]["sections"][0][
                 "activityImage"
@@ -219,24 +228,25 @@ class MunkiRepoTeamsNotifier(Processor):
         else:
             try:
                 del message["attachments"][0]["content"]["sections"][0][
-                        "activityImage"]
+                    "activityImage"
+                ]
             except KeyError:
                 pass
         return message
 
     def add_fact(self, message, name, value):
-        '''
+        """
         Adds a facts dictionary to a Teams message dictionary.
-        '''
+        """
         message["attachments"][0]["content"]["sections"][0]["facts"] += [
             {"name": name, "value": value}
         ]
         return message
 
     def munki_message(self, message, munki_summary, verbosity):
-        '''
+        """
         Compiles the important results of MunkiImporter into a teams message.
-        '''
+        """
         data = munki_summary.get("data")
         name = data.get("name")
         version = data.get("version")
@@ -262,14 +272,15 @@ class MunkiRepoTeamsNotifier(Processor):
             if icon_repo_path:
                 message = self.add_fact(message, "Icon Path", icon_repo_path)
             else:
-                message = self.add_fact(message, "Icon Path",
-                                        "no icon path given")
+                message = self.add_fact(
+                    message, "Icon Path", "no icon path given"
+                )
         return (message, name)
 
     def staging_message(self, message, autostaging_summary, verbosity):
-        '''
+        """
         Compiles the important results of MunkiAutoStaging into a teams message.
-        '''
+        """
         data = autostaging_summary.get("data")
         name = data.get("name")
         versions = data.get("versions")
@@ -287,53 +298,62 @@ class MunkiRepoTeamsNotifier(Processor):
             message = self.add_fact(message, "Name", name)
         message = self.add_fact(message, "autostaged Versions", versions)
         if verbosity >= 1:
-            message = self.add_fact(message, "from Staging Catalog",
-                                    munki_staging_catalog)
-            message = self.add_fact(message, "to Production Catalogs",
-                                    munki_production_catalog)
+            message = self.add_fact(
+                message, "from Staging Catalog", munki_staging_catalog
+            )
+            message = self.add_fact(
+                message, "to Production Catalogs", munki_production_catalog
+            )
         return (message, name)
 
     def main(self):
-        '''
+        """
         Gets environment variables of MunkiImporter and MunkiAutoStaging and
         hands them to specialised methods for message creation.
         The message will be sent through a webhook to Teams if any relevant
         changes occured in the munki repository.
-        '''
+        """
         nice_name = self.env.get("NAME") or ""
         teams_webhook_url = self.env.get("teams_webhook_url")
         teams_username = self.env.get("teams_username") or "AutoPkg"
         verbosity = int(self.env.get("verbosity")) or 0
-        teams_icon_url = self.env.get("teams_icon_url") or \
-            "https://munkibuilds.org/logo.jpg"
+        teams_icon_url = (
+            self.env.get("teams_icon_url")
+            or "https://munkibuilds.org/logo.jpg"
+        )
         munki_repo_changed = self.env.get("munki_repo_changed") or False
         munki_summary = self.env.get("munki_importer_summary_result")
         autostaging_summary = self.env.get("munki_autostaging_summary_result")
 
-        message = self.new_message(title=teams_username,
-                                   activity_image=teams_icon_url)
+        message = self.new_message(
+            title=teams_username, activity_image=teams_icon_url
+        )
 
         if munki_repo_changed and munki_summary and autostaging_summary:
-            self.set_activity_subtitle(message, "MunkiImporter and AutoStaging")
-            (message, munki_name) = self.munki_message(message, munki_summary,
-                                                       verbosity)
-            (message, staging_name) = self.staging_message(message,
-                                                           autostaging_summary,
-                                                           verbosity)
+            self.set_activity_subtitle(
+                message, "MunkiImporter and AutoStaging"
+            )
+            (message, munki_name) = self.munki_message(
+                message, munki_summary, verbosity
+            )
+            (message, staging_name) = self.staging_message(
+                message, autostaging_summary, verbosity
+            )
             name = f"{munki_name} / {nice_name}"
         elif munki_repo_changed and munki_summary:
             self.set_activity_subtitle(message, "MunkiImporter")
-            (message, munki_name) = self.munki_message(message, munki_summary,
-                                                       verbosity)
+            (message, munki_name) = self.munki_message(
+                message, munki_summary, verbosity
+            )
             if nice_name:
                 name = f"{munki_name} / {nice_name}"
             else:
                 name = munki_name
         elif munki_repo_changed and autostaging_summary:
             self.set_activity_subtitle(message, "MunkiAutoStaging")
-            (message, staging_name) = self.staging_message(message,
-                                                           autostaging_summary,
-                                                           verbosity)
+            (message, staging_name) = self.staging_message(
+                message, autostaging_summary, verbosity
+            )
             name = staging_name
         else:
             self.output("Nothing to report to Teams")
@@ -341,6 +361,7 @@ class MunkiRepoTeamsNotifier(Processor):
         self.set_activity_title(message, name)
 
         self.send_teams_message(teams_webhook_url, message)
+
 
 if __name__ == "__main__":
     PROCESSOR = MunkiRepoTeamsNotifier()
