@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Comment</key>
-	<string>Pragli has been renamed to "Pesto (Pragli)". To allow updates, the internal name remains "Pragli".</string>
+	<string>Pesto (formerly named Pragli) is discontinued (see https://twitter.com/PestoHQ for more details.)</string>
 	<key>Description</key>
 	<string>Downloads the latest version of Pragli and imports it into Munki.</string>
 	<key>Identifier</key>
