@@ -3,8 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Comment</key>
-	<string>Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)
-Due to dynamic JavaScript encoding of the dmg path, URLTextSearcher cannot be used without further custom processor. This recipe must be updated once the path changes again.</string>
+	<string>Pesto (formerly named Pragli) is discontinued (see https://twitter.com/PestoHQ for more details.)</string>
 	<key>Description</key>
 	<string>Downloads the latest version of Pragli, now named Pesto.</string>
 	<key>Identifier</key>
@@ -18,6 +17,24 @@ Due to dynamic JavaScript encoding of the dmg path, URLTextSearcher cannot be us
 	<string>1.0.0</string>
 	<key>Process</key>
 	<array>
+		<dict>
+			<key>Processor</key>
+			<string>DeprecationWarning</string>
+			<key>Arguments</key>
+			<dict>
+				<key>warning_message</key>
+				<string>This recipe is now non-functional and will soon be removed. Please remove it from your list of recipes.</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>StopProcessingIf</string>
+			<key>Arguments</key>
+			<dict>
+				<key>predicate</key>
+				<string>TRUEPREDICATE</string>
+			</dict>
+		</dict>
 		<dict>
 			<key>Arguments</key>
 			<dict>
