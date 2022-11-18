@@ -18,6 +18,7 @@ limitations under the License.
 """
 
 import json
+import os
 import subprocess
 from datetime import datetime
 from time import sleep
@@ -99,7 +100,6 @@ class MunkiRepoTeamsSummarizer(Processor):
     output_variables = {}
 
     __doc__ = description
-
     def _curl_json_poster(self, message_json, teams_webhook_url):
         """
         Sends a JSON formatted message via curl through a teams webhook.
@@ -149,6 +149,7 @@ class MunkiRepoTeamsSummarizer(Processor):
         invokes _curl_json_poster to send it to teams.
         """
         message_json = json.dumps(message)
+        print(json.dumps(message_json))
         for count in range(1, 6):
             self.output(
                 "Teams webhook post attempt {}".format(count), verbose_level=2
@@ -269,10 +270,13 @@ class MunkiRepoTeamsSummarizer(Processor):
         ]
         return message
 
-    def munki_message(self, message, munki_summary, verbosity):
+    def munki_message(self, message, munki_summary):
         """
         Compiles the important results of MunkiImporter into a teams message.
         """
+        print("munki_message start")
+        print(message)
+
         data = munki_summary.get("data")
         name = data.get("name")
         version = data.get("version")
@@ -291,17 +295,19 @@ class MunkiRepoTeamsSummarizer(Processor):
             name,
             f"imported ver. {version} -> {catalogs}"
         )
+        print("munki_message end")
+        print(message)
         return (message)
 
-    def staging_message(self, message, autostaging_summary, verbosity):
+    def staging_message(self, message, autostaging_summary):
         """
         Compiles the important results of MunkiAutoStaging into a teams message.
         """
         data = autostaging_summary.get("data")
         name = data.get("name")
         versions = data.get("versions")
-        munki_staging_catalog = data.get("staging_catalog")
-        munki_production_catalog = data.get("production_catalog")
+        munki_staging_catalog = data.get("munki_staging_catalog")
+        munki_production_catalog = data.get("munki_production_catalog")
         self.output(f"                    AutoStaging name: {name}")
         self.output(f"                AutoStaging versions: {versions}")
         self.output(
@@ -347,18 +353,27 @@ class MunkiRepoTeamsSummarizer(Processor):
             self.env.get("msg_file_clear_at_finish") or False
 
         # Prepare / load message
+        print('got params')
+        if msg_file_clear_at_start and msg_file_path:
+            try:
+                os.remove(msg_file_path)
+            except (FileNotFoundError):
+                pass
+
         message = ""
         if msg_file_path and not msg_file_clear_at_start:
-            with open(msg_file_path, 'r') as msg_file:
-                try:
+            print("trying to open {msg_file_path}")
+            try:
+                with open(msg_file_path, 'r') as msg_file:
                     message = json.load(msg_file)
-                except (IOError, OSError, JSONDecodeError):
-                    self.output(
-                        f"File {msg_file_path} could not be read or is not "
-                        f"json formatted. Creating new message."
-                    )
+            except (FileNotFoundError, IOError, OSError, json.JSONDecodeError):
+                self.output(
+                    f"File {msg_file_path} could not be read or is not "
+                    f"json formatted. Creating new message."
+                )
 
         if not message:
+            print("message empty")
             message = self.new_message(
                 title=teams_username,
                 activity_image=teams_icon_url
@@ -367,20 +382,22 @@ class MunkiRepoTeamsSummarizer(Processor):
                 message,
                 "start: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             )
+        
+        print(message)
 
         # Process repo changes
         if munki_repo_changed:
+            print("repo changed")
             if munki_summary:
-                (message, munki_name) = self.munki_message(
-                    message, munki_summary, verbosity
-                )
+                print("import")
+                message = self.munki_message(message, munki_summary)
 
             if autostaging_summary:
-                (message, staging_name) = self.staging_message(
-                    message, autostaging_summary, verbosity
-                )
+                print("staging")
+                message = self.staging_message(message, autostaging_summary)
 
         if msg_file_path and not msg_file_clear_at_finish:
+            print("saving message file")
             with open(msg_file_path, 'w') as msg_file:
                 try:
                     json.dump(message, msg_file)
@@ -388,26 +405,34 @@ class MunkiRepoTeamsSummarizer(Processor):
                     self.output(f"Failed witing file {msg_file_path}.")
                     raise file_error
 
+        print(message)
+
         if teams_webhook_url:
+            print("trying to send message")
+            facts = message["attachments"][0]["content"]["sections"][0]["facts"]
+            facts.sort(key=lambda d: d['value'])
+            facts.sort(key=lambda d: d['name'])
+            message["attachments"][0]["content"]["sections"][0]["facts"] = facts
+
             try:
                 self.send_teams_message(teams_webhook_url, message)
-                if msg_file_clear_after_send:
+                if msg_file_clear_after_send and msg_file_path:
                     try:
-                        os.remove(msg_file)
-                    except (FileNotFoundError()):
+                        os.remove(msg_file_path)
+                    except (FileNotFoundError):
                         pass
             except (ProcessorError) as teams_error:
-                if msg_file_clear_at_finish:
+                if msg_file_clear_at_finish and msg_file_path:
                     try:
-                        os.remove(msg_file)
-                    except (FileNotFoundError()):
+                        os.remove(msg_file_path)
+                    except (FileNotFoundError):
                         pass
                     raise teams_error
         
-        if msg_file_clear_at_finish:
+        if msg_file_clear_at_finish and msg_file_path:
             try:
-                os.remove(msg_file)
-            except (FileNotFoundError()):
+                os.remove(msg_file_path)
+            except (FileNotFoundError):
                 pass
 
 if __name__ == "__main__":
