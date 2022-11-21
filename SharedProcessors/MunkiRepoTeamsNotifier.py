@@ -19,8 +19,8 @@ limitations under the License.
 
 import json
 import subprocess
-
 from time import sleep
+
 from autopkglib import Processor, ProcessorError
 
 __all__ = ["MunkiRepoTeamsNotifier"]
