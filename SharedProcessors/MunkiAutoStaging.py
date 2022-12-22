@@ -18,12 +18,10 @@
 
 from __future__ import absolute_import
 
+import glob
 import os
 import plistlib
-import glob
-
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 from distutils.version import StrictVersion
 
 from autopkglib import Processor, ProcessorError
