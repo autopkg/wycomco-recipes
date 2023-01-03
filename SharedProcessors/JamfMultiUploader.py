@@ -28,7 +28,6 @@ from autopkglib import (
     AutoPackagerError,
     AutoPackagerLoadError,
     Processor,
-    ProcessorError,
     get_processor,
 )
 
@@ -172,7 +171,9 @@ class JamfMultiUploader(Processor):
 
         try:
             self.env = processor.process()
-        except ProcessorError as err:
+        # Disable broad-except error since we do not know what
+        # exception may occur
+        except Exception as err:  # pylint: disable=broad-except
             if self.verbose > 2:
                 exc_traceback = sys.exc_info()[2]
                 traceback.print_exc(file=sys.stdout)
