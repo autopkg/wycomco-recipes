@@ -66,8 +66,8 @@ def _fetch_repo_library(
 
 
 class MunkiAutoStaging(Processor):
-    """This processor will automatically move all given Munki items from a testing
-    catalog to a production catalog after a given amount of days."""
+    """This processor will automatically move all given Munki items from a
+    testing catalog to a production catalog after a given amount of days."""
 
     description = __doc__
     input_variables = {

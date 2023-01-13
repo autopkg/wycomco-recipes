@@ -28,8 +28,8 @@ __all__ = ["MunkiRepoTeamsNotifier"]
 
 class MunkiRepoTeamsNotifier(Processor):
     description = (
-        "Posts changes to Teams via webhook based on output of a MunkiImporter "
-        "or MunkiAutoStaging process."
+        "Posts changes to Teams via webhook based on output of a "
+        "MunkiImporter or MunkiAutoStaging process."
     )
     input_variables = {
         "NAME": {"required": False, "description": ("Generic product name.")},
@@ -78,36 +78,31 @@ class MunkiRepoTeamsNotifier(Processor):
     def _curl_json_poster(self, message_json, teams_webhook_url):
         """
         Sends a JSON formatted message via curl through a teams webhook.
+        Essentially:
+        curl -H "Content-Type: application/json" -d "${JSON}" "${WEBHOOK_URL}"
         """
-        # curl -H "Content-Type: application/json" -d "${JSON}" "${WEBHOOK_URL}"
         curl_cmd = [
             "/usr/bin/curl",
             "--silent",
             "--show-error",
             "--fail-with-body",
-            "-H" "Content-Type: application/json",
+            "-H",
+            "Content-Type: application/json",
             "-d",
             message_json,
             teams_webhook_url,
         ]
         try:
-            proc = subprocess.Popen(
+            with subprocess.Popen(
                 curl_cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
-            )
-            (out, err) = proc.communicate()
+            ) as proc:
+                (out, err) = proc.communicate()
         except (IOError, OSError) as error:
-            raise ProcessorError(error)
+            raise ProcessorError(error) from error
         if proc.returncode != 0 or err:
-            raise ProcessorError(
-                "curl returned an error while sending teams "
-                "message via webhook.",
-                f"returncode: {proc.returncode}",
-                f"stdout: {out}",
-                f"stderr: {err}",
-            )
             self.output(
                 "curl returned an error while sending teams message"
                 "via webhook."
@@ -115,7 +110,14 @@ class MunkiRepoTeamsNotifier(Processor):
             self.output(f"returncode: {proc.returncode}")
             self.output(f"stdout: {out}")
             self.output(f"stderr: {err}")
-            return False
+            raise ProcessorError(
+                "curl returned an error while sending teams "
+                "message via webhook.",
+                f"returncode: {proc.returncode}",
+                f"stdout: {out}",
+                f"stderr: {err}",
+            )
+            # return False
         return True
 
     def send_teams_message(self, teams_webhook_url, message):
@@ -125,9 +127,7 @@ class MunkiRepoTeamsNotifier(Processor):
         """
         message_json = json.dumps(message)
         for count in range(1, 6):
-            self.output(
-                "Teams webhook post attempt {}".format(count), verbose_level=2
-            )
+            self.output(f"Teams webhook post attempt {count}", verbose_level=2)
             success = self._curl_json_poster(message_json, teams_webhook_url)
             if success:
                 break
@@ -156,7 +156,9 @@ class MunkiRepoTeamsNotifier(Processor):
             "type": "message",
             "attachments": [
                 {
-                    "contentType": "application/vnd.microsoft.teams.card.o365connector",
+                    "contentType": (
+                        "application/vnd.microsoft.teams.card.o365connector"
+                    ),
                     "content": {
                         "$schema": "https://schema.org/extensions",
                         "sections": [
@@ -279,7 +281,8 @@ class MunkiRepoTeamsNotifier(Processor):
 
     def staging_message(self, message, autostaging_summary, verbosity):
         """
-        Compiles the important results of MunkiAutoStaging into a teams message.
+        Compiles the important results of MunkiAutoStaging into a teams
+        message.
         """
         data = autostaging_summary.get("data")
         name = data.get("name")
