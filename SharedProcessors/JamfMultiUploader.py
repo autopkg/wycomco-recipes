@@ -1,7 +1,7 @@
 #!/usr/local/autopkg/python
 # -*- coding: utf-8 -*-
 #
-# Copyright 2022 wycomco GmbH
+# Copyright 2023 wycomco GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ def get_fake_recipe():
 
 
 class JamfMultiUploader(Processor):
-    """This processor invokes the JamfUploader processor multiple times
+    """This processor invokes the given JamfUploader processor multiple times
     to support multiple Jamf environments at once."""
 
     def __init__(self, env=None, infile=None, outfile=None):
@@ -58,16 +58,25 @@ class JamfMultiUploader(Processor):
 
     description = __doc__
     input_variables = {
-        "pkg_path": {
+        "jamf_uploader_name": {
             "required": True,
-            "description": "Path to a pkg or dmg to import - provided by "
-            "previous pkg recipe/processor.",
-            "default": "",
+            "description": "Name of the JamfUploader processor to be used, "
+            "for example: com.github.grahampugh.jamf-upload.processors"
+            "/JamfPackageUploader",
         },
         "jamf_server_configs": {
             "required": False,
-            "description": "List of dictionaries containing individual configs"
+            "description": "List of dictionaries containing individual config"
             "parameters for specific Jamf Pro servers.",
+        },
+        "jamf_uploader_processor_parameters": {
+            "required": False,
+            "description": "Dictionary with parameters for the used processor."
+            " If specific JSS need different parameters, these should be "
+            "grouped in a separate dictionary item, identified by the "
+            "JSS_URL from jamf_server_configs, default parameters should "
+            "then be made available with a 'default' key."
+            "jamf_server_configs as key, or 'default'.",
         },
     }
     output_variables = {
@@ -76,26 +85,43 @@ class JamfMultiUploader(Processor):
         },
     }
 
-    def check_dependencies(self, processor_name):
+    def check_dependencies(
+        self,
+        processor_name,
+        jamf_server_configs,
+        default_params,
+        custom_params,
+    ):
         """Make sure that we have access to all needed resources."""
-        # Initialize variable set with input variables.
-        variables = set(self.env.keys())
-
         processor_class = self.get_processor_class(processor_name)
 
         # Add this processors input and output vars to our internal vars
         self.input_variables.update(processor_class.input_variables)
         self.output_variables.update(processor_class.output_variables)
 
-        # Make sure all required input variables exist.
-        for key, flags in list(self.input_variables.items()):
-            if flags["required"] and (key not in variables):
-                raise AutoPackagerError(
-                    f"{processor_name} requires missing argument {key}"
-                )
+        for jamf_server_config in jamf_server_configs:
+            # Initialize variable set with input variables.
+            variables = set(self.env.keys())
 
-        # Add output variables to set.
-        variables.update(set(processor_class.output_variables.keys()))
+            # Get the JSS URL for this run, to identify special params
+            jss_url = jamf_server_config.get("JSS_URL", "")
+
+            # Get special params for this JSS
+            jss_params = custom_params.get(jss_url, {})
+
+            # Join the different configs...
+            jamf_server_config.update(default_params)
+            jamf_server_config.update(jss_params)
+
+            variables.update(jamf_server_config.keys())
+
+            # Make sure all required input variables exist.
+            for key, flags in list(self.input_variables.items()):
+                if flags["required"] and (key not in variables):
+                    raise AutoPackagerError(
+                        f"{processor_name} requires missing argument {key}"
+                        " for JSS URL {jss_url}"
+                    )
 
     def update_env(self, custom_config, substituted_vars):
         """Update env with config, preserving original values in variable"""
@@ -108,7 +134,7 @@ class JamfMultiUploader(Processor):
 
         if custom_config:
             for key, value in custom_config.items():
-                if self.env[key]:
+                if key in self.env:
                     substituted_vars.update({key: self.env[key]})
                 self.env[key] = value
 
@@ -125,7 +151,7 @@ class JamfMultiUploader(Processor):
             print("Resetting original values")
         if custom_config:
             for key in custom_config.keys():
-                if substituted_vars[key]:
+                if key in substituted_vars:
                     self.env[key] = substituted_vars[key]
                 else:
                     del self.env[key]
@@ -238,28 +264,60 @@ class JamfMultiUploader(Processor):
 
     def run_processor(self, processor_name):
         """Run the needed processor"""
-        self.check_dependencies(processor_name=processor_name)
 
-        for jamf_server_config in self.env["jamf_server_configs"]:
-            self.prepare_and_run(
-                processor_name=processor_name, custom_config=jamf_server_config
-            )
+        custom_params = self.env.get("jamf_uploader_processor_parameters", {})
 
-    def main(self, options=None):
+        # Get any default params, if any.
+        default_params = custom_params.get("default", {})
 
-        if options:
-            self.options = options
-            if self.options.verbose:
-                self.verbose = self.options.verbose
+        if "jamf_server_configs" in self.env:
+            jamf_server_configs = self.env["jamf_server_configs"]
+        else:
+            # If there is no list of configs, look for the default parameters
+            config = {}
+            if "JSS_URL" in self.env:
+                config["JSS_URL"] = self.env["JSS_URL"]
 
-        self.run_processor(
-            processor_name="com.github.grahampugh.jamf-upload.processors"
-            "/JamfPackageUploader"
+            if "API_USERNAME" in self.env:
+                config["API_USERNAME"] = self.env["API_USERNAME"]
+
+            if "API_PASSWORD" in self.env:
+                config["API_PASSWORD"] = self.env["API_PASSWORD"]
+
+            jamf_server_configs = []
+            jamf_server_configs.append(config)
+
+        self.check_dependencies(
+            processor_name=processor_name,
+            jamf_server_configs=jamf_server_configs,
+            default_params=default_params,
+            custom_params=custom_params,
         )
 
+        for jamf_server_config in jamf_server_configs:
+
+            # Get the JSS URL for this run, to identify special params
+            jss_url = jamf_server_config.get("JSS_URL", "")
+
+            # Get special params for this JSS
+            jss_params = custom_params.get(jss_url, {})
+
+            # Join the different configs...
+            jamf_server_config.update(default_params)
+            jamf_server_config.update(jss_params)
+
+            self.prepare_and_run(
+                processor_name=processor_name,
+                custom_config=jamf_server_config,
+            )
+
+    def generate_summary_result(self):
+        """Generate an autopkg summary result"""
         # clear any pre-existing summary result
         if "jamf_multi_uploader_summary_result" in self.env:
             del self.env["jamf_multi_uploader_summary_result"]
+
+        processor_name = self.env["jamf_uploader_name"].split("/")[1]
 
         server_status = []
 
@@ -273,21 +331,37 @@ class JamfMultiUploader(Processor):
         else:
             pkg_name = "n/a"
 
+        if "version" in self.env:
+            version = self.env["version"]
+        else:
+            version = "n/a"
+
         self.env["jamf_multi_uploader_summary_result"] = {
-            "summary_text": (
-                "Package upload to one or more Jamf instances was processed:"
-            ),
+            "summary_text": ("Running JamfUploader processor multiple times:"),
             "report_fields": [
-                "PKG Name",
+                "Processor",
+                "PKG",
                 "Version",
                 "Jamf Servers (Status)",
             ],
             "data": {
-                "PKG Name": pkg_name,
-                "Version": self.env["version"],
+                "Processor": processor_name,
+                "PKG": pkg_name,
+                "Version": version,
                 "Jamf Servers (Status)": ", ".join(server_status),
             },
         }
+
+    def main(self, options=None):
+
+        if options:
+            self.options = options
+            if self.options.verbose:
+                self.verbose = self.options.verbose
+
+        self.run_processor(processor_name=self.env["jamf_uploader_name"])
+
+        self.generate_summary_result()
 
 
 if __name__ == "__main__":
