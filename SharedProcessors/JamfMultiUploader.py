@@ -48,7 +48,7 @@ def get_fake_recipe():
 
 class JamfMultiUploader(Processor):
     """This processor invokes the given JamfUploader processor multiple times
-    to support multiple Jamf environments at once."""
+    to support multiple Jamf environments in one AutoPkg run."""
 
     def __init__(self, env=None, infile=None, outfile=None):
         super().__init__(env, infile, outfile)
