@@ -227,10 +227,41 @@ class JamfMultiUploader(Processor):
             pprint.pprint({"Output": output_dict})
 
         if not run_results["Status"]:
-            if "pkg_uploaded" in output_dict and output_dict["pkg_uploaded"]:
-                run_results["Status"] = "Uploaded"
-            else:
-                run_results["Status"] = "Not uploaded"
+            run_results["Status"] = self.get_processor_status(
+                output_dict=output_dict
+            )
+
+    def get_processor_status(self, output_dict):
+        """Returns the relevant part of a processor's output"""
+
+        # Split the name to get the actual processor name
+        processor_name = self.env["jamf_uploader_name"].split("/")[1]
+
+        return {
+            "JamfPackageUploader": "Uploaded"
+            if output_dict.get("pkg_uploaded", False)
+            else "Not Uploaded",
+            "JamfPatchUploader": output_dict.get("patch", "Not Uploaded"),
+            "JamfAccountUploader": output_dict.get(
+                "account_name", "Not Uploaded"
+            ),
+            "JamfCategoryUploader": output_dict.get(
+                "category", "Not Uploaded"
+            ),
+            "JamfDockItemUploader": output_dict.get(
+                "dock_item", "Not Uploaded"
+            ),
+            "JamfIconUploader": output_dict.get("icon_id", "Not Uploaded"),
+            "JamfMacAppUploader": output_dict.get(
+                "macapp_name", "Not Uploaded"
+            ),
+            "JamfPolicyUploader": output_dict.get(
+                "policy_name", "Not Uploaded"
+            ),
+            "JamfScriptUploader": output_dict.get(
+                "script_name", "Not Uploaded"
+            ),
+        }.get(processor_name, "Success")
 
     def prepare_and_run(self, processor_name, custom_config):
         """Temporarly override env and run processor"""
@@ -341,7 +372,9 @@ class JamfMultiUploader(Processor):
             version = "n/a"
 
         self.env["jamf_multi_uploader_summary_result"] = {
-            "summary_text": ("Running JamfUploader processor multiple times:"),
+            "summary_text": (
+                "Running JamfUploader processors multiple times:"
+            ),
             "report_fields": [
                 "Processor",
                 "PKG",
