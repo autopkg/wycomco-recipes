@@ -72,13 +72,13 @@ class JamfMultiUploader(Processor):
         "jamf_uploader_processor_parameters": {
             "required": False,
             "description": "Dictionary with parameters for the used processor."
-            " If specific JSS need different parameters, these should be "
+            " If a specific JSS needs different parameters, these should be "
             "grouped in a separate dictionary item, identified by the "
-            "JSS_URL from jamf_server_configs, default parameters should "
-            "then be made available with a 'default' key."
-            "jamf_server_configs as key, or 'default'.",
+            "JSS_URL from jamf_server_configs variable, common parameters "
+            "should then be made available with a 'default' key.",
         },
     }
+
     output_variables = {
         "jamf_multi_uploader_summary_result": {
             "description": "Description of interesting results."
@@ -93,6 +93,7 @@ class JamfMultiUploader(Processor):
         custom_params,
     ):
         """Make sure that we have access to all needed resources."""
+
         processor_class = self.get_processor_class(processor_name)
 
         # Add this processors input and output vars to our internal vars
@@ -149,6 +150,7 @@ class JamfMultiUploader(Processor):
 
         if self.verbose:
             print("Resetting original values")
+
         if custom_config:
             for key in custom_config.keys():
                 if key in substituted_vars:
@@ -174,6 +176,7 @@ class JamfMultiUploader(Processor):
         except (KeyError, AttributeError) as err:
             msg = f"Unknown processor '{processor_name}'."
             raise AutoPackagerError(msg) from err
+
         except AutoPackagerLoadError as err:
             msg = (
                 f"Unable to import '{processor_name}', likely due "
@@ -197,6 +200,7 @@ class JamfMultiUploader(Processor):
 
         try:
             self.env = processor.process()
+
         # Disable broad-except error since we do not know what
         # exception may occur
         except Exception as err:  # pylint: disable=broad-except
@@ -230,6 +234,7 @@ class JamfMultiUploader(Processor):
 
     def prepare_and_run(self, processor_name, custom_config):
         """Temporarly override env and run processor"""
+
         substituted_vars = {}
         run_results = {
             "JSS_URL": "",
@@ -244,7 +249,6 @@ class JamfMultiUploader(Processor):
         # Actually running the given processor, using the code from autopkglib
         processor_class = self.get_processor_class(processor_name)
         processor = processor_class(self.env)
-
         self.execute_processor(processor=processor, run_results=run_results)
 
         self.restore_env(
@@ -295,7 +299,6 @@ class JamfMultiUploader(Processor):
         )
 
         for jamf_server_config in jamf_server_configs:
-
             # Get the JSS URL for this run, to identify special params
             jss_url = jamf_server_config.get("JSS_URL", "")
 
@@ -313,6 +316,7 @@ class JamfMultiUploader(Processor):
 
     def generate_summary_result(self):
         """Generate an autopkg summary result"""
+
         # clear any pre-existing summary result
         if "jamf_multi_uploader_summary_result" in self.env:
             del self.env["jamf_multi_uploader_summary_result"]
