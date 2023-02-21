@@ -18,8 +18,8 @@
 		<string>LibreOffice</string>
 		<key>RELEASE</key>
 		<string>still</string>
-		<key>TYPE</key>
-		<string>mac-x86_64</string>
+		<key>ARCH</key>
+		<string>x86_64</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>blocking_applications</key>
