@@ -129,11 +129,12 @@ class JamfMultiUploader(Processor):
     def update_env(self, custom_config, substituted_vars):
         """Update env with config, preserving original values in variable"""
 
-        if self.verbose:
-            print("Update env with custom config, preserving original values")
-
-        if self.verbose > 2:
-            pprint.pprint({"env before temporary override": self.env})
+        self.output(
+            "Update env with custom config, preserving original values", 1
+        )
+        self.output(
+            pprint.pformat({"env before temporary override": self.env}), 3
+        )
 
         if custom_config:
             for key, value in custom_config.items():
@@ -143,17 +144,16 @@ class JamfMultiUploader(Processor):
                     )
                 self.env[key] = copy.deepcopy(value)
 
-        if self.verbose > 2:
-            pprint.pprint({"env after temporary override": self.env})
+        self.output(
+            pprint.pformat({"env after temporary override": self.env}), 3
+        )
 
     def restore_env(self, custom_config, substituted_vars):
         """Restore env with original values"""
 
-        if self.verbose > 2:
-            pprint.pprint({"env before reset": self.env})
+        self.output(pprint.pformat({"env before reset": self.env}), 3)
 
-        if self.verbose:
-            print("Resetting original values")
+        self.output("Resetting original values", 1)
 
         if custom_config:
             for key in custom_config.keys():
@@ -162,8 +162,7 @@ class JamfMultiUploader(Processor):
                 else:
                     del self.env[key]
 
-        if self.verbose > 2:
-            pprint.pprint({"env after reset": self.env})
+        self.output(pprint.pformat({"env after reset": self.env}), 3)
 
     def get_processor_class(self, processor_name):
         """Get the processor class"""
@@ -198,9 +197,7 @@ class JamfMultiUploader(Processor):
             if key in processor.env:
                 input_dict[key] = processor.env[key]
 
-        if self.verbose > 1:
-            # pretty print any defined input variables
-            pprint.pprint({"Input": input_dict})
+        self.output(pprint.pformat({"Input": input_dict}), 1)
 
         try:
             self.env = processor.process()
@@ -226,9 +223,7 @@ class JamfMultiUploader(Processor):
             if processor.env.get(key):
                 output_dict[key] = self.env[key]
 
-        if self.verbose > 1:
-            # pretty print output variables
-            pprint.pprint({"Output": output_dict})
+        self.output(pprint.pformat({"Output": output_dict}), 2)
 
         if not run_results["Status"]:
             run_results["Status"] = self.get_processor_status(
