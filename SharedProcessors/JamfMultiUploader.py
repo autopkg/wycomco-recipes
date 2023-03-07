@@ -18,6 +18,7 @@
 
 from __future__ import absolute_import
 
+import copy
 import os
 import pathlib
 import pprint
@@ -97,8 +98,8 @@ class JamfMultiUploader(Processor):
         processor_class = self.get_processor_class(processor_name)
 
         # Add this processors input and output vars to our internal vars
-        self.input_variables.update(processor_class.input_variables)
-        self.output_variables.update(processor_class.output_variables)
+        needed_input_variables = copy.deepcopy(self.input_variables)
+        needed_input_variables.update(processor_class.input_variables)
 
         for jamf_server_config in jamf_server_configs:
             # Initialize variable set with input variables.
@@ -111,13 +112,14 @@ class JamfMultiUploader(Processor):
             jss_params = custom_params.get(jss_url, {})
 
             # Join the different configs...
-            jamf_server_config.update(default_params)
-            jamf_server_config.update(jss_params)
+            temp_jamf_server_config = copy.deepcopy(jamf_server_config)
+            temp_jamf_server_config.update(copy.deepcopy(default_params))
+            temp_jamf_server_config.update(copy.deepcopy(jss_params))
 
-            variables.update(jamf_server_config.keys())
+            variables.update(temp_jamf_server_config.keys())
 
             # Make sure all required input variables exist.
-            for key, flags in list(self.input_variables.items()):
+            for key, flags in list(needed_input_variables.items()):
                 if flags["required"] and (key not in variables):
                     raise AutoPackagerError(
                         f"{processor_name} requires missing argument {key}"
@@ -136,8 +138,10 @@ class JamfMultiUploader(Processor):
         if custom_config:
             for key, value in custom_config.items():
                 if key in self.env:
-                    substituted_vars.update({key: self.env[key]})
-                self.env[key] = value
+                    substituted_vars.update(
+                        {key: copy.deepcopy(self.env[key])}
+                    )
+                self.env[key] = copy.deepcopy(value)
 
         if self.verbose > 2:
             pprint.pprint({"env after temporary override": self.env})
@@ -154,7 +158,7 @@ class JamfMultiUploader(Processor):
         if custom_config:
             for key in custom_config.keys():
                 if key in substituted_vars:
-                    self.env[key] = substituted_vars[key]
+                    self.env[key] = copy.deepcopy(substituted_vars[key])
                 else:
                     del self.env[key]
 
@@ -273,18 +277,14 @@ class JamfMultiUploader(Processor):
             "Message": "",
         }
 
-        self.update_env(
-            custom_config=custom_config, substituted_vars=substituted_vars
-        )
+        self.update_env(custom_config, substituted_vars)
 
         # Actually running the given processor, using the code from autopkglib
         processor_class = self.get_processor_class(processor_name)
         processor = processor_class(self.env)
-        self.execute_processor(processor=processor, run_results=run_results)
+        self.execute_processor(processor, run_results)
 
-        self.restore_env(
-            custom_config=custom_config, substituted_vars=substituted_vars
-        )
+        self.restore_env(custom_config, substituted_vars)
 
         if custom_config["JSS_URL"]:
             run_results["JSS_URL"] = custom_config["JSS_URL"]
@@ -330,19 +330,21 @@ class JamfMultiUploader(Processor):
         )
 
         for jamf_server_config in jamf_server_configs:
+            temp_server_config = copy.deepcopy(jamf_server_config)
+
             # Get the JSS URL for this run, to identify special params
-            jss_url = jamf_server_config.get("JSS_URL", "")
+            jss_url = temp_server_config.get("JSS_URL", "")
 
             # Get special params for this JSS
             jss_params = custom_params.get(jss_url, {})
 
             # Join the different configs...
-            jamf_server_config.update(default_params)
-            jamf_server_config.update(jss_params)
+            temp_server_config.update(copy.deepcopy(default_params))
+            temp_server_config.update(copy.deepcopy(jss_params))
 
             self.prepare_and_run(
                 processor_name=processor_name,
-                custom_config=jamf_server_config,
+                custom_config=temp_server_config,
             )
 
     def generate_summary_result(self):
@@ -397,7 +399,6 @@ class JamfMultiUploader(Processor):
                 self.verbose = self.options.verbose
 
         self.run_processor(processor_name=self.env["jamf_uploader_name"])
-
         self.generate_summary_result()
 
 
