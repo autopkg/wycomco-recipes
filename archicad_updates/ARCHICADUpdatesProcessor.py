@@ -1,37 +1,48 @@
 #!/usr/local/autopkg/python
 # -*- coding: utf-8 -*-
-#
-# Copyright 2019 Zack T (mlbz521)
-# Fixed and ammended by jutonium for wycomco, copyright Aug 2020
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+
+"""
+Copyright 2019 Zack T (mlbz521)
+Fixed and ammended by jutonium for wycomco, copyright Aug 2020
+Updated to adhere to coding standards by jutonium for wycomco Jan 23
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
 
 from __future__ import absolute_import, print_function
 
 import json
 
-from autopkglib import Processor, ProcessorError, URLGetter
+# pylint: disable=W0611
+from autopkglib import Processor, ProcessorError, URLGetter  # noqa: F401
 
 __all__ = ["ARCHICADUpdatesProcessor"]
 
 
+# pylint: disable=E0239
+# pylint: disable=R0903
 class ARCHICADUpdatesProcessor(URLGetter):
-    """This processor finds the URL for the desired version, localization, and type of ARCHICAD."""
+    """
+    This processor finds the URL for the desired version, localization, and
+    type of ARCHICAD.
+    """
 
     input_variables = {
         "major_version": {
             "required": True,
-            "description": "The ARCHICAD Major Version to look for available patches.",
+            "description": (
+                "The ARCHICAD Major Version to look for available patches."
+            ),
         },
         "localization": {
             "required": True,
@@ -71,8 +82,10 @@ class ARCHICADUpdatesProcessor(URLGetter):
         )
         json_data = json.loads(response)
 
-        # Parse through the available downloads for versions that match the requested paramters.
-        # Adress potential python runtime errors by checking for the existence of "build". (jutonium)
+        # Parse through the available downloads for versions that match the
+        # requested paramters.
+        # Adress potential python runtime errors by checking for the existence
+        # of "build". (jutonium)
         for json_object in json_data:
             if all(
                 (
@@ -84,8 +97,8 @@ class ARCHICADUpdatesProcessor(URLGetter):
             ):
                 # Handling of new internal structure (jutonium)
                 mac_link = (
-                    json_object.get("downloadLinks", dict())
-                    .get("mac", dict())
+                    json_object.get("downloadLinks", {})
+                    .get("mac", {})
                     .get("url")
                 )
                 if mac_link:
@@ -96,7 +109,7 @@ class ARCHICADUpdatesProcessor(URLGetter):
         # Avoid unrelated errors and compute propper version (jutonium)
         if available_builds:
             build = sorted(available_builds.keys())[-1]
-            version = "{}.0.0.{}".format(major_version, build)
+            version = f"{major_version}.0.0.{build}"
             url = available_builds[build]
             build = str(build)
         else:
@@ -106,12 +119,12 @@ class ARCHICADUpdatesProcessor(URLGetter):
 
         if url:
             self.env["url"] = url
-            self.output("Download URL: {}".format(self.env["url"]))
+            self.output(f"Download URL: {url}")
             # Build and version instead of build as version (jutonium)
             self.env["build"] = build
-            self.output("build: {}".format(self.env["build"]))
+            self.output(f"build: {build}")
             self.env["version"] = version
-            self.output("version: {}".format(self.env["version"]))
+            self.output(f"version: {version}")
         else:
             raise ProcessorError(
                 "Unable to find a url based on the parameters provided."
