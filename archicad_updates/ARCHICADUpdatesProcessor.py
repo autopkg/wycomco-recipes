@@ -52,11 +52,18 @@ class ARCHICADUpdatesProcessor(URLGetter):
             "required": True,
             "description": "The release type to look for available patches.",
         },
+        "ARCHITECTURE": {
+            "required": False,
+            "description": "INTEL or ARM, falls back to INTEL if not set.",
+        },
     }
     # Amended to output build number and version (jutonium)
     output_variables = {
         "url": {"description": "Returns the url to download."},
-        "build": {"build": "Returns the build number."},
+        "build": {"description": "Returns the build number."},
+        "supported_architecture": {
+            "description": "Returns a corresponding string for Munki"
+        },
         "version": {
             "description": "Returns the version computed from major_version "
             "and build number. Same as CFBundleVersion."
@@ -72,6 +79,7 @@ class ARCHICADUpdatesProcessor(URLGetter):
         major_version = self.env.get("major_version")
         localization = self.env.get("localization")
         release_type = self.env.get("release_type")
+        architecture = self.env.get("ARCHITECTURE", "INTEL")
         available_builds = {}
 
         # Grab the available downloads.
@@ -101,7 +109,8 @@ class ARCHICADUpdatesProcessor(URLGetter):
                     .get("mac", {})
                     .get("url")
                 )
-                if mac_link:
+
+                if mac_link and mac_link.endswith(f"-{architecture}.dmg"):
                     mac_link = "https://dl.graphisoft.com" + mac_link[3:]
                     available_builds[json_object.get("build")] = mac_link
 
@@ -125,6 +134,10 @@ class ARCHICADUpdatesProcessor(URLGetter):
             self.output(f"build: {build}")
             self.env["version"] = version
             self.output(f"version: {version}")
+            if architecture == "ARM":
+                self.env["supported_architecture"] = "arm64"
+            else:
+                self.env["supported_architecture"] = "x86_64"
         else:
             raise ProcessorError(
                 "Unable to find a url based on the parameters provided."
