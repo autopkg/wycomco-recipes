@@ -385,7 +385,8 @@ class MunkiRepoTeamsNotifier(URLGetter):
         The message will be sent through a webhook to Teams if any relevant
         changes occured in the munki repository.
         """
-        nice_name = self.env.get("NAME") or ""
+        munki_info = self.env.get("munki_info", {})
+        nice_name = munki_info.get("display_name", self.env.get("NAME", ""))
         teams_webhook_url = self.env.get("teams_webhook_url")
         teams_username = self.env.get("teams_username") or "AutoPkg"
         verbosity = int(self.env.get("verbosity")) or 0
@@ -395,7 +396,6 @@ class MunkiRepoTeamsNotifier(URLGetter):
         )
         munki_repo_changed = self.env.get("munki_repo_changed") or False
         munki_summary = self.env.get("munki_importer_summary_result")
-        munki_info = self.env.get("munki_info", {})
         autostaging_summary = self.env.get("munki_autostaging_summary_result")
 
         message = self.new_message(
@@ -412,22 +412,28 @@ class MunkiRepoTeamsNotifier(URLGetter):
             (message, staging_name) = self.staging_message(
                 message, autostaging_summary, munki_info, verbosity
             )
-            name = f"{munki_name} / {nice_name}"
+            if nice_name != munki_name:
+                name = f"{nice_name} ({munki_name})"
+            else:
+                name = f"{munki_name}"
         elif munki_repo_changed and munki_summary:
             self.set_activity_subtitle(message, "MunkiImporter")
             (message, munki_name) = self.munki_message(
                 message, munki_summary, munki_info, verbosity
             )
-            if nice_name:
-                name = f"{munki_name} / {nice_name}"
+            if nice_name != munki_name:
+                name = f"{nice_name} ({munki_name})"
             else:
-                name = munki_name
+                name = f"{munki_name}"
         elif munki_repo_changed and autostaging_summary:
             self.set_activity_subtitle(message, "MunkiAutoStaging")
             (message, staging_name) = self.staging_message(
                 message, autostaging_summary, munki_info, verbosity
             )
-            name = staging_name
+            if nice_name != staging_name:
+                name = f"{nice_name} ({staging_name})"
+            else:
+                name = f"{staging_name}"
         else:
             self.output("Nothing to report to Teams")
             return
