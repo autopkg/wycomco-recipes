@@ -293,17 +293,26 @@ class MunkiRepoTeamsNotifier(URLGetter):
         pkginfo_path = data.get("pkginfo_path")
         pkg_repo_path = data.get("pkg_repo_path")
         icon_repo_path = data.get("icon_repo_path")
+
+        supported_archs = munki_info.get("supported_architectures", [])
+        supported_archs = ", ".join(supported_archs)
+
         self.output(f"          MunkiImporter name: {name}")
         self.output(f"       MunkiImporter version: {version}")
         self.output(f"      MunkiImporter catalogs: {catalogs}")
         self.output(f"  MunkiImporter pkginfo_path: {pkginfo_path}")
         self.output(f" MunkiImporter pkg_repo_path: {pkg_repo_path}")
         self.output(f"MunkiImporter icon_repo_path: {icon_repo_path}")
+        self.output(f"     Supported architectures: {supported_archs}")
         if verbosity >= 3:
             message = self.add_fact(message, "Name", name)
         message = self.add_fact(message, "new Version", version)
         if verbosity >= 1:
             message = self.add_fact(message, "in Catalogs", catalogs)
+            if supported_archs:
+                message = self.add_fact(
+                    message, "supported architectures", supported_archs
+                )
         if verbosity >= 2:
             message = self.add_fact(message, "PkgInfo Path", pkginfo_path)
             message = self.add_fact(message, "Package Path", pkg_repo_path)
@@ -334,6 +343,10 @@ class MunkiRepoTeamsNotifier(URLGetter):
         versions = data.get("versions")
         munki_staging_catalog = data.get("munki_staging_catalog")
         munki_production_catalog = data.get("munki_production_catalog")
+
+        supported_archs = munki_info.get("supported_architectures", [])
+        supported_archs = ", ".join(supported_archs)
+
         self.output(f"                    AutoStaging name: {name}")
         self.output(f"                AutoStaging versions: {versions}")
         self.output(
@@ -342,6 +355,7 @@ class MunkiRepoTeamsNotifier(URLGetter):
         self.output(
             f"AutoStaging munki_production_catalog: {munki_production_catalog}"
         )
+        self.output(f"     Supported architectures: {supported_archs}")
         if verbosity >= 3:
             message = self.add_fact(message, "Name", name)
         message = self.add_fact(message, "autostaged Versions", versions)
@@ -352,6 +366,10 @@ class MunkiRepoTeamsNotifier(URLGetter):
             message = self.add_fact(
                 message, "to Production Catalogs", munki_production_catalog
             )
+            if supported_archs:
+                message = self.add_fact(
+                    message, "supported architectures", supported_archs
+                )
 
         icon_url = self.gen_icon_url(munki_info)
 
