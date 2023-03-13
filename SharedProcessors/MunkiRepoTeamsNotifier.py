@@ -21,12 +21,13 @@ import json
 import subprocess
 from time import sleep
 
-from autopkglib import Processor, ProcessorError
+from autopkglib import ProcessorError
+from autopkglib.URLGetter import URLGetter
 
 __all__ = ["MunkiRepoTeamsNotifier"]
 
 
-class MunkiRepoTeamsNotifier(Processor):
+class MunkiRepoTeamsNotifier(URLGetter):
     description = (
         "Posts changes to Teams via webhook based on output of a "
         "MunkiImporter or MunkiAutoStaging process."
@@ -184,10 +185,7 @@ class MunkiRepoTeamsNotifier(Processor):
             ],
         }
 
-        if activity_image:
-            message["attachments"][0]["content"]["sections"][0][
-                "activityImage"
-            ] = activity_image
+        self.set_activity_image(message, activity_image)
 
         return message
 
@@ -245,7 +243,46 @@ class MunkiRepoTeamsNotifier(Processor):
         ]
         return message
 
-    def munki_message(self, message, munki_summary, verbosity):
+    def gen_icon_url(self, munki_info):
+        """
+        Derives the icon url from a given pkginfo dictionary
+        """
+
+        icon_url = ""
+
+        # Get icon_base_url
+        icon_url = self.env.get("ICON_BASE_URL", "")
+
+        if not icon_url or not munki_info:
+            return ""
+
+        icon_name = munki_info.get(
+            "icon_name", f'{munki_info.get("name")}.png'
+        )
+
+        if icon_name:
+            icon_url = f"{icon_url}/{icon_name}"
+
+        if self.check_web_url(icon_url):
+            return icon_url
+
+        return ""
+
+    def check_web_url(self, url):
+        """
+        Returns true if a given url seems to be valid and reachable
+        """
+
+        curl_cmd = self.prepare_curl_cmd()
+        curl_cmd.extend(["--head", url])
+        raw_headers = self.download_with_curl(curl_cmd)
+        header = self.parse_headers(raw_headers)
+
+        print(header)
+
+        return header.get("http_result_code") == "200"
+
+    def munki_message(self, message, munki_summary, munki_info, verbosity):
         """
         Compiles the important results of MunkiImporter into a teams message.
         """
@@ -277,9 +314,17 @@ class MunkiRepoTeamsNotifier(Processor):
                 message = self.add_fact(
                     message, "Icon Path", "no icon path given"
                 )
+
+        icon_url = self.gen_icon_url(munki_info)
+
+        if icon_url:
+            self.set_activity_image(message, icon_url)
+
         return (message, name)
 
-    def staging_message(self, message, autostaging_summary, verbosity):
+    def staging_message(
+        self, message, autostaging_summary, munki_info, verbosity
+    ):
         """
         Compiles the important results of MunkiAutoStaging into a teams
         message.
@@ -307,6 +352,12 @@ class MunkiRepoTeamsNotifier(Processor):
             message = self.add_fact(
                 message, "to Production Catalogs", munki_production_catalog
             )
+
+        icon_url = self.gen_icon_url(munki_info)
+
+        if icon_url:
+            self.set_activity_image(message, icon_url)
+
         return (message, name)
 
     def main(self):
@@ -326,6 +377,7 @@ class MunkiRepoTeamsNotifier(Processor):
         )
         munki_repo_changed = self.env.get("munki_repo_changed") or False
         munki_summary = self.env.get("munki_importer_summary_result")
+        munki_info = self.env.get("munki_info", {})
         autostaging_summary = self.env.get("munki_autostaging_summary_result")
 
         message = self.new_message(
@@ -337,16 +389,16 @@ class MunkiRepoTeamsNotifier(Processor):
                 message, "MunkiImporter and AutoStaging"
             )
             (message, munki_name) = self.munki_message(
-                message, munki_summary, verbosity
+                message, munki_summary, munki_info, verbosity
             )
             (message, staging_name) = self.staging_message(
-                message, autostaging_summary, verbosity
+                message, autostaging_summary, munki_info, verbosity
             )
             name = f"{munki_name} / {nice_name}"
         elif munki_repo_changed and munki_summary:
             self.set_activity_subtitle(message, "MunkiImporter")
             (message, munki_name) = self.munki_message(
-                message, munki_summary, verbosity
+                message, munki_summary, munki_info, verbosity
             )
             if nice_name:
                 name = f"{munki_name} / {nice_name}"
@@ -355,7 +407,7 @@ class MunkiRepoTeamsNotifier(Processor):
         elif munki_repo_changed and autostaging_summary:
             self.set_activity_subtitle(message, "MunkiAutoStaging")
             (message, staging_name) = self.staging_message(
-                message, autostaging_summary, verbosity
+                message, autostaging_summary, munki_info, verbosity
             )
             name = staging_name
         else:
