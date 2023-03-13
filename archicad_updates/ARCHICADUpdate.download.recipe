@@ -5,7 +5,7 @@
 	<key>Description</key>
 	<string>Downloads the latest update build of ARCHICAD based on the override-able parameters: MAJOR_VERSION, LOCALIZATION, and RELEASE_TYPE
 
-MAJOR_VERSION options include:  20, 21, 22, 23, 24, 25 and 26
+MAJOR_VERSION options include:  24, 25 and 26 (GRAPHISOFT supports the current and two previous versions)
 LOCALIZATION options include:  INT (international english, part of many other licenses), AUS, AUT, BRA, CHE, CHI, CZE, FIN, FRA, GER, GRE, HUN, ITA, JPN, KOR, NED, NOR, NZE, POL, POR, RUS, SPA, SWE, TAI, TUR, UKI, UKR, and USA
 RELEASE_TYPE options include:  FULL (for full version), AC (full versions for older majors), SOLO, and START
 ARCHITECTURE:  INTEL or ARM, falls back to INTEL</string>
