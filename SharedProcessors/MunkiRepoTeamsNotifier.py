@@ -278,7 +278,7 @@ class MunkiRepoTeamsNotifier(URLGetter):
         raw_headers = self.download_with_curl(curl_cmd)
         header = self.parse_headers(raw_headers)
 
-        print(header)
+        self.output(header, 2)
 
         return header.get("http_result_code") == "200"
 
