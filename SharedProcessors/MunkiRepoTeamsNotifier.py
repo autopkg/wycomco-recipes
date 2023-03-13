@@ -53,6 +53,12 @@ class MunkiRepoTeamsNotifier(URLGetter):
             "description": ("Teams display icon URL."),
             "default": "https://munkibuilds.org/logo.jpg",
         },
+        "ICON_BASE_URL": {
+            "required": False,
+            "description": (
+                "Base url to icons folder, corresponds to Munki's IconURL"
+            ),
+        },
         "munki_repo_changed": {
             "required": False,
             "description": (
