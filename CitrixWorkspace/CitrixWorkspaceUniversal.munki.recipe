@@ -131,7 +131,8 @@
 					<string>%RECIPE_CACHE_DIR%/payload</string>
 					<string>%RECIPE_CACHE_DIR%/unpack</string>
 					<string>%RECIPE_CACHE_DIR%/unpackpkg</string>
-					<string>%RECIPE_CACHE_DIR%/Scripts</string>
+					<string>%RECIPE_CACHE_DIR%/pkgroot</string>
+					<string>%RECIPE_CACHE_DIR%/Citrix_Workspace_Universal_%version%.pkg</string>
 				</array>
 			</dict>
 			<key>Processor</key>
