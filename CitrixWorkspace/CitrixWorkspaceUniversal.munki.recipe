@@ -18,6 +18,8 @@
 			<array>
 				<string>testing</string>
 			</array>
+			<key>blocking_applications</key>
+			<array/>
 			<key>category</key>
 			<string>Productivity</string>
 			<key>description</key>
@@ -28,6 +30,25 @@
 			<string>Citrix Workspace</string>
 			<key>name</key>
 			<string>%NAME%</string>
+			<key>preuninstall_script</key>
+			<string>#!/bin/zsh
+		
+		launch_agents=(/Library/LaunchAgents/com.citrix*)
+		launch_daemons=(/Library/LaunchDaemons/com.citrix*)
+		
+		for agent in "${launch_agents[@]}"
+		do
+		  rm "$agent"
+		  echo "Removed LaunchAgent: $agent"
+		done
+		
+		for daemon in "${launch_daemons[@]}"
+		do
+		  launchctl unload "$daemon"
+		  rm "$daemon"
+		  echo "Unloaded and removed LaunchDaemon: $daemon"
+		done
+	</string>
 			<key>unattended_install</key>
 			<true/>
 			<key>unattended_uninstall</key>
