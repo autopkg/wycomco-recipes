@@ -272,6 +272,11 @@ class MunkiRepoTeamsNotifier(URLGetter):
         if self.check_web_url(icon_url):
             return icon_url
 
+        # Try to add .png to the icon_name
+        icon_name = f"{icon_name}.png"
+        if self.check_web_url(icon_name):
+            return icon_url
+
         return ""
 
     def check_web_url(self, url):
