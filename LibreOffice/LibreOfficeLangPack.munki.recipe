@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads and packages the latest LibreOffice with the given language. Imports it into Munki. Set RELEASE to either "fresh" or "still". TYPE (either "mac-x86_64" or "mac-aarch64") at this time only works with "mac-x86_64".</string>
+	<string>Downloads and packages the latest LibreOffice with the given language. Imports it into Munki. Set RELEASE to either "fresh" or "still" and ARCH to either "x86_64" for Intel or "aarch64" for ARM.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.LibreOfficeLangPack</string>
 	<key>Input</key>
@@ -18,8 +18,8 @@
 		<string>LibreOffice</string>
 		<key>RELEASE</key>
 		<string>still</string>
-		<key>TYPE</key>
-		<string>mac-x86_64</string>
+		<key>ARCH</key>
+		<string>x86_64</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>blocking_applications</key>
