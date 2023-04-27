@@ -32,22 +32,36 @@
 			<string>%NAME%</string>
 			<key>preuninstall_script</key>
 			<string>#!/bin/zsh
-		
-		launch_agents=(/Library/LaunchAgents/com.citrix*)
-		launch_daemons=(/Library/LaunchDaemons/com.citrix*)
-		
-		for agent in "${launch_agents[@]}"
-		do
-		  rm "$agent"
-		  echo "Removed LaunchAgent: $agent"
-		done
-		
-		for daemon in "${launch_daemons[@]}"
-		do
-		  launchctl unload "$daemon"
-		  rm "$daemon"
-		  echo "Unloaded and removed LaunchDaemon: $daemon"
-		done
+launch_agents=(/Library/LaunchAgents/com.citrix*)
+launch_daemons=(/Library/LaunchDaemons/com.citrix*)
+
+currentUser=$( echo "show State:/Users/ConsoleUser" | scutil | awk '/Name :/ { print $3 }' )
+
+# global check if there is a user logged in
+if [ -n "$currentUser" -a "$currentUser" != "loginwindow" ]; then
+	uid=$(id -u "$currentUser")
+
+	killall "Citrix Workspace"
+
+	for agent in "${launch_agents[@]}"
+	do
+		launchctl asuser "$uid" sudo -u "$currentUser" launchctl unload "$agent"
+		echo "Unloaded LaunchAgent: $agent"
+	done
+fi
+
+for agent in "${launch_agents[@]}"
+do
+	rm "$agent"
+	echo "Removed LaunchAgent: $agent"
+done
+
+for daemon in "${launch_daemons[@]}"
+do
+	launchctl unload "$daemon"
+	rm "$daemon"
+	echo "Unloaded and removed LaunchDaemon: $daemon"
+done
 	</string>
 			<key>unattended_install</key>
 			<true/>
