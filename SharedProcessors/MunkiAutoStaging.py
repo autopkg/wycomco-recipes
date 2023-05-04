@@ -56,7 +56,6 @@ def _fetch_repo_library(
     repo_subdirectory,
     force_munki_lib,
 ):
-
     if munki_repo_plugin == "FileRepo" and not force_munki_lib:
         return AutoPkgLib(munki_repo, repo_subdirectory)
 
@@ -164,9 +163,19 @@ class MunkiAutoStaging(Processor):
             )
 
         if len(file_extension) > 0:
+            name = pkginfo.get("name", None)
+            self.output(
+                f"Adding {file_extension} to filename for {name}...", 2
+            )
             file_extension = "." + file_extension.strip(".")
 
         pkginfo_basename = f"{pkginfo['name']}-{pkginfo['version'].strip()}"
+
+        self.output(
+            "Searching through repository for a file named "
+            f"{pkginfo_basename} with an extension of {file_extension}",
+            2,
+        )
 
         file_list = glob.iglob(
             os.path.join(
@@ -187,9 +196,19 @@ class MunkiAutoStaging(Processor):
 
         for item in items:
             if "catalogs" not in item:
+                self.output(
+                    "Did not find any catalogs in item with name "
+                    f"{item.name}...",
+                    2,
+                )
                 continue
 
             if self.env["MUNKI_STAGING_CATALOG"] not in item["catalogs"]:
+                self.output(
+                    "Did not find staging catalog in item with name "
+                    f"{item.name}...",
+                    2,
+                )
                 continue
 
             files = self._find_pkginfo_files_in_repo(
@@ -197,19 +216,30 @@ class MunkiAutoStaging(Processor):
             )
 
             for file in files:
+                self.output(f"Opening file {file}...", 2)
                 with open(file, "rb") as file_handler:
                     pkginfo = plistlib.load(file_handler)
                     file_handler.close()
 
+                self.output("Checking pkginfo for staging catalog...", 2)
                 if ("catalogs" not in pkginfo) or (
                     self.env["MUNKI_STAGING_CATALOG"]
                     not in pkginfo["catalogs"]
                 ):
+                    self.output(
+                        "No catalog or no staging catalog found... skipping.",
+                        2,
+                    )
                     continue
 
+                self.output("Checking _metadata for creation_date...", 2)
                 if ("_metadata" not in pkginfo) or (
                     "creation_date" not in pkginfo["_metadata"]
                 ):
+                    self.output(
+                        "No _metadata or no creation_date found... skipping.",
+                        2,
+                    )
                     continue
 
                 period = timedelta(float(self.env["MUNKI_STAGING_DAYS"]))
@@ -218,6 +248,10 @@ class MunkiAutoStaging(Processor):
                 if delta > period:
                     self.output(f"Found item to promote at {file}")
                     items_to_promote.append(file)
+                else:
+                    self.output(
+                        f"Item {file} is too young to promote... skipping", 1
+                    )
 
         return items_to_promote
 
