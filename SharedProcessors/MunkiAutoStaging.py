@@ -198,7 +198,7 @@ class MunkiAutoStaging(Processor):
             if "catalogs" not in item:
                 self.output(
                     "Did not find any catalogs in item with name "
-                    f"{item.name}...",
+                    f"{item['name']}...",
                     2,
                 )
                 continue
@@ -206,7 +206,7 @@ class MunkiAutoStaging(Processor):
             if self.env["MUNKI_STAGING_CATALOG"] not in item["catalogs"]:
                 self.output(
                     "Did not find staging catalog in item with name "
-                    f"{item.name}...",
+                    f"{item['name']}...",
                     2,
                 )
                 continue
