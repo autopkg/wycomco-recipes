@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads the latest Citrix Workspace version with Apple Silicon support and imports into Munki. Override NAME and MUNKI_REPO_SUBDIR to your own preferences. Download is performed by using rtouton's download-recipe.</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.munki.citrixworkspaceuniversal</string>
+	<key>Input</key>
+	<dict>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%</string>
+		<key>NAME</key>
+		<string>CitrixWorkspaceUniversal</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>blocking_applications</key>
+			<array/>
+			<key>category</key>
+			<string>Productivity</string>
+			<key>description</key>
+			<string>High performance web and self-services access to virtual apps and desktops. Configure for anywhere access from your desktop or web access with Safari, Chrome or Firefox.</string>
+			<key>developer</key>
+			<string>Citrix Systems, Inc.</string>
+			<key>display_name</key>
+			<string>Citrix Workspace</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>preuninstall_script</key>
+			<string>#!/bin/zsh
+launch_agents=(/Library/LaunchAgents/com.citrix*)
+launch_daemons=(/Library/LaunchDaemons/com.citrix*)
+
+currentUser=$( echo "show State:/Users/ConsoleUser" | scutil | awk '/Name :/ { print $3 }' )
+
+# global check if there is a user logged in
+if [ -n "$currentUser" -a "$currentUser" != "loginwindow" ]; then
+	uid=$(id -u "$currentUser")
+
+	killall "Citrix Workspace"
+
+	for agent in "${launch_agents[@]}"
+	do
+		launchctl asuser "$uid" sudo -u "$currentUser" launchctl unload "$agent"
+		echo "Unloaded LaunchAgent: $agent"
+	done
+fi
+
+for agent in "${launch_agents[@]}"
+do
+	rm "$agent"
+	echo "Removed LaunchAgent: $agent"
+done
+
+for daemon in "${launch_daemons[@]}"
+do
+	launchctl unload "$daemon"
+	rm "$daemon"
+	echo "Unloaded and removed LaunchDaemon: $daemon"
+done
+	</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.2.5</string>
+	<key>ParentRecipe</key>
+	<string>com.github.rtrouton.pkg.citrixworkspaceuniversal</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>flat_pkg_path</key>
+				<string>%pkg_path%</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/unpack</string>
+			</dict>
+			<key>Processor</key>
+			<string>FlatPkgUnpacker</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>flat_pkg_path</key>
+				<string>%RECIPE_CACHE_DIR%/unpack/Scripts/Install Citrix Workspace.pkg</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/unpackpkg</string>
+			</dict>
+			<key>Processor</key>
+			<string>FlatPkgUnpacker</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_payload_path</key>
+				<string>%RECIPE_CACHE_DIR%/unpackpkg/com.citrix.ICAClient.pkg/Payload</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/payload</string>
+			</dict>
+			<key>Processor</key>
+			<string>PkgPayloadUnpacker</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>info_path</key>
+				<string>%RECIPE_CACHE_DIR%/payload/Applications/Citrix Workspace.app/Contents/Info.plist</string>
+				<key>plist_keys</key>
+				<dict>
+					<key>LSMinimumSystemVersion</key>
+					<string>minimum_os_version</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>PlistReader</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>minimum_os_version</key>
+					<string>%minimum_os_version%</string>
+					<key>installs</key>
+					<array>
+						<dict>
+							<key>CFBundleShortVersionString</key>
+							<string>%version%</string>
+							<key>path</key>
+							<string>/Applications/Citrix Workspace.app</string>
+							<key>type</key>
+							<string>application</string>
+							<key>version_comparison_key</key>
+							<string>CFBundleShortVersionString</string>
+						</dict>
+					</array>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%pathname%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>path_list</key>
+				<array>
+					<string>%RECIPE_CACHE_DIR%/payload</string>
+					<string>%RECIPE_CACHE_DIR%/unpack</string>
+					<string>%RECIPE_CACHE_DIR%/unpackpkg</string>
+					<string>%RECIPE_CACHE_DIR%/pkgroot</string>
+					<string>%RECIPE_CACHE_DIR%/Citrix_Workspace_Universal_%version%.pkg</string>
+				</array>
+			</dict>
+			<key>Processor</key>
+			<string>PathDeleter</string>
+		</dict>
+	</array>
+</dict>
+</plist>
