@@ -73,7 +73,7 @@ ARCHITECTURE:  INTEL or ARM, falls back to INTEL
 				<key>additional_pkginfo</key>
 				<dict>
 					<key>display_name</key>
-					<string>ARCHICAD %MAJOR_VERSION% %LOCALIZATION% Update %version%</string>
+					<string>ARCHICAD %MAJOR_VERSION% %LOCALIZATION% (%ARCHITECTURE%) Update %version%</string>
 					<key>installs</key>
 					<array>
 						<dict>
