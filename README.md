@@ -14,11 +14,11 @@ autopkg repo-add wycomco-recipes
 
 ## SharedProcessors
 
-Currently we offer one shared processor:
+Currently we offer a handfull processors:
 
 * [JamfMultiUploader](https://github.com/autopkg/wycomco-recipes/blob/master/SharedProcessors/JamfMultiUploader.py): Take the great [JamfUploader Processors](https://github.com/grahampugh/jamf-upload) from [Graham Pugh](https://grahamrpugh.com) to the next level and manage *multiple* Jamf Pro instances from a single recipe or override.
-* [MunkiRepoTeamsNotifier](https://github.com/autopkg/wycomco-recipes/blob/master/SharedProcessors/MunkiRepoTeamsNotifier.py): Send a notification to a Microsoft Teams channel with information about recent changes in your Munki repository.
 * [MunkiAutoStaging](https://github.com/autopkg/wycomco-recipes/blob/master/SharedProcessors/MunkiAutoStaging.py): Automatically promote Munki packages from a staging catalog to a production catalog, [here](https://medium.com/@choules/staging-munki-updates-with-autopkg-da58d2f79020) you may find a short introduction.
+* [MunkiRepoTeamsNotifier](https://github.com/autopkg/wycomco-recipes/blob/master/SharedProcessors/MunkiRepoTeamsNotifier.py): Send a notification to a Microsoft Teams channel with information about recent changes in your Munki repository.
 
 ## Dependencies
 
