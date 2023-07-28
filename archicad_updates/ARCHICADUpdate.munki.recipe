@@ -29,7 +29,7 @@ ARCHITECTURE:  INTEL or ARM, falls back to INTEL
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/graphisoft/ARCHICAD%MAJOR_VERSION%_%LOCALIZATION%</string>
 		<key>NAME</key>
-		<string>ARCHICAD%MAJOR_VERSION%_%LOCALIZATION%_update</string>
+		<string>ARCHICAD%MAJOR_VERSION%_%LOCALIZATION%_update_%ARCHITECTURE%</string>
 		<key>RELEASE_TYPE</key>
 		<string>FULL</string>
 		<key>UPDATE_FOR</key>
@@ -73,7 +73,7 @@ ARCHITECTURE:  INTEL or ARM, falls back to INTEL
 				<key>additional_pkginfo</key>
 				<dict>
 					<key>display_name</key>
-					<string>ARCHICAD %MAJOR_VERSION% %LOCALIZATION% Update %version%</string>
+					<string>ARCHICAD %MAJOR_VERSION% %LOCALIZATION% (%ARCHITECTURE%) Update %version%</string>
 					<key>installs</key>
 					<array>
 						<dict>
