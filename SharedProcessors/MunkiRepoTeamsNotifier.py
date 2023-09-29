@@ -160,35 +160,18 @@ class MunkiRepoTeamsNotifier(URLGetter):
         methods of this module.
         """
         message = {
-            "type": "message",
-            "attachments": [
+            "@type": "AdaptiveCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": "778eb1",
+            "summary": title,
+            "sections": [
                 {
-                    "contentType": (
-                        "application/vnd.microsoft.teams.card.o365connector"
-                    ),
-                    "content": {
-                        "$schema": "https://schema.org/extensions",
-                        "sections": [
-                            {
-                                # "activityImage":
-                                # "https://munkibuilds.org/logo.jpg",
-                                "activitySubtitle": activity_subtitle,
-                                "activityTitle": activity_title,
-                                "facts": [
-                                    # {
-                                    #     "name": "foo",
-                                    #     "value": "bar"
-                                    # }
-                                ],
-                            }
-                        ],
-                        "summary": title,
-                        "themeColor": "778eb1",
-                        "title": title,
-                        "type": "MessageCard",
-                    },
+                    "activityTitle": activity_title,
+                    "activitySubtitle": activity_subtitle,
+                    "facts": [],
                 }
             ],
+            "potentialAction": [],
         }
 
         self.set_activity_image(message, activity_image)
@@ -199,26 +182,21 @@ class MunkiRepoTeamsNotifier(URLGetter):
         """
         Set summary and title in an existing Teams message dictionary.
         """
-        message["attachments"][0]["content"]["summary"] = title
-        message["attachments"][0]["content"]["title"] = title
+        message["summary"] = title
         return message
 
     def set_activity_title(self, message, activity_title):
         """
         Set activityTitle in an existing Teams message dictionary.
         """
-        message["attachments"][0]["content"]["sections"][0][
-            "activityTitle"
-        ] = activity_title
+        message["sections"][0]["activityTitle"] = activity_title
         return message
 
     def set_activity_subtitle(self, message, activity_subtitle):
         """
         Set activitySubtitle in an existing Teams message dictionary.
         """
-        message["attachments"][0]["content"]["sections"][0][
-            "activitySubtitle"
-        ] = activity_subtitle
+        message["sections"][0]["activitySubtitle"] = activity_subtitle
         return message
 
     def set_activity_image(self, message, activity_image=""):
@@ -228,14 +206,10 @@ class MunkiRepoTeamsNotifier(URLGetter):
         image will be removed.
         """
         if activity_image:
-            message["attachments"][0]["content"]["sections"][0][
-                "activityImage"
-            ] = activity_image
+            message["sections"][0]["activityImage"] = activity_image
         else:
             try:
-                del message["attachments"][0]["content"]["sections"][0][
-                    "activityImage"
-                ]
+                del message["sections"][0]["activityImage"]
             except KeyError:
                 pass
         return message
@@ -244,8 +218,19 @@ class MunkiRepoTeamsNotifier(URLGetter):
         """
         Adds a facts dictionary to a Teams message dictionary.
         """
-        message["attachments"][0]["content"]["sections"][0]["facts"] += [
-            {"name": name, "value": value}
+        message["sections"][0]["facts"] += [{"name": name, "value": value}]
+        return message
+
+    def add_link(self, message, name, url):
+        """
+        Adds a link to a Teams message dictionary.
+        """
+        message["potentialAction"] += [
+            {
+                "@type": "OpenUri",
+                "name": name,
+                "targets": [{"os": "default", "uri": url}],
+            }
         ]
         return message
 
@@ -339,6 +324,8 @@ class MunkiRepoTeamsNotifier(URLGetter):
 
         if icon_url:
             self.set_activity_image(message, icon_url)
+
+        # self.add_link(message, "Show in Munki", "munki://detail-" + name)
 
         return (message, name)
 
