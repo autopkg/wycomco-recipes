@@ -22,6 +22,7 @@ limitations under the License.
 from __future__ import absolute_import, print_function
 
 import json
+import re
 
 # pylint: disable=W0611
 from autopkglib import Processor, ProcessorError, URLGetter  # noqa: F401
@@ -82,40 +83,78 @@ class ARCHICADUpdatesProcessor(URLGetter):
         architecture = self.env.get("ARCHITECTURE", "INTEL")
         available_builds = {}
 
-        # Grab the available downloads.
-        # Fixed URL (jutonium)
+        # Grab the available public downloads page
         response = self.download(
-            "https://graphisoft.com/ww/service/downloads/archicad-updates",
-            headers={"Accept": "application/json"},
+            "https://graphisoft.com/de/service-support/downloads"
         )
-        json_data = json.loads(response)
+
+        # Parse the html to get the retrieve the actual json data for the categories.
+        json_response = re.search(r":categories='(.*)'", response.decode('utf-8')).group(1)
+        json_data = json.loads(json_response)
+
+        # Parse through the available categories to identify the category id for updates.
+        slug = None
+        for json_object in json_data:
+            slug = "update"
+
+            if json_object.get("slug") == slug:
+                category_id = json_object.get("id")
+
+        if not slug or not category_id:
+            raise ProcessorError(
+                "Unable to find a url based on the type update."
+            )
+
+        # Parse the html to get the retrieve the actual json data for the platforms.
+        json_response = re.search(r":platforms='(.*)'", response.decode('utf-8')).group(1)
+        json_data = json.loads(json_response)
+
+        # Parse through the available platforms to identify the platform id
+        # for the requested architecture.
+        slug = None
+        for json_object in json_data:
+            if architecture == "INTEL":
+                slug = "mac-intel-processor"
+            elif architecture == "ARM":
+                slug = "mac-apple-silicon"
+
+            if json_object.get("slug") == slug:
+                platform_id = json_object.get("id")
+
+        if not slug or not platform_id:
+            raise ProcessorError(
+                "Unable to find a url based on the provided architecture."
+            )
+
+        # Parse the html to get the retrieve the actual json data for the downloads.
+        json_response = re.search(r":downloads='(.*)'", response.decode('utf-8')).group(1)
+        json_data = json.loads(json_response)
 
         # Parse through the available downloads for versions that match the
         # requested paramters.
-        # Adress potential python runtime errors by checking for the existence
-        # of "build". (jutonium)
         for json_object in json_data:
+
+            # Only proceed if json_object is a dict, some items seem to be lists.
+            if not isinstance(json_object, dict):
+                continue
+
             if all(
                 (
+                    json_object.get("category") == category_id,
                     json_object.get("version") == major_version,
-                    json_object.get("localization") == localization,
-                    json_object.get("type") == release_type,
+                    json_object.get("locale") == localization,
+                    json_object.get("edition") == release_type,
+                    json_object.get("platform") == int(platform_id),
+                    json_object.get("type") == 'Archicad',
                     json_object.get("build"),
                 )
             ):
-                # Handling of new internal structure (jutonium)
-                mac_link = (
-                    json_object.get("downloadLinks", {})
-                    .get("mac", {})
-                    .get("url")
-                )
-
-                if mac_link and mac_link.endswith(f"-{architecture}.dmg"):
-                    mac_link = "https://dl.graphisoft.com" + mac_link[3:]
-                    available_builds[json_object.get("build")] = mac_link
+                # Get the actual download url and map it to the build number.
+                mac_link = json_object.get("data", {}).get("url")
+                available_builds[str(json_object.get("build"))] = mac_link
 
         # Get the latest version.
-        # Avoid unrelated errors and compute propper version (jutonium)
+        # Avoid unrelated errors and compute propper version
         if available_builds:
             build = sorted(available_builds.keys())[-1]
             version = f"{major_version}.0.0.{build}"
@@ -129,7 +168,7 @@ class ARCHICADUpdatesProcessor(URLGetter):
         if url:
             self.env["url"] = url
             self.output(f"Download URL: {url}")
-            # Build and version instead of build as version (jutonium)
+            # Build and version instead of build as version
             self.env["build"] = build
             self.output(f"build: {build}")
             self.env["version"] = version
