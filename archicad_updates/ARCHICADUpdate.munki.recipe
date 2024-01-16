@@ -48,6 +48,10 @@ ARCHITECTURE:  INTEL or ARM, falls back to INTEL
 			<string>GRAPHISOFT</string>
 			<key>installer_type</key>
 			<string>copy_from_dmg</string>
+			<key>supported_architectures</key>
+			<array>
+				<string>%supported_architecture%</string>
+			</array>
 			<key>unattended_install</key>
 			<true/>
 		</dict>
@@ -111,10 +115,6 @@ rm -rf "$INSTALLER"
 INSTALLER="/var/tmp/%dmg_found_filename%"
 rm -rf "$INSTALLER"
 </string>
-					<key>supported_architectures</key>
-					<array>
-						<string>%supported_architecture%</string>
-					</array>
 					<key>uninstallable</key>
 					<false/>
 					<key>update_for</key>
