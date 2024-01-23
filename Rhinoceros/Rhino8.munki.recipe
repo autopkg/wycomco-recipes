@@ -5,7 +5,7 @@
 	<key>Comment</key>
 	<string>Created with Recipe Robot v2.3.1 (https://github.com/homebysix/recipe-robot)</string>
 	<key>Description</key>
-	<string>Downloads the latest version of Rhino 8 and imports it into Munki.</string>
+	<string>Downloads the latest version of Rhino 8 and imports it into Munki. This recipe is customized by wycomco (https://www.wycomco.de) to support a different naming convention for munki and a German translation for selected meta tags.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.Rhino8</string>
 	<key>Input</key>
@@ -20,15 +20,31 @@
 			<array>
 				<string>testing</string>
 			</array>
+            <key>category</key>
+			<string>Graphics
 			<key>description</key>
-			<string>Versatile 3D modeler.</string>
+			<string>Rhino can create, edit, analyze, document, render, animate, and translate NURBS curves, surfaces, and solids, point clouds, and polygon meshes.</string>
 			<key>developer</key>
 			<string>Robert McNeel &amp; Associates</string>
 			<key>display_name</key>
 			<string>Rhino 8</string>
+            <key>localized_strings</key>
+			<dict>
+				<key>de</key>
+				<dict>
+					<key>category</key>
+					<string>Grafik und Design</string>
+					<key>description</key>
+					<string>Rhino kann NURBS-Kurven, -Flächen und -Volumenkörper, Punktwolken und Polygonnetze erstellen, bearbeiten, analysieren, dokumentieren, rendern, animieren und übersetzen.</string>
+				</dict>
+				<key>fallback_locale</key>
+				<string>en</string>
+			</dict>
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>
+			<true/>
+            <key>unattended_uninstall</key>
 			<true/>
 		</dict>
 	</dict>
