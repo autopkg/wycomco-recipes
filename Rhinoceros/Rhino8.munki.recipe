@@ -21,7 +21,7 @@
 				<string>testing</string>
 			</array>
             <key>category</key>
-			<string>Graphics
+			<string>Graphics</string>
 			<key>description</key>
 			<string>Rhino can create, edit, analyze, document, render, animate, and translate NURBS curves, surfaces, and solids, point clouds, and polygon meshes.</string>
 			<key>developer</key>
