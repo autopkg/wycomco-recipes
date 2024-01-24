@@ -11,7 +11,7 @@
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
-		<string>Rhino 8</string>
+		<string>app_rhino8</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>2.3</string>
@@ -30,7 +30,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>filename</key>
-				<string>%NAME%-%version%.dmg</string>
+				<string>%NAME%.dmg</string>
 			</dict>
 			<key>Processor</key>
 			<string>URLDownloader</string>
