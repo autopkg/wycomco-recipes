@@ -18,7 +18,7 @@
 		<dict>
 			<key>catalogs</key>
 			<array>
-				<string>testing</string>
+				<string>generic</string>
 			</array>
             <key>category</key>
 			<string>Graphics</string>
