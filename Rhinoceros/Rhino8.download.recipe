@@ -11,7 +11,7 @@
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
-		<string>app_rhino8</string>
+		<string>Rhino 8</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>2.3</string>

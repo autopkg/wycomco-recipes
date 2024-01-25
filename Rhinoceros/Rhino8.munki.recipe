@@ -11,14 +11,14 @@
 	<key>Input</key>
 	<dict>
 		<key>MUNKI_REPO_SUBDIR</key>
-		<string>generic/apps/rhinoceros</string>
+		<string>apps/rhinoceros</string>
 		<key>NAME</key>
-		<string>app_rhino8</string>
+		<string>Rhino 8</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>catalogs</key>
 			<array>
-				<string>generic</string>
+				<string>testing</string>
 			</array>
             <key>category</key>
 			<string>Graphics</string>
@@ -28,18 +28,6 @@
 			<string>Robert McNeel &amp; Associates</string>
 			<key>display_name</key>
 			<string>Rhino 8</string>
-            <key>localized_strings</key>
-			<dict>
-				<key>de</key>
-				<dict>
-					<key>category</key>
-					<string>Grafik und Design</string>
-					<key>description</key>
-					<string>Rhino kann NURBS-Kurven, -Flächen und -Volumenkörper, Punktwolken und Polygonnetze erstellen, bearbeiten, analysieren, dokumentieren, rendern, animieren und übersetzen.</string>
-				</dict>
-				<key>fallback_locale</key>
-				<string>en</string>
-			</dict>
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>
