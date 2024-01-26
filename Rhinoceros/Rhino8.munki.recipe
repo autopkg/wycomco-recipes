@@ -5,7 +5,7 @@
 	<key>Comment</key>
 	<string>Created with Recipe Robot v2.3.1 (https://github.com/homebysix/recipe-robot)</string>
 	<key>Description</key>
-	<string>Downloads the latest version of Rhino 8 and imports it into Munki. This recipe is customized by wycomco (https://www.wycomco.de) to support a different naming convention for munki and a German translation for selected meta tags.</string>
+	<string>Downloads the latest version of Rhino 8 and imports it into Munki.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.Rhino8</string>
 	<key>Input</key>
@@ -20,7 +20,7 @@
 			<array>
 				<string>testing</string>
 			</array>
-            <key>category</key>
+			<key>category</key>
 			<string>Graphics</string>
 			<key>description</key>
 			<string>Rhino can create, edit, analyze, document, render, animate, and translate NURBS curves, surfaces, and solids, point clouds, and polygon meshes.</string>
@@ -32,7 +32,7 @@
 			<string>%NAME%</string>
 			<key>unattended_install</key>
 			<true/>
-            <key>unattended_uninstall</key>
+			<key>unattended_uninstall</key>
 			<true/>
 		</dict>
 	</dict>
