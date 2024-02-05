@@ -10,8 +10,10 @@
 	<string>com.github.wycomco.download.Rhino8</string>
 	<key>Input</key>
 	<dict>
+		<key>VERSION</key>
+		<string>8</string>
 		<key>NAME</key>
-		<string>Rhino 8</string>
+		<string>Rhino %VERSION%</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>2.3</string>
@@ -21,7 +23,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>appcast_url</key>
-				<string>https://files.mcneel.com/rhino/8/mac/updates/commercialUpdates.xml</string>
+				<string>https://files.mcneel.com/rhino/%VERSION%/mac/updates/commercialUpdates.xml</string>
 			</dict>
 			<key>Processor</key>
 			<string>SparkleUpdateInfoProvider</string>
