@@ -7,7 +7,7 @@
 	<key>Description</key>
 	<string>Downloads the selected version of Rhino.</string>
 	<key>Identifier</key>
-	<string>com.github.wycomco.download.Rhino3D</string>
+	<string>com.github.wycomco.download.rhino3d</string>
 	<key>Input</key>
 	<dict>
 		<key>VERSION</key>

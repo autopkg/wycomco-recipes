@@ -7,11 +7,11 @@
 	<key>Description</key>
 	<string>Downloads the latest version of Selected Rhino Version and imports it into Munki.</string>
 	<key>Identifier</key>
-	<string>com.github.wycomco.munki.Rhino3D</string>
+	<string>com.github.wycomco.munki.rhino3d</string>
 	<key>Input</key>
 	<dict>
 		<key>MUNKI_REPO_SUBDIR</key>
-		<string>apps/rhino3D</string>
+		<string>apps/rhino3d</string>
 		<key>VERSION</key>
 		<string>8</string>
 		<key>NAME</key>
@@ -41,7 +41,7 @@
 	<key>MinimumVersion</key>
 	<string>2.3</string>
 	<key>ParentRecipe</key>
-	<string>com.github.wycomco.download.Rhino3D</string>
+	<string>com.github.wycomco.download.rhino3d</string>
 	<key>Process</key>
 	<array>
 		<dict>
