@@ -3,19 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads and packages the latest LibreOffice with the given language. Set RELEASE to either "fresh" or "still" and TYPE to either "mac-x86_64" or "mac-aarch64"</string>
+	<string>Downloads and packages the latest LibreOffice with the given language. Set RELEASE to either 'Latest' or 'Previous' and ARCH to either 'x86_64' or 'aarch64'.
+
+Please assign the appopriate LANGUAGE_CODE. This can be found by going to https://www.libreoffice.org/download/download-libreoffice, selecting "need another language",
+and selecting the language. The LANGUAGE_CODE can be found at the end of the URL after 'lang='</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.pkg.LibreOfficeLangPack</string>
 	<key>Input</key>
 	<dict>
+		<key>ARCH</key>
+		<string>x86_64</string>
 		<key>LANGUAGE_CODE</key>
 		<string>fr</string>
 		<key>NAME</key>
 		<string>LibreOffice</string>
 		<key>RELEASE</key>
 		<string>Latest</string>
-		<key>TYPE</key>
-		<string>mac-x86_64</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>2.4.1</string>
