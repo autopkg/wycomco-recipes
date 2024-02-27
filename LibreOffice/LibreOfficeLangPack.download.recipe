@@ -13,7 +13,7 @@
 		<key>NAME</key>
 		<string>LibreOffice</string>
 		<key>RELEASE</key>
-		<string>still</string>
+		<string>Latest</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>0.2.0</string>
