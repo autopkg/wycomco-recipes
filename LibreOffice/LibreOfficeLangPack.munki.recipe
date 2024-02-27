@@ -3,11 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads and packages the latest LibreOffice with the given language. Imports it into Munki. Set RELEASE to either "fresh" or "still" and ARCH to either "x86_64" for Intel or "aarch64" for ARM.</string>
+	<string>Downloads and packages the latest LibreOffice with the given language. Imports it into Munki. Set RELEASE to either 'Latest' or 'Previous' and ARCH to either 'x86_64' or 'aarch64'.
+
+Please assign the appopriate LANGUAGE_CODE. This can be found by going to https://www.libreoffice.org/download/download-libreoffice, selecting "need another language",
+and selecting the language. The LANGUAGE_CODE can be found at the end of the URL after 'lang='</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.LibreOfficeLangPack</string>
 	<key>Input</key>
 	<dict>
+		<key>ARCH</key>
+		<string>x86_64</string>
 		<key>LANGUAGE_CODE</key>
 		<string>fr</string>
 		<key>MUNKI_CATEGORY</key>
@@ -17,9 +22,7 @@
 		<key>NAME</key>
 		<string>LibreOffice</string>
 		<key>RELEASE</key>
-		<string>still</string>
-		<key>ARCH</key>
-		<string>x86_64</string>
+		<string>Latest</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>blocking_applications</key>
