@@ -337,6 +337,17 @@ class JamfMultiUploader(Processor):
             temp_server_config.update(copy.deepcopy(default_params))
             temp_server_config.update(copy.deepcopy(jss_params))
 
+            # Check if the processor is disabled
+            disabled = temp_server_config.get("disabled", False)
+
+            if disabled:
+                self.output(
+                    f"Skipping {processor_name} for JSS {jss_url} as it is"
+                    " disabled",
+                    1,
+                )
+                continue
+
             self.prepare_and_run(
                 processor_name=processor_name,
                 custom_config=temp_server_config,
