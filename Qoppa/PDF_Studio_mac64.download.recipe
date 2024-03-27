@@ -11,7 +11,7 @@
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
-		<string>PDF Studio</string>
+		<string>PDF Studio Installer</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>2.3</string>
