@@ -7,7 +7,7 @@
 	<key>Description</key>
 	<string>Downloads the latest version of PDF Studio Installer.</string>
 	<key>Identifier</key>
-	<string>com.github.wkipo.download.PDFStudioInstaller</string>
+	<string>com.github.wycomco.download.PDFStudioInstaller</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
