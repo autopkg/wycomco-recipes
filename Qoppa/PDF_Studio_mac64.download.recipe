@@ -11,7 +11,7 @@
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
-		<string>PDF Studio Installer</string>
+		<string>PDF Studio</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>2.3</string>
@@ -36,7 +36,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>input_path</key>
-				<string>%pathname%/PDF Studio.app</string>
+				<string>%pathname%/PDF Studio Installer.app</string>
 				<key>requirement</key>
 				<string>always</string>
 			</dict>
