@@ -237,9 +237,11 @@ class JamfMultiUploader(Processor):
         processor_name = self.env["jamf_uploader_name"].split("/")[1]
 
         return {
-            "JamfPackageUploader": "Uploaded"
-            if output_dict.get("pkg_uploaded", False)
-            else "Not Uploaded",
+            "JamfPackageUploader": (
+                "Uploaded"
+                if output_dict.get("pkg_uploaded", False)
+                else "Not Uploaded"
+            ),
             "JamfPatchUploader": output_dict.get("patch", "Not Uploaded"),
             "JamfAccountUploader": output_dict.get(
                 "account_name", "Not Uploaded"

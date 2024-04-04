@@ -89,7 +89,9 @@ class ARCHICADUpdatesProcessor(URLGetter):
         )
 
         # Parse the html to get the retrieve the actual json data for the categories.
-        json_response = re.search(r":categories='(.*)'", response.decode('utf-8')).group(1)
+        json_response = re.search(
+            r":categories='(.*)'", response.decode("utf-8")
+        ).group(1)
         json_data = json.loads(json_response)
 
         # Parse through the available categories to identify the category id for updates.
@@ -106,7 +108,9 @@ class ARCHICADUpdatesProcessor(URLGetter):
             )
 
         # Parse the html to get the retrieve the actual json data for the platforms.
-        json_response = re.search(r":platforms='(.*)'", response.decode('utf-8')).group(1)
+        json_response = re.search(
+            r":platforms='(.*)'", response.decode("utf-8")
+        ).group(1)
         json_data = json.loads(json_response)
 
         # Parse through the available platforms to identify the platform id
@@ -127,7 +131,9 @@ class ARCHICADUpdatesProcessor(URLGetter):
             )
 
         # Parse the html to get the retrieve the actual json data for the downloads.
-        json_response = re.search(r":downloads='(.*)'", response.decode('utf-8')).group(1)
+        json_response = re.search(
+            r":downloads='(.*)'", response.decode("utf-8")
+        ).group(1)
         json_data = json.loads(json_response)
 
         # Parse through the available downloads for versions that match the
@@ -145,7 +151,7 @@ class ARCHICADUpdatesProcessor(URLGetter):
                     json_object.get("locale") == localization,
                     json_object.get("edition") == release_type,
                     json_object.get("platform") == int(platform_id),
-                    json_object.get("type") == 'Archicad',
+                    json_object.get("type") == "Archicad",
                     json_object.get("build"),
                 )
             ):
