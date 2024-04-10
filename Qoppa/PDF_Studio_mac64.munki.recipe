@@ -43,6 +43,99 @@
 		<dict>
 			<key>Arguments</key>
 			<dict>
+				<key>source_path</key>
+				<string>%pathname%/PDF Studio Installer.app/Contents/Resources/app/?.dat</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/app.zip</string>
+				<key>overwrite</key>
+				<true/>
+			</dict>
+			<key>Processor</key>
+			<string>Copier</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>archive_path</key>
+				<string>%RECIPE_CACHE_DIR%/app.zip</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/Applications</string>
+				<key>purge_destination</key>
+				<true/>
+			</dict>
+			<key>Processor</key>
+			<string>Unarchiver</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pattern</key>
+				<string>%RECIPE_CACHE_DIR%/Applications/PDF Studio ????.app</string>
+			</dict>
+			<key>Processor</key>
+			<string>FileFinder</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>installs_item_paths</key>
+				<array>
+					<string>/Applications/%found_basename%</string>
+				</array>
+				<key>derive_minimum_os_version</key>
+				<true/>
+				<key>faux_root</key>
+				<string>%RECIPE_CACHE_DIR%/</string>
+				<key>version_comparison_key</key>
+				<string>CFBundleShortVersionString</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiInstallsItemsCreator</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pattern</key>
+				<string>%pathname%/*.app</string>
+			</dict>
+			<key>Processor</key>
+			<string>FileFinder</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>postinstall_script</key>
+					<string>#!/bin/sh
+INSTALLER="/var/tmp/%dmg_found_filename%"
+
+"$INSTALLER/Contents/MacOS/JavaApplicationStub" --args -q -c -overwrite
+
+rm -rf "$INSTALLER"
+</string>
+					<key>preinstall_script</key>
+					<string>#!/bin/bash
+# Remove installer from install_tmp_dir. Be careful with this!
+INSTALLER="/var/tmp/%dmg_found_filename%"
+rm -rf "$INSTALLER"
+</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_makepkginfo_options</key>
+				<array>
+					<string>--destinationpath=/var/tmp/</string>
+				</array>
 				<key>pkg_path</key>
 				<string>%pathname%</string>
 				<key>repo_subdirectory</key>
@@ -50,6 +143,18 @@
 			</dict>
 			<key>Processor</key>
 			<string>MunkiImporter</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>path_list</key>
+				<array>
+					<string>%RECIPE_CACHE_DIR%/app.zip</string>
+					<string>%RECIPE_CACHE_DIR%/Applications</string>
+				</array>
+			</dict>
+			<key>Processor</key>
+			<string>PathDeleter</string>
 		</dict>
 	</array>
 </dict>
