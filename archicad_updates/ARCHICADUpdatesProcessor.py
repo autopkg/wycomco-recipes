@@ -88,13 +88,14 @@ class ARCHICADUpdatesProcessor(URLGetter):
             "https://graphisoft.com/de/service-support/downloads"
         )
 
-        # Parse the html to get the retrieve the actual json data for the categories.
+        # Parse the html to retrieve the actual json data for the categories.
         json_response = re.search(
             r":categories='(.*)'", response.decode("utf-8")
         ).group(1)
         json_data = json.loads(json_response)
 
-        # Parse through the available categories to identify the category id for updates.
+        # Parse through the available categories to identify the category id
+        # for updates.
         slug = None
         for json_object in json_data:
             slug = "update"
@@ -107,7 +108,7 @@ class ARCHICADUpdatesProcessor(URLGetter):
                 "Unable to find a url based on the type update."
             )
 
-        # Parse the html to get the retrieve the actual json data for the platforms.
+        # Parse the html to retrieve the actual json data for the platforms.
         json_response = re.search(
             r":platforms='(.*)'", response.decode("utf-8")
         ).group(1)
@@ -130,7 +131,7 @@ class ARCHICADUpdatesProcessor(URLGetter):
                 "Unable to find a url based on the provided architecture."
             )
 
-        # Parse the html to get the retrieve the actual json data for the downloads.
+        # Parse the html to retrieve the actual json data for the downloads.
         json_response = re.search(
             r":downloads='(.*)'", response.decode("utf-8")
         ).group(1)
@@ -140,7 +141,7 @@ class ARCHICADUpdatesProcessor(URLGetter):
         # requested paramters.
         for json_object in json_data:
 
-            # Only proceed if json_object is a dict, some items seem to be lists.
+            # Only proceed if json_object is a dict, some items may be lists.
             if not isinstance(json_object, dict):
                 continue
 
