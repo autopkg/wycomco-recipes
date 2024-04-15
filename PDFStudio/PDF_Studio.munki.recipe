@@ -19,7 +19,7 @@ This recipe requires com.github.jazzace.processors/TextSearcher to identify the 
 		<key>NAME</key>
 		<string>PDF Studio %MAJOR_VERSION%</string>
 		<key>MAJOR_VERSION</key>
-		<string>2022</string>
+		<string>2023</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>catalogs</key>
