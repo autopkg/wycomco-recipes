@@ -7,7 +7,9 @@
 	<key>Description</key>
 	<string>Downloads the latest version of PDF Studio Installer and imports it into Munki.
 
-Please set the major version accordingly to prevent unwanted upgrades for clients.</string>
+You may set the MAJOR_VERSION to prevent unwanted upgrades for clients. Leave the MAJOR_VERSION blank to process all future versions.
+
+This recipe requires com.github.jazzace.processors/TextSearcher to identify the major version.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.PDFStudio</string>
 	<key>Input</key>
@@ -17,7 +19,7 @@ Please set the major version accordingly to prevent unwanted upgrades for client
 		<key>NAME</key>
 		<string>PDF Studio %MAJOR_VERSION%</string>
 		<key>MAJOR_VERSION</key>
-		<string>2023</string>
+		<string>2022</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>catalogs</key>
@@ -79,6 +81,28 @@ Please set the major version accordingly to prevent unwanted upgrades for client
 			<key>Processor</key>
 			<string>FileFinder</string>
 		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>com.github.jazzace.processors/TextSearcher</string>
+			<key>Arguments</key>
+			<dict>
+				<key>re_pattern</key>
+				<string>([\d]{4})</string>
+				<key>result_output_var_name</key>
+				<string>found_major_version</string>
+				<key>text_in</key>
+				<string>%found_basename%</string>
+			</dict>
+		</dict>
+        <dict>
+            <key>Processor</key>
+            <string>StopProcessingIf</string>
+            <key>Arguments</key>
+            <dict>
+                <key>predicate</key>
+                <string>MAJOR_VERSION != "" AND MAJOR_VERSION != found_major_version</string>
+            </dict>
+        </dict>
 		<dict>
 			<key>Arguments</key>
 			<dict>
