@@ -145,7 +145,23 @@ INSTALLER="/var/tmp/%dmg_found_filename%"
 "$INSTALLER/Contents/MacOS/JavaApplicationStub" --args -q -c -overwrite
 
 rm -rf "$INSTALLER"
-</string>
+					</string>
+					<key>postuninstall_script</key>
+					<string>#!/bin/sh
+set -x
+VERSION=%MAJOR_VERSION%
+for USERSDIR in /Users/*; do
+	for USER in $(dscl . list /Users | grep -v "^_\|daemon\|nobody\|root\|Shared\|Guest"); do
+		NFSHOME=$(dscl . -read /Users/"$USER" NFSHomeDirectory | grep NFSHomeDirectory | awk '{print $2}')
+		if [[ "$NFSHOME" == "$USERSDIR" ]]; then
+		rm -rf /Users/$USER/Library/Saved\ Application\ State/net.java.openjdk.java.savedState
+		rm -rf /Users/$USER/Library/Preferences/net.java.openjdk.java.plist
+		rm -rf /Users/$USER/Library/Preferences/com.qoppa.PDFStudio.plist 
+		fi
+	done
+done
+rm -rf /Applications/PDF Studio "$VERSION".app
+					</string>
 					<key>preinstall_script</key>
 					<string>#!/bin/bash
 # Remove installer from install_tmp_dir. Be careful with this!
