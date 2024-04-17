@@ -148,8 +148,6 @@ rm -rf "$INSTALLER"
 					</string>
 					<key>postuninstall_script</key>
 					<string>#!/bin/sh
-set -x
-VERSION=%MAJOR_VERSION%
 for USERSDIR in /Users/*; do
 	for USER in $(dscl . list /Users | grep -v "^_\|daemon\|nobody\|root\|Shared\|Guest"); do
 		NFSHOME=$(dscl . -read /Users/"$USER" NFSHomeDirectory | grep NFSHomeDirectory | awk '{print $2}')
@@ -160,7 +158,7 @@ for USERSDIR in /Users/*; do
 		fi
 	done
 done
-rm -rf /Applications/PDF\ Studio\ "$VERSION".app
+rm -rf /Applications/PDF\ Studio\ %MAJOR_VERSION%.app
 					</string>
 					<key>preinstall_script</key>
 					<string>#!/bin/bash
