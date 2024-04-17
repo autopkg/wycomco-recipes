@@ -165,7 +165,7 @@ rm -rf /Applications/PDF\ Studio\ %MAJOR_VERSION%.app
 # Remove installer from install_tmp_dir. Be careful with this!
 INSTALLER="/var/tmp/%dmg_found_filename%"
 rm -rf "$INSTALLER"
-</string>
+					</string>
 				</dict>
 			</dict>
 			<key>Processor</key>
