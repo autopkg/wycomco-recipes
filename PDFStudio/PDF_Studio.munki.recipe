@@ -160,7 +160,7 @@ for USERSDIR in /Users/*; do
 		fi
 	done
 done
-rm -rf /Applications/PDF Studio "$VERSION".app
+rm -rf /Applications/PDF\ Studio\ "$VERSION".app
 					</string>
 					<key>preinstall_script</key>
 					<string>#!/bin/bash
