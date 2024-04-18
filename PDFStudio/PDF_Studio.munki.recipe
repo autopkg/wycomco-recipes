@@ -31,7 +31,7 @@ This recipe requires com.github.jazzace.processors/TextSearcher to identify the 
 			<key>developer</key>
 			<string>Qoppa Software LLC</string>
 			<key>display_name</key>
-			<string>%NAME%</string>
+			<string>PDF Studio %MAJOR_VERSION%</string>
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>
