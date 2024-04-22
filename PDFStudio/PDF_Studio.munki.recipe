@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Comment</key>
+	<string>Created with Recipe Robot v2.3.1 (https://github.com/homebysix/recipe-robot)</string>
+	<key>Description</key>
+	<string>Downloads the latest version of PDF Studio Installer and imports it into Munki.
+
+You may set the MAJOR_VERSION to prevent unwanted upgrades for clients. Leave the MAJOR_VERSION blank to process all future versions.
+
+This recipe requires com.github.jazzace.processors/TextSearcher to identify the major version.</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.munki.PDFStudio</string>
+	<key>Input</key>
+	<dict>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/PDF_Studio</string>
+		<key>NAME</key>
+		<string>PDF Studio %MAJOR_VERSION%</string>
+		<key>MAJOR_VERSION</key>
+		<string>2024</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>description</key>
+			<string>PDF creator with annotation features and more.</string>
+			<key>developer</key>
+			<string>Qoppa Software LLC</string>
+			<key>display_name</key>
+			<string>PDF Studio %MAJOR_VERSION%</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>2.3</string>
+	<key>ParentRecipe</key>
+	<string>com.github.wycomco.download.PDFStudio</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>source_path</key>
+				<string>%pathname%/PDF Studio Installer.app/Contents/Resources/app/?.dat</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/app.zip</string>
+				<key>overwrite</key>
+				<true/>
+			</dict>
+			<key>Processor</key>
+			<string>Copier</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>archive_path</key>
+				<string>%RECIPE_CACHE_DIR%/app.zip</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/Applications</string>
+				<key>purge_destination</key>
+				<true/>
+			</dict>
+			<key>Processor</key>
+			<string>Unarchiver</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pattern</key>
+				<string>%RECIPE_CACHE_DIR%/Applications/PDF Studio ????.app</string>
+			</dict>
+			<key>Processor</key>
+			<string>FileFinder</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>com.github.jazzace.processors/TextSearcher</string>
+			<key>Arguments</key>
+			<dict>
+				<key>re_pattern</key>
+				<string>([\d]{4})</string>
+				<key>result_output_var_name</key>
+				<string>found_major_version</string>
+				<key>text_in</key>
+				<string>%found_basename%</string>
+			</dict>
+		</dict>
+        <dict>
+            <key>Processor</key>
+            <string>StopProcessingIf</string>
+            <key>Arguments</key>
+            <dict>
+                <key>predicate</key>
+                <string>MAJOR_VERSION != "" AND MAJOR_VERSION != found_major_version</string>
+            </dict>
+        </dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>installs_item_paths</key>
+				<array>
+					<string>/Applications/%found_basename%</string>
+				</array>
+				<key>derive_minimum_os_version</key>
+				<true/>
+				<key>faux_root</key>
+				<string>%RECIPE_CACHE_DIR%/</string>
+				<key>version_comparison_key</key>
+				<string>CFBundleShortVersionString</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiInstallsItemsCreator</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pattern</key>
+				<string>%pathname%/*.app</string>
+			</dict>
+			<key>Processor</key>
+			<string>FileFinder</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>postinstall_script</key>
+					<string>#!/bin/sh
+INSTALLER="/var/tmp/%dmg_found_filename%"
+
+"$INSTALLER/Contents/MacOS/JavaApplicationStub" --args -q -c -overwrite
+
+rm -rf "$INSTALLER"
+					</string>
+					<key>postuninstall_script</key>
+					<string>#!/bin/sh
+for USERSDIR in /Users/*; do
+	for USER in $(dscl . list /Users | grep -v "^_\|daemon\|nobody\|root\|Shared\|Guest"); do
+		NFSHOME=$(dscl . -read /Users/"$USER" NFSHomeDirectory | grep NFSHomeDirectory | awk '{print $2}')
+		if [[ "$NFSHOME" == "$USERSDIR" ]]; then
+			rm -rf /Users/$USER/Library/Saved\ Application\ State/net.java.openjdk.java.savedState
+			rm -rf /Users/$USER/Library/Preferences/net.java.openjdk.java.plist
+			rm -rf /Users/$USER/Library/Preferences/com.qoppa.PDFStudio.plist 
+		fi
+	done
+done
+rm -rf /Applications/PDF\ Studio\ %MAJOR_VERSION%.app
+					</string>
+					<key>preinstall_script</key>
+					<string>#!/bin/bash
+# Remove installer from install_tmp_dir. Be careful with this!
+INSTALLER="/var/tmp/%dmg_found_filename%"
+rm -rf "$INSTALLER"
+					</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_makepkginfo_options</key>
+				<array>
+					<string>--destinationpath=/var/tmp/</string>
+				</array>
+				<key>pkg_path</key>
+				<string>%pathname%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>path_list</key>
+				<array>
+					<string>%RECIPE_CACHE_DIR%/app.zip</string>
+					<string>%RECIPE_CACHE_DIR%/Applications</string>
+				</array>
+			</dict>
+			<key>Processor</key>
+			<string>PathDeleter</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -26,6 +26,7 @@ Please be aware that some recipes might be dependent on other peoples fantastic 
 
 * DeepL: [autopkg/andredb90-recipes](https://github.com/autopkg/andredb90-recipes) `autopkg repo-add andredb90-recipes`
 * MicrosoftOffice365: [autopkg/rtrouton-recipes](https://github.com/autopkg/rtrouton-recipes) `autopkg repo-add rtrouton-recipes`
+* PDF Studio: [autopkg/jazzace-recipes](https://github.com/autopkg/jazzace-recipes) `autopkg repo-add jazzace-recipes`
 
 ## Issues
 
