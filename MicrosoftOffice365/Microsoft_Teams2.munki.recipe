@@ -74,51 +74,36 @@
 		</dict>
 	</dict>
 	<key>ParentRecipe</key>
-	<string>com.github.autopkg.munki.MSTeams2</string>
-	<key>ParentRecipeTrustInfo</key>
-	<dict>
-		<key>non_core_processors</key>
+	<string>com.github.wycomco.pkg.MSTeams2</string>
+	<key>Process</key>
+	<array>
 		<dict>
-			<key>MSOfficeMacURLandUpdateInfoProvider</key>
-			<dict>
-				<key>git_hash</key>
-				<string>a00457ad6d835f4d7bb5a256cc2b280607269134</string>
-				<key>path</key>
-				<string>~/Library/AutoPkg/RecipeRepos/com.github.autopkg.recipes/MSOfficeUpdates/MSOfficeMacURLandUpdateInfoProvider.py</string>
-				<key>sha256_hash</key>
-				<string>54997072c0e3720d09b8fb4f002e18af8e57e9841c9363201e931a6914f13080</string>
-			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
 		</dict>
-		<key>parent_recipes</key>
 		<dict>
-			<key>com.github.autopkg.download.MSOfficeMacProduct</key>
+			<key>Arguments</key>
 			<dict>
-				<key>git_hash</key>
-				<string>db02edcc4fad1325e3f44ea31aa387a4ad39c998</string>
-				<key>path</key>
-				<string>~/Library/AutoPkg/RecipeRepos/com.github.autopkg.recipes/MSOfficeUpdates/MSOfficeMacProduct.download.recipe</string>
-				<key>sha256_hash</key>
-				<string>c7f9b0fa0e3634c0aab69e3248da0dca823e0749304a70c45272bbcb9db84df8</string>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>minimum_os_version</key>
+					<string>%minimum_os_version%</string>
+				</dict>
 			</dict>
-			<key>com.github.autopkg.download.MSTeams2</key>
-			<dict>
-				<key>git_hash</key>
-				<string>a635a1d811c437f8c050995f2b29dedd2b5c8c3d</string>
-				<key>path</key>
-				<string>~/Library/AutoPkg/RecipeRepos/com.github.autopkg.recipes/MSOfficeUpdates/MSTeams2.download.recipe</string>
-				<key>sha256_hash</key>
-				<string>00c49b22f492017eb11d835dfad2456001494238b49fdb47256ac8633bfb6b70</string>
-			</dict>
-			<key>com.github.autopkg.munki.MSTeams2</key>
-			<dict>
-				<key>git_hash</key>
-				<string>1c73252ecbaa7ec9dc47b41210d2b69062ee2d22</string>
-				<key>path</key>
-				<string>~/Library/AutoPkg/RecipeRepos/com.github.autopkg.recipes/MSOfficeUpdates/MSTeams2.munki.recipe</string>
-				<key>sha256_hash</key>
-				<string>97cafc6a96131afb716fadb75aaf16c911a01840c9c7b962020e968cae75e3ec</string>
-			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
 		</dict>
-	</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%pathname%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
 </dict>
 </plist>
