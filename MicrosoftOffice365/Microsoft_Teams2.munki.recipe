@@ -18,7 +18,7 @@
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/msoffice</string>
 		<key>NAME</key>
-		<string>MSTeams</string>
+		<string>Teams2</string>
 		<key>PRODUCT</key>
 		<string>Teams2</string>
 		<key>MUNKI_CATEGORY</key>
@@ -32,6 +32,7 @@
 			<key>blocking_applications</key>
 			<array>
 				<string>Microsoft Teams</string>
+				<string>Microsoft Teams classic</string>
 				<string>Microsoft Teams (work or school)</string>
 				<string>Microsoft Error Reporting</string>
 				<string>Microsoft AutoUpdate</string>
@@ -41,11 +42,11 @@
 				<string>testing</string>
 			</array>
 			<key>description</key>
-			<string>Microsoft Teams is the new chat-centered workspace in Office 365. Keep all your content, tools, people, and conversations together in one place.</string>
+			<string>Microsoft Teams is the chat-centered workspace in Office 365. Keep all your content, tools, people, and conversations together in one place.</string>
 			<key>category</key>
 			<string>%MUNKI_CATEGORY%</string>
 			<key>developer</key>
-			<string>Microsoft</string>
+			<string>%VENDOR%</string>
 			<key>display_name</key>
 			<string>Microsoft Teams</string>
 			<key>installer_choices_xml</key>
@@ -70,6 +71,8 @@
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
 			<true/>
 		</dict>
 	</dict>

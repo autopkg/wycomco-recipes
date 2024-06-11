@@ -4,8 +4,8 @@
 <dict>
 	<key>Description</key>
 	<string>Downloads the latest version of Microsoft Teams installer package and renames the package.
-    This recipe is based on com.github.wycomco.pkg.microsoftexcel365, which is a fork of com.github.rtrouton.pkg.microsoftexcel365 and supports gathering of useful meta data from
-    the app bundle.</string>
+	This recipe is a fork of com.github.rtrouton.pkg.microsoftteams and supports gathering of useful meta data from
+	the app bundle.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.pkg.MSTeams2</string>
 	<key>Input</key>
@@ -21,6 +21,8 @@
 	</dict>
 	<key>MinimumVersion</key>
 	<string>1.0.0</string>
+	<key>ParentRecipe</key>
+	<string>com.github.rtrouton.download.microsoftteams</string>
 	<key>Process</key>
 	<array>
 		<dict>
@@ -69,7 +71,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>info_path</key>
-				<string>%RECIPE_CACHE_DIR%/downloads/payload/Applications/Microsoft Excel.app/Contents/Info.plist</string>
+				<string>%RECIPE_CACHE_DIR%/downloads/payload/Applications/Microsoft Teams.app/Contents/Info.plist</string>
 				<key>plist_keys</key>
 				<dict>
 					<key>LSMinimumSystemVersion</key>
@@ -118,52 +120,5 @@
 			<string>PathDeleter</string>
 		</dict>
 	</array>
-	<key>ParentRecipe</key>
-	<string>com.github.autopkg.munki.MSTeams2</string>
-	<key>ParentRecipeTrustInfo</key>
-	<dict>
-		<key>non_core_processors</key>
-		<dict>
-			<key>MSOfficeMacURLandUpdateInfoProvider</key>
-			<dict>
-				<key>git_hash</key>
-				<string>a00457ad6d835f4d7bb5a256cc2b280607269134</string>
-				<key>path</key>
-				<string>~/Library/AutoPkg/RecipeRepos/com.github.autopkg.recipes/MSOfficeUpdates/MSOfficeMacURLandUpdateInfoProvider.py</string>
-				<key>sha256_hash</key>
-				<string>54997072c0e3720d09b8fb4f002e18af8e57e9841c9363201e931a6914f13080</string>
-			</dict>
-		</dict>
-		<key>parent_recipes</key>
-		<dict>
-			<key>com.github.autopkg.download.MSOfficeMacProduct</key>
-			<dict>
-				<key>git_hash</key>
-				<string>db02edcc4fad1325e3f44ea31aa387a4ad39c998</string>
-				<key>path</key>
-				<string>~/Library/AutoPkg/RecipeRepos/com.github.autopkg.recipes/MSOfficeUpdates/MSOfficeMacProduct.download.recipe</string>
-				<key>sha256_hash</key>
-				<string>c7f9b0fa0e3634c0aab69e3248da0dca823e0749304a70c45272bbcb9db84df8</string>
-			</dict>
-			<key>com.github.autopkg.download.MSTeams2</key>
-			<dict>
-				<key>git_hash</key>
-				<string>a635a1d811c437f8c050995f2b29dedd2b5c8c3d</string>
-				<key>path</key>
-				<string>~/Library/AutoPkg/RecipeRepos/com.github.autopkg.recipes/MSOfficeUpdates/MSTeams2.download.recipe</string>
-				<key>sha256_hash</key>
-				<string>00c49b22f492017eb11d835dfad2456001494238b49fdb47256ac8633bfb6b70</string>
-			</dict>
-			<key>com.github.autopkg.munki.MSTeams2</key>
-			<dict>
-				<key>git_hash</key>
-				<string>1c73252ecbaa7ec9dc47b41210d2b69062ee2d22</string>
-				<key>path</key>
-				<string>~/Library/AutoPkg/RecipeRepos/com.github.autopkg.recipes/MSOfficeUpdates/MSTeams2.munki.recipe</string>
-				<key>sha256_hash</key>
-				<string>97cafc6a96131afb716fadb75aaf16c911a01840c9c7b962020e968cae75e3ec</string>
-			</dict>
-		</dict>
-	</dict>
 </dict>
 </plist>
