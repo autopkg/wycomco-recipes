@@ -154,7 +154,7 @@ for USERSDIR in /Users/*; do
 		if [[ "$NFSHOME" == "$USERSDIR" ]]; then
 			rm -rf /Users/$USER/Library/Saved\ Application\ State/net.java.openjdk.java.savedState
 			rm -rf /Users/$USER/Library/Preferences/net.java.openjdk.java.plist
-			rm -rf /Users/$USER/Library/Preferences/com.qoppa.PDFStudio.plist 
+			rm -rf /Users/$USER/Library/Preferences/com.qoppa.PDFStudio.plist
 		fi
 	done
 done
