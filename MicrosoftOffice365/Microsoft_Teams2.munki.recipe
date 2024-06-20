@@ -13,20 +13,14 @@
 	<dict>
 		<key>CHANNEL</key>
 		<string>Production</string>
-		<key>LOCALE_ID</key>
-		<string>1033</string>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/msoffice</string>
 		<key>NAME</key>
-		<string>Teams2</string>
-		<key>PRODUCT</key>
 		<string>Teams2</string>
 		<key>MUNKI_CATEGORY</key>
 		<string>Social Media</string>
 		<key>VERSION</key>
 		<string>latest</string>
-		<key>munki_required_update_name</key>
-		<string></string>
 		<key>pkginfo</key>
 		<dict>
 			<key>blocking_applications</key>
