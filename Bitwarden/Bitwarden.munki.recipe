@@ -30,6 +30,10 @@ Override NAME and MUNKI_REPO_SUBDIR to your own preferences. Download is perform
 			<string>%NAME%</string>
 			<key>name</key>
 			<string>%NAME%</string>
+			<key>postinstall_script</key>
+			<string>#!/bin/zsh
+sed -i '' 's|url: https://artifacts.bitwarden.com/desktop|url: https://artifacts.bitwarden.com/desktop/Bitwarden-2024.6.4-universal-mac.zip|' /Applications/Bitwarden.app/Contents/Resources/app-update.yml
+	</string>
 			<key>unattended_install</key>
 			<true/>
 			<key>unattended_uninstall</key>
