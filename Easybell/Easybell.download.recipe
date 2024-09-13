@@ -11,7 +11,7 @@
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
-		<string>easybell-desktop-client</string>
+		<string>easybell</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>2.3</string>
