@@ -15,7 +15,7 @@
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/msoffice</string>
 		<key>NAME</key>
-		<string>MicrosoftWindowsApp</string>
+		<string>WindowsApp</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>blocking_applications</key>
@@ -23,6 +23,7 @@
 				<string>Microsoft AutoUpdate</string>
 				<string>Microsoft Error Reporting</string>
 				<string>Microsoft Remote Desktop</string>
+				<string>Windows App</string>
 			</array>
 			<key>catalogs</key>
 			<array>
@@ -31,7 +32,7 @@
 			<key>description</key>
 			<string>The Windows App is your gateway to securely connect to Windows on any device or app across Windows 365, Azure Virtual Desktop, Remote PC, Remote Desktop Services, Microsoft Dev Box, and more.</string>
 			<key>display_name</key>
-			<string>Microsoft Remote Desktop</string>
+			<string>Windows App</string>
 			<key>installer_choices_xml</key>
 			<array>
 				<dict>
