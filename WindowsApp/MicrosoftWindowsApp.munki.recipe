@@ -49,7 +49,7 @@
 					<key>choiceAttribute</key>
 					<string>selected</string>
 					<key>choiceIdentifier</key>
-					<string>com.microsoft.package.Microsoft_AutoUpdate.app</string>
+					<string>com.microsoft.autoupdate</string>
 				</dict>
 			</array>
 			<key>name</key>
