@@ -3,37 +3,30 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads the latest version of Microsoft's Remote Desktop installer package and renames the package.
-    This recipe is a fork of com.github.rtrouton.pkg.microsoftremotedesktop and supports gathering of useful meta
-    data from the app bundle.</string>
+	<string>Downloads the latest version of Microsoft's Windows app installer package and renames the package.
+	This recipe is a fork of com.github.rtrouton.pkg.microsoftwindowsapp and supports gathering of useful meta data
+	from the app bundle.</string>
 	<key>Identifier</key>
-	<string>com.github.wycomco.pkg.microsoftremotedesktop</string>
+	<string>com.github.wycomco.pkg.windowsapp</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
-		<string>MicrosoftRemoteDesktop</string>
-		<key>SOFTWARETITLE</key>
-		<string>Remote</string>
+		<string>WindowsApp</string>
 		<key>VENDOR</key>
 		<string>Microsoft</string>
+		<key>SOFTWARETITLE1</key>
+		<string>Windows</string>
+		<key>SOFTWARETITLE2</key>
+		<string>App</string>
 		<key>VERSIONTYPE</key>
 		<string>CFBundleShortVersionString</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>1.0.0</string>
+	<string>1.0</string>
 	<key>ParentRecipe</key>
-	<string>com.github.rtrouton.download.microsoftremotedesktop</string>
+	<string>com.github.rtrouton.download.microsoftwindowsapp</string>
 	<key>Process</key>
 	<array>
-		<dict>
-			<key>Processor</key>
-			<string>DeprecationWarning</string>
-			<key>Arguments</key>
-			<dict>
-				<key>warning_message</key>
-				<string>Since Microsoft has replaced the Microsoft Remote Desktop app with the new Windows App, this recipe is now non-functional. Please replace its references in your recipes with the new recipe "com.github.wycomco.pkg.windowsapp".</string>
-			</dict>
-		</dict>
 		<dict>
 			<key>Arguments</key>
 			<dict>
@@ -49,7 +42,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>pattern</key>
-				<string>%RECIPE_CACHE_DIR%/downloads/unpack/*rdc.macos*.pkg</string>
+				<string>%RECIPE_CACHE_DIR%/downloads/unpack/*rdc*.pkg</string>
 			</dict>
 			<key>Processor</key>
 			<string>FileFinder</string>
@@ -58,7 +51,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/downloads/payload/Applications</string>
+				<string>%RECIPE_CACHE_DIR%/downloads/payload</string>
 				<key>pkg_payload_path</key>
 				<string>%found_filename%/Payload</string>
 			</dict>
@@ -68,8 +61,21 @@
 		<dict>
 			<key>Arguments</key>
 			<dict>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/Applications/Windows App.app</string>
+				<key>overwrite</key>
+				<true/>
+				<key>source_path</key>
+				<string>%RECIPE_CACHE_DIR%/downloads/payload/Windows App.app</string>
+			</dict>
+			<key>Processor</key>
+			<string>Copier</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
 				<key>input_plist_path</key>
-				<string>%RECIPE_CACHE_DIR%/downloads/payload/Applications/Microsoft Remote Desktop.app/Contents/Info.plist</string>
+				<string>%RECIPE_CACHE_DIR%/downloads/payload/Windows App.app/Contents/Info.plist</string>
 				<key>plist_version_key</key>
 				<string>%VERSIONTYPE%</string>
 			</dict>
@@ -80,7 +86,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>info_path</key>
-				<string>%RECIPE_CACHE_DIR%/downloads/payload/Applications/Microsoft Remote Desktop.app/Contents/Info.plist</string>
+				<string>%RECIPE_CACHE_DIR%/downloads/payload/Windows App.app/Contents/Info.plist</string>
 				<key>plist_keys</key>
 				<dict>
 					<key>LSMinimumSystemVersion</key>

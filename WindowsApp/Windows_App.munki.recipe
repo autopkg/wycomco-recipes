@@ -4,18 +4,17 @@
 <dict>
 	<key>Description</key>
 	<string>Downloads the latest Microsoft Remote Desktop installer package for Office 365 and imports into Munki.
-    This recipe is a fork of com.github.foigus.munki.microsoftremotedesktop and supports the automatic identification
-    of the minimum_os_version and creates a proper installs array.
-    You may also want to change the attributeSetting for com.microsoft.package.Microsoft_AutoUpdate.app in
-    installer_choices_xml to "0" to prevent Microsoft's own updater to be installed (line 47 in this recipe).</string>
+	This recipe supports the automatic identification of the minimum_os_version and creates a proper installs array.
+	You may also want to change the attributeSetting for com.microsoft.package.Microsoft_AutoUpdate.app in
+	installer_choices_xml to "0" to prevent Microsoft's own updater to be installed (line 47 in this recipe).</string>
 	<key>Identifier</key>
-	<string>com.github.wycomco.munki.microsoftremotedesktop</string>
+	<string>com.github.wycomco.munki.windowsapp</string>
 	<key>Input</key>
 	<dict>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/msoffice</string>
 		<key>NAME</key>
-		<string>MicrosoftRemoteDesktop</string>
+		<string>WindowsApp</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>blocking_applications</key>
@@ -23,15 +22,16 @@
 				<string>Microsoft AutoUpdate</string>
 				<string>Microsoft Error Reporting</string>
 				<string>Microsoft Remote Desktop</string>
+				<string>Windows App</string>
 			</array>
 			<key>catalogs</key>
 			<array>
 				<string>testing</string>
 			</array>
 			<key>description</key>
-			<string>Use the new Microsoft Remote Desktop app to connect to a remote PC or virtual apps and desktops made available by your administrator. The app helps you be productive no matter where you are.</string>
+			<string>The Windows App is your gateway to securely connect to Windows on any device or app across Windows 365, Azure Virtual Desktop, Remote PC, Remote Desktop Services, Microsoft Dev Box, and more.</string>
 			<key>display_name</key>
-			<string>Microsoft Remote Desktop</string>
+			<string>Windows App</string>
 			<key>installer_choices_xml</key>
 			<array>
 				<dict>
@@ -62,26 +62,17 @@
 	<key>MinimumVersion</key>
 	<string>0.2.0</string>
 	<key>ParentRecipe</key>
-	<string>com.github.wycomco.pkg.microsoftremotedesktop</string>
+	<string>com.github.wycomco.pkg.windowsapp</string>
 	<key>Process</key>
 	<array>
-		<dict>
-			<key>Processor</key>
-			<string>DeprecationWarning</string>
-			<key>Arguments</key>
-			<dict>
-				<key>warning_message</key>
-				<string>Since Microsoft has replaced the Microsoft Remote Desktop app with the new Windows App, this recipe is now non-functional. Please replace its references in your recipes with the new recipe "com.github.wycomco.munki.windowsapp".</string>
-			</dict>
-		</dict>
 		<dict>
 			<key>Arguments</key>
 			<dict>
 				<key>faux_root</key>
-				<string>%RECIPE_CACHE_DIR%/downloads/payload</string>
+				<string>%RECIPE_CACHE_DIR%</string>
 				<key>installs_item_paths</key>
 				<array>
-					<string>/Applications/Microsoft Remote Desktop.app</string>
+					<string>/Applications/Windows App.app</string>
 				</array>
 				<key>version_comparison_key</key>
 				<string>%VERSIONTYPE%</string>
