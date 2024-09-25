@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads the latest Microsoft Remote Desktop installer package for Office 365 and imports into Munki.
+	<string>Downloads the latest version of Microsoft's Windows app installer package and imports into Munki.
 	This recipe supports the automatic identification of the minimum_os_version and creates a proper installs array.
 	You may also want to change the attributeSetting for com.microsoft.package.Microsoft_AutoUpdate.app in
 	installer_choices_xml to "0" to prevent Microsoft's own updater to be installed (line 47 in this recipe).</string>
