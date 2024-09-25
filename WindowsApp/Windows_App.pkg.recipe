@@ -4,10 +4,10 @@
 <dict>
 	<key>Description</key>
 	<string>Downloads the latest version of Microsoft's Windows app installer package and renames the package.
-	This recipe is a fork of com.github.rtrouton.pkg.WindowsApp and supports gathering of useful meta data
+	This recipe is a fork of com.github.rtrouton.pkg.microsoftwindowsapp and supports gathering of useful meta data
 	from the app bundle.</string>
 	<key>Identifier</key>
-	<string>com.github.wycomco.pkg.microsoftwindowsapp</string>
+	<string>com.github.wycomco.pkg.windowsapp</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
