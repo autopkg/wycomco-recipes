@@ -66,6 +66,15 @@
 	<key>Process</key>
 	<array>
 		<dict>
+			<key>Processor</key>
+			<string>DeprecationWarning</string>
+			<key>Arguments</key>
+			<dict>
+				<key>warning_message</key>
+				<string>Since Microsoft has replaced the Microsoft Remote Desktop app with the new Windows App, this recipe is now non-functional. Please replace its references in your recipes with the new recipe "com.github.wycomco.munki.windowsapp".</string>
+			</dict>
+		</dict>
+		<dict>
 			<key>Arguments</key>
 			<dict>
 				<key>faux_root</key>
