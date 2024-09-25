@@ -62,7 +62,7 @@
 	<key>MinimumVersion</key>
 	<string>0.2.0</string>
 	<key>ParentRecipe</key>
-	<string>com.github.wycomco.pkg.microsoftwindowsapp</string>
+	<string>com.github.wycomco.pkg.windowsapp</string>
 	<key>Process</key>
 	<array>
 		<dict>
