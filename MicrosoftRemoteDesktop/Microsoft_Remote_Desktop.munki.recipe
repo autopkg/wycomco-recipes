@@ -60,7 +60,7 @@
 		</dict>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>0.2.0</string>
+	<string>1.1.0</string>
 	<key>ParentRecipe</key>
 	<string>com.github.wycomco.pkg.microsoftremotedesktop</string>
 	<key>Process</key>

@@ -20,7 +20,7 @@
 		<string>CFBundleShortVersionString</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>1.0.0</string>
+	<string>1.1.0</string>
 	<key>ParentRecipe</key>
 	<string>com.github.rtrouton.download.microsoftremotedesktop</string>
 	<key>Process</key>
