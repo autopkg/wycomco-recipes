@@ -12,9 +12,27 @@
 		<string>ClipStudioPaint</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>0.3.1</string>
+	<string>1.1.0</string>
 	<key>Process</key>
 	<array>
+		<dict>
+			<key>Processor</key>
+			<string>DeprecationWarning</string>
+			<key>Arguments</key>
+			<dict>
+				<key>warning_message</key>
+				<string>The download URL points to an outdated version and will soon be removed. Please remove it from your list of recipes.</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>StopProcessingIf</string>
+			<key>Arguments</key>
+			<dict>
+				<key>predicate</key>
+				<string>TRUEPREDICATE</string>
+			</dict>
+		</dict>
 		<dict>
 			<key>Arguments</key>
 			<dict>
