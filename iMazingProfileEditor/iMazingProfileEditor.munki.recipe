@@ -12,12 +12,6 @@
 		<string>apps/%NAME%</string>
 		<key>NAME</key>
 		<string>iMazing Profile Editor</string>
-        <key>VENDOR</key>
-        <string>iMazing</string>
-        <key>SOFTWARETITLE1</key>
-        <string>Profile</string>
-        <key>SOFTWARETITLE2</key>
-        <string>Editor</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>catalogs</key>
