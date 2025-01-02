@@ -29,7 +29,7 @@
 				<key>filename</key>
 				<string>%NAME%.dmg</string>
 				<key>url</key>
-				<string>https://tracker.bimcollab.com/bimcollabzoommacosxen</string>
+				<string>https://bimcollab.com/download/ZOOM/MAC</string>
 			</dict>
 			<key>Processor</key>
 			<string>URLDownloader</string>
@@ -42,7 +42,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>pattern</key>
-				<string>%RECIPE_CACHE_DIR%/downloads/%NAME%.dmg/*.pkg</string>
+				<string>%pathname%/*.pkg</string>
 			</dict>
 			<key>Processor</key>
 			<string>FileFinder</string>
@@ -51,7 +51,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>input_path</key>
-				<string>%RECIPE_CACHE_DIR%/downloads/%NAME%.dmg/%dmg_found_filename%</string>
+				<string>%pathname%/%dmg_found_filename%</string>
 				<key>requirement</key>
 				<string>anchor apple generic and identifier "Kubus.BIMcollab-ZOOM" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = Y6ZY6GR8Y3)</string>
 			</dict>
