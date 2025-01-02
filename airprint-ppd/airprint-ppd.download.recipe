@@ -44,6 +44,12 @@
 				<string>%pathname%</string>
 				<key>strict_verification</key>
 				<true/>
+				<key>expected_authority_names</key>
+				<array>
+					<string>Developer ID Installer: wycomco GmbH (CD4727XSC2)</string>
+					<string>Developer ID Certification Authority</string>
+					<string>Apple Root CA</string>
+				</array>
 			</dict>
 			<key>Processor</key>
 			<string>CodeSignatureVerifier</string>
