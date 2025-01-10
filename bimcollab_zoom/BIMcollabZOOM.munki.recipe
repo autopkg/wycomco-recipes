@@ -3,13 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Munki process and import recipe for Kubus' BIMcollab ZOOM.</string>
+	<string>Munki process and import recipe for Kubus' BIMcollab ZOOM.
+
+Set the DERIVE_MIN_OS variable to a non-empty string to set the minimum_os_version via MunkiInstallsItemsCreator. This requires a minimum AutoPkg version of 2.7 please update if you're not already running it.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.bimcollab_zoom</string>
 	<key>Input</key>
 	<dict>
 		<key>APPLICATIONS_PATH</key>
 		<string>/Applications</string>
+		<key>DERIVE_MIN_OS</key>
+		<string>YES</string>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/%NAME%</string>
 		<key>NAME</key>
@@ -36,8 +40,6 @@ BIMcollab ZOOM brings IFC model viewing and validating fully integrated into the
 			<string>Kubus</string>
 			<key>display_name</key>
 			<string>BIMcollab ZOOM</string>
-			<key>minimum_os_version</key>
-			<string>10.12</string>
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>
@@ -55,7 +57,7 @@ rm -rf "/Applications/BIMcollab ZOOM/"
 		</dict>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>0.3.1</string>
+	<string>2.7</string>
 	<key>ParentRecipe</key>
 	<string>com.github.wycomco.pkg.bimcollab_zoom</string>
 	<key>Process</key>
@@ -63,6 +65,8 @@ rm -rf "/Applications/BIMcollab ZOOM/"
 		<dict>
 			<key>Arguments</key>
 			<dict>
+				<key>derive_minimum_os_version</key>
+				<string>%DERIVE_MIN_OS%</string>
 				<key>faux_root</key>
 				<string>%RECIPE_CACHE_DIR%/%PKGPAYLOAD_DIR%</string>
 				<key>installs_item_paths</key>
