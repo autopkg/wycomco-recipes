@@ -85,7 +85,7 @@ class ARCHICADUpdatesProcessor(URLGetter):
 
         # Grab the available public downloads page
         response = self.download(
-            "https://graphisoft.com/de/service-support/downloads"
+            "https://graphisoft.com/de/service-support/downloads?section=update"
         )
 
         # Parse the html to retrieve the actual json data for the categories.
@@ -97,6 +97,7 @@ class ARCHICADUpdatesProcessor(URLGetter):
         # Parse through the available categories to identify the category id
         # for updates.
         slug = None
+        category_id = None
         for json_object in json_data:
             slug = "update"
 
@@ -117,6 +118,7 @@ class ARCHICADUpdatesProcessor(URLGetter):
         # Parse through the available platforms to identify the platform id
         # for the requested architecture.
         slug = None
+        platform_id = None
         for json_object in json_data:
             if architecture == "INTEL":
                 slug = "mac-intel-processor"
