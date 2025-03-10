@@ -6,11 +6,12 @@
 	<string>Imports the latest update build of ARCHICAD into munki which has been downloaded by its parent based on the override-able parameters: MAJOR_VERSION, LOCALIZATION, and RELEASE_TYPE
 The installation target can be changed by setting INSTALL_DIR to a different location. Useful e.g. if multiple language versions should be available on a Mac.
 
-MAJOR_VERSION options include:  24, 25 and 26 (GRAPHISOFT supports the current and two previous versions)
+MAJOR_VERSION options include:  24, 25, 26, 27, 28 (GRAPHISOFT actively supports the current and two previous versions)
 LOCALIZATION options include:  INT (international english, part of many other licenses), AUS, AUT, BRA, CHE, CHI, CZE, FIN, FRA, GER, GRE, HUN, ITA, JPN, KOR, NED, NOR, NZE, POL, POR, RUS, SPA, SWE, TAI, TUR, UKI, UKR, and USA
 RELEASE_TYPE options include:  FULL (for full version), AC (full versions for older majors), SOLO, and START
-MINIMUM_OS_VERSION: AC 24: 10.13, AC 25: 10.15, AC 26: 11.3. These are the absolute minimum versions as stated by GRAPHISOFT. Some are listed as "untested but should run".
+MINIMUM_OS_VERSION: AC 24: 10.13, AC 25: 10.15, AC 26: 11.3, AC 27: 12.6, AC 28: 12.6.7. These are the absolute minimum versions as stated by GRAPHISOFT. Some are listed as "untested but should run".
 ARCHITECTURE:  INTEL or ARM, falls back to INTEL
+SUPPORTED_ARCHITECTURES:  x86_64 or arm64, falls back to x86_64
 </string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.ARCHICADUpdate</string>
@@ -32,6 +33,8 @@ ARCHITECTURE:  INTEL or ARM, falls back to INTEL
 		<string>ARCHICAD%MAJOR_VERSION%_%LOCALIZATION%_update_%ARCHITECTURE%</string>
 		<key>RELEASE_TYPE</key>
 		<string>FULL</string>
+		<key>SUPPORTED_ARCHITECTURES</key>
+		<string>x86_64</string>
 		<key>UPDATE_FOR</key>
 		<string>archicad_%MAJOR_VERSION%_%LOCALIZATION%</string>
 		<key>pkginfo</key>
@@ -50,7 +53,7 @@ ARCHITECTURE:  INTEL or ARM, falls back to INTEL
 			<string>copy_from_dmg</string>
 			<key>supported_architectures</key>
 			<array>
-				<string>%supported_architecture%</string>
+				<string>%SUPPORTED_ARCHITECTURES%</string>
 			</array>
 			<key>unattended_install</key>
 			<true/>
