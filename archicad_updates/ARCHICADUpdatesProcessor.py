@@ -1,5 +1,4 @@
 #!/usr/local/autopkg/python
-# -*- coding: utf-8 -*-
 
 """
 Copyright 2019 Zack T (mlbz521)
@@ -19,7 +18,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from __future__ import absolute_import, print_function
 
 import json
 import re
@@ -85,7 +83,8 @@ class ARCHICADUpdatesProcessor(URLGetter):
 
         # Grab the available public downloads page
         response = self.download(
-            "https://graphisoft.com/de/service-support/downloads?section=update"
+            "https://graphisoft.com/de/service-support/"
+            "downloads?section=update"
         )
 
         # Parse the html to retrieve the actual json data for the categories.
