@@ -1,7 +1,7 @@
 # See https://www.elliotjordan.com/posts/pre-commit-02-autopkg/ for more information
 repos:
   - repo: https://github.com/homebysix/pre-commit-macadmin
-    rev: v1.17.0
+    rev: v1.18.0
     hooks:
       - id: check-autopkg-recipes
         args: ["--recipe-prefix=com.github.wycomco.", "--strict", "--"]
@@ -21,12 +21,11 @@ repos:
       - id: detect-private-key
       - id: end-of-file-fixer
       - id: fix-byte-order-marker
-      - id: fix-encoding-pragma
       - id: mixed-line-ending
       - id: no-commit-to-branch
       - id: trailing-whitespace
         args: ["--markdown-linebreak-ext=md"]
-  - repo: https://github.com/ambv/black
+  - repo: https://github.com/psf/black
     rev: 24.10.0
     hooks:
       - id: black
@@ -38,8 +37,12 @@ repos:
     rev: 5.13.2
     hooks:
       - id: isort
-        args: ["--profile", "black"]
   - repo: https://github.com/PyCQA/pylint
     rev: v3.3.3
     hooks:
       - id: pylint
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.19.1
+    hooks:
+      - id: pyupgrade
+        args: ["--py38-plus"]

@@ -1,5 +1,4 @@
 #!/usr/local/autopkg/python
-# -*- coding: utf-8 -*-
 #
 # Copyright 2023 wycomco GmbH
 #
@@ -16,7 +15,6 @@
 # limitations under the License.
 """See docstring for JamfMultiUploader class"""
 
-from __future__ import absolute_import
 
 import copy
 import os
@@ -25,12 +23,8 @@ import pprint
 import sys
 import traceback
 
-from autopkglib import (
-    AutoPackagerError,
-    AutoPackagerLoadError,
-    Processor,
-    get_processor,
-)
+from autopkglib import (AutoPackagerError, AutoPackagerLoadError, Processor,
+                        get_processor)
 
 __all__ = ["JamfMultiUploader"]
 

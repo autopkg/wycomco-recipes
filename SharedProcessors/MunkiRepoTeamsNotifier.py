@@ -1,5 +1,4 @@
 #!/usr/local/autopkg/python
-# -*- coding: utf-8 -*-
 
 """
 Copyright 2022 bock@wycomco.de
@@ -107,7 +106,7 @@ class MunkiRepoTeamsNotifier(URLGetter):
                 universal_newlines=True,
             ) as proc:
                 (out, err) = proc.communicate()
-        except (IOError, OSError) as error:
+        except OSError as error:
             raise ProcessorError(error) from error
         if proc.returncode != 0 or err:
             self.output(
