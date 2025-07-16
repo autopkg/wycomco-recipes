@@ -74,17 +74,6 @@
 		<dict>
 			<key>Arguments</key>
 			<dict>
-				<key>input_path</key>
-				<string>%RECIPE_CACHE_DIR%/%PKGPAYLOAD_DIR%/%RELATIVE_APP_PATH%</string>
-				<key>requirement</key>
-				<string>anchor apple generic and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = Y6ZY6GR8Y3)</string>
-			</dict>
-			<key>Processor</key>
-			<string>CodeSignatureVerifier</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
 				<key>input_plist_path</key>
 				<string>%RECIPE_CACHE_DIR%/%PKGPAYLOAD_DIR%/%RELATIVE_APP_PATH%/Contents/Info.plist</string>
 			</dict>
