@@ -4,19 +4,19 @@
 <dict>
 	<key>Description</key>
 	<string>Downloads the latest ONLYOFFICE pkg and imports into Munki.
-	For Apple Silicon version, override ARCH with "arm" and SUPPORTED_ARCHITECTURES with "arm64".</string>
+	For the Intel version, override ARCH and SUPPORTED_ARCHITECTURES with "x86_64".</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.ONLYOFFICE</string>
 	<key>Input</key>
 	<dict>
 		<key>ARCH</key>
-		<string>x86_64</string>
+		<string>arm</string>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/%NAME%</string>
 		<key>NAME</key>
 		<string>ONLYOFFICE</string>
 		<key>SUPPORTED_ARCHITECTURES</key>
-		<string>x86_64</string>
+		<string>arm64</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>catalogs</key>
