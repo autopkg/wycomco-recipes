@@ -12,19 +12,58 @@
 		<string>Foxit PDF Reader</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>0.3.1</string>
+	<string>1.4</string>
 	<key>Process</key>
 	<array>
 		<dict>
+			<key>Processor</key>
+			<string>URLTextSearcher</string>
 			<key>Arguments</key>
 			<dict>
-				<key>filename</key>
-				<string>%NAME%.pkg</string>
 				<key>url</key>
-				<string>https://www.foxit.com/downloads/latest.html?product=Foxit-Reader&amp;platform=Mac-OS-X&amp;version=&amp;package_type=&amp;distID=</string>
+				<string>https://www.foxit.com/pdf-reader/version-history.html</string>
+				<key>re_pattern</key>
+				<string>Version (\d+\.\d+\.\d+\.\d+)</string>
+				<key>result_output_var_name</key>
+				<string>latest_version</string>
 			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>URLTextSearcher</string>
+			<key>Arguments</key>
+			<dict>
+				<key>url</key>
+				<string>https://www.foxit.com/pdf-reader/version-history.html</string>
+				<key>re_pattern</key>
+				<string>Version (\d+)\.</string>
+				<key>result_output_var_name</key>
+				<string>MAJOR</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>URLTextSearcher</string>
+			<key>Arguments</key>
+			<dict>
+				<key>url</key>
+				<string>https://www.foxit.com/pdf-reader/version-history.html</string>
+				<key>re_pattern</key>
+				<string>Version \d+\.(\d+)\.</string>
+				<key>result_output_var_name</key>
+				<string>MINOR</string>
+			</dict>
+		</dict>
+		<dict>
 			<key>Processor</key>
 			<string>URLDownloader</string>
+			<key>Arguments</key>
+			<dict>
+				<key>url</key>
+				<string>https://cdn01.foxitsoftware.com/pub/foxit/phantomPDF/desktop/mac/%MAJOR%.x/%MAJOR%.%MINOR%/FoxitPDFReader%MAJOR%%MINOR%.L10N.Setup.pkg</string>
+				<key>filename</key>
+				<string>%NAME%.pkg</string>
+			</dict>
 		</dict>
 		<dict>
 			<key>Processor</key>
@@ -37,7 +76,7 @@
 				<string>%RECIPE_CACHE_DIR%/downloads/%NAME%.pkg</string>
 				<key>expected_authority_names</key>
 				<array>
-					<string>Developer ID Installer: Foxit Corporation (8GN47HTP75)</string>
+					<string>Developer ID Installer: FOXIT SOFTWARE INCORPORATED (8GN47HTP75)</string>
 					<string>Developer ID Certification Authority</string>
 					<string>Apple Root CA</string>
 				</array>
