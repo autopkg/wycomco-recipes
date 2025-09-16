@@ -16,8 +16,6 @@
 		<string>Outlook</string>
 		<key>VENDOR</key>
 		<string>Microsoft</string>
-		<key>VERSIONTYPE</key>
-		<string>CFBundleVersion</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>1.0.0</string>
@@ -91,7 +89,7 @@
 					<string>/Applications/Microsoft Outlook.app</string>
 				</array>
 				<key>version_comparison_key</key>
-				<string>%VERSIONTYPE%</string>
+				<string>CFBundleVersion</string>
 			</dict>
 			<key>Processor</key>
 			<string>MunkiInstallsItemsCreator</string>
