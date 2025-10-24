@@ -40,20 +40,15 @@ and selecting the language. The LANGUAGE_CODE can be found at the end of the URL
 		<dict>
 			<key>Arguments</key>
 			<dict>
+				<key>find</key>
+				<string>.dmg</string>
 				<key>input_string</key>
 				<string>%url%</string>
-				<key>pattern_replace</key>
-				<array>
-					<dict>
-						<key>pattern</key>
-						<string>.dmg</string>
-						<key>repl</key>
-						<string>_langpack_%LANGUAGE_CODE%.dmg</string>
-					</dict>
-				</array>
+				<key>replace</key>
+				<string>_langpack_%LANGUAGE_CODE%.dmg</string>
 			</dict>
 			<key>Processor</key>
-			<string>com.github.sebtomasi.SharedProcessors/TextSubstituer</string>
+			<string>com.github.homebysix-recipes.FindAndReplace/FindAndReplace</string>
 		</dict>
 		<dict>
 			<key>Arguments</key>
@@ -61,7 +56,7 @@ and selecting the language. The LANGUAGE_CODE can be found at the end of the URL
 				<key>filename</key>
 				<string>%NAME%_langpack_%LANGUAGE_CODE%.dmg</string>
 				<key>url</key>
-				<string>%parsed_string%</string>
+				<string>%output_string%</string>
 			</dict>
 			<key>Processor</key>
 			<string>URLDownloader</string>
