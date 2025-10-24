@@ -26,6 +26,25 @@
 			<string>Epos Connect</string>
 			<key>name</key>
 			<string>%NAME%</string>
+			<key>postuninstall_script</key>
+			<string>#!/bin/zsh
+PLIST="/Library/LaunchDaemons/com.EPOS.EPOSConnect.plist"
+PROCS=('EPOS Connect' 'EPOS Connect Helper' 'EPOS Connect Helper (GPU)' 'EPOS Connect Helper (Renderer)')
+
+if /bin/launchctl list | grep -q com.EPOS.EPOSConnect; then
+    echo "LaunchDaemon \"$PLIST\" is running, stopping for removal ..."
+    /bin/launchctl unload "$PLIST"
+    /bin/rm -f "$PLIST"
+fi
+
+for PROC in "${PROCS[@]}"; do
+    /usr/bin/killall "$PROC" &gt;/dev/null 2&gt;&amp;1
+done
+
+/bin/rm -rf "/Library/Application Support/EPOS/EPOS Connect"
+/bin/rmdir "/Library/Application Support/EPOS" &gt;/dev/null 2&gt;&amp;1
+/bin/rm -rf "/Library/PrivilegedHelperTools/EPOS/EPOS Connect"
+	</string>
 			<key>unattended_install</key>
 			<true/>
 			<key>unattended_uninstall</key>
