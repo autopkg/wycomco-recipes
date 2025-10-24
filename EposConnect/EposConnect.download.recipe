@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Download recipe for the latest version of Epos Connect.</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.download.EposConnect</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>Epos Connect</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>1.4</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>URLTextSearcher</string>
+			<key>Arguments</key>
+			<dict>
+				<key>re_pattern</key>
+				<string>href="(https://www\.eposaudio\.com/contentassets/.*/eposconnect_(\d+\.\d+\.\d+\.\d+)\.pkg)"</string>
+				<key>url</key>
+				<string>https://www.eposaudio.com/de/de/software/epos-connect</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>URLDownloader</string>
+			<key>Arguments</key>
+			<dict>
+				<key>filename</key>
+				<string>%NAME%.pkg</string>
+				<key>url</key>
+				<string>%match%</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>EndOfCheckPhase</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>input_path</key>
+				<string>%RECIPE_CACHE_DIR%/downloads/%NAME%.pkg</string>
+				<key>expected_authority_names</key>
+				<array>
+					<string>Developer ID Installer: EPOS GROUP AS (8956A7Y69J)</string>
+					<string>Developer ID Certification Authority</string>
+					<string>Apple Root CA</string>
+				</array>
+			</dict>
+			<key>Processor</key>
+			<string>CodeSignatureVerifier</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>flat_pkg_path</key>
+				<string>%RECIPE_CACHE_DIR%/downloads/%NAME%.pkg</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/extracted_pkg/</string>
+			</dict>
+			<key>Processor</key>
+			<string>FlatPkgUnpacker</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pattern</key>
+				<string>%RECIPE_CACHE_DIR%/extracted_pkg/*.pkg</string>
+			</dict>
+			<key>Processor</key>
+			<string>FileFinder</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_payload_path</key>
+				<string>%RECIPE_CACHE_DIR%/extracted_pkg/%found_basename%/payload</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/extracted_pkg/payload</string>
+			</dict>
+			<key>Processor</key>
+			<string>PkgPayloadUnpacker</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pattern</key>
+				<string>%RECIPE_CACHE_DIR%/extracted_pkg/payload/Applications/EPOS Connect.app</string>
+			</dict>
+			<key>Processor</key>
+			<string>FileFinder</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>input_plist_path</key>
+				<string>%found_filename%/Contents/Info.plist</string>
+			</dict>
+			<key>Processor</key>
+			<string>Versioner</string>
+		</dict>
+	</array>
+</dict>
+</plist>
