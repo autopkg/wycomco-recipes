@@ -104,9 +104,9 @@ and selecting the language. The LANGUAGE_CODE can be found at the end of the URL
 					<string>purge_ds_store</string>
 					<key>pkgdir</key>
 					<string>%RECIPE_CACHE_DIR%</string>
+					<key>pkgname</key>
+					<string>%NAME%_%LANGUAGE_CODE%-%version%</string>
 				</dict>
-				<key>pkgname</key>
-				<string>%NAME%_%LANGUAGE_CODE%-%version%</string>
 			</dict>
 			<key>Processor</key>
 			<string>PkgCreator</string>
