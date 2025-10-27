@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Imports the latest version of Epos Connect into your Munki repository.</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.munki.EposConnect</string>
+	<key>Input</key>
+	<dict>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%</string>
+		<key>NAME</key>
+		<string>Epos Connect</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>blocking_applications</key>
+			<array/>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>description</key>
+			<string>EPOS Connect is a user-friendly desktop application designed to keep your EPOS devices seamlessly connected and updated with the latest firmware. This tool provides real-time updates and enables end-users to customize settings for optimal call quality and a tailored audio experience.</string>
+			<key>developer</key>
+			<string>EPOS</string>
+			<key>display_name</key>
+			<string>Epos Connect</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>postuninstall_script</key>
+			<string>#!/bin/zsh
+PLIST="/Library/LaunchDaemons/com.EPOS.EPOSConnect.plist"
+PROCS=('EPOS Connect' 'EPOS Connect Helper' 'EPOS Connect Helper (GPU)' 'EPOS Connect Helper (Renderer)')
+
+if /bin/launchctl list | grep -q com.EPOS.EPOSConnect; then
+    echo "LaunchDaemon \"$PLIST\" is running, stopping for removal ..."
+    /bin/launchctl unload "$PLIST"
+    /bin/rm -f "$PLIST"
+fi
+
+for PROC in "${PROCS[@]}"; do
+    /usr/bin/killall "$PROC" &gt;/dev/null 2&gt;&amp;1
+done
+
+/bin/rm -rf "/Library/Application Support/EPOS/EPOS Connect"
+/bin/rmdir "/Library/Application Support/EPOS" &gt;/dev/null 2&gt;&amp;1
+/bin/rm -rf "/Library/PrivilegedHelperTools/EPOS/EPOS Connect"
+	</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.2.5</string>
+	<key>ParentRecipe</key>
+	<string>com.github.wycomco.download.EposConnect</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>info_path</key>
+				<string>%found_filename%/Contents/Info.plist</string>
+				<key>plist_keys</key>
+				<dict>
+					<key>LSMinimumSystemVersion</key>
+					<string>minimum_os_version</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>PlistReader</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>installs_item_paths</key>
+				<array>
+					<string>/Applications/%found_basename%</string>
+				</array>
+				<key>faux_root</key>
+				<string>%RECIPE_CACHE_DIR%/extracted_pkg/payload</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiInstallsItemsCreator</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>minimum_os_version</key>
+					<string>%minimum_os_version%</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>version</key>
+					<string>%version%</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%pathname%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
+</dict>
+</plist>
