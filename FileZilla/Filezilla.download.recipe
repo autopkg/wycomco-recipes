@@ -3,12 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads the latest stable version of FileZilla for Mac.
+	<string>Downloads the latest stable version of FileZilla for macOS.
 
 Valid values for ARCH include:
 - "arm64" (default, Apple Silicon)
 - "x86" (Intel)
-Note the architecture values are not the same as the FileZilla nightly recipe.
 
 For the processor used by this recipe to work you need to import the cryptography package using
 "sudo /Library/AutoPkg/Python3/Python.framework/Versions/Current/bin/pip3 install cryptography"
