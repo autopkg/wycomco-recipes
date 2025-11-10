@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads the latest release of FileZilla and imports it into Munki.
+
+Valid values for ARCH include:
+- "arm64" (default, Apple Silicon)
+- "x86" (Intel)
+
+For the processor used by this recipe to work you need to import the cryptography package using
+"sudo /Library/AutoPkg/Python3/Python.framework/Versions/Current/bin/pip3 install cryptography"
+</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.munki.FileZilla</string>
+	<key>Input</key>
+	<dict>
+		<key>ARCH</key>
+		<string>arm64</string>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/FileZilla</string>
+		<key>NAME</key>
+		<string>FileZilla</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>description</key>
+			<string>FileZilla is a fast and reliable cross-platform FTP, FTPS and SFTP client.</string>
+			<key>display_name</key>
+			<string>FileZilla</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>2.7.6</string>
+	<key>ParentRecipe</key>
+	<string>com.github.wycomco.download.FileZilla</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>find</key>
+				<string></string>
+				<key>input_string</key>
+				<string>%ARCH%</string>
+				<key>replace</key>
+				<string></string>
+				<key>result_output_var_name</key>
+				<string>SUPPORTED_ARCHITECTURES</string>
+			</dict>
+			<key>Processor</key>
+			<string>FindAndReplace</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>find</key>
+				<string>x86</string>
+				<key>input_string</key>
+				<string>%SUPPORTED_ARCHITECTURES%</string>
+				<key>replace</key>
+				<string>x86_64</string>
+				<key>result_output_var_name</key>
+				<string>SUPPORTED_ARCHITECTURES</string>
+			</dict>
+			<key>Processor</key>
+			<string>FindAndReplace</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>supported_architectures</key>
+					<array>
+						<string>%SUPPORTED_ARCHITECTURES%</string>
+					</array>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>dmg_path</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
+				<key>dmg_root</key>
+				<string>%RECIPE_CACHE_DIR%/FileZilla.app</string>
+			</dict>
+			<key>Processor</key>
+			<string>DmgCreator</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%dmg_path%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
+</dict>
+</plist>
