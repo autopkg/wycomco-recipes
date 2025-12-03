@@ -6,10 +6,10 @@
 	<string>Imports the latest update build of ARCHICAD into munki which has been downloaded by its parent based on the override-able parameters: MAJOR_VERSION, LOCALIZATION, and RELEASE_TYPE
 The installation target can be changed by setting INSTALL_DIR to a different location. Useful e.g. if multiple language versions should be available on a Mac.
 
-MAJOR_VERSION options include:  24, 25, 26, 27, 28 (GRAPHISOFT actively supports the current and two previous versions)
+MAJOR_VERSION options include:  24, 25, 26, 27, 28, 29 (GRAPHISOFT actively supports the current and two previous versions)
 LOCALIZATION options include:  INT (international english, part of many other licenses), AUS, AUT, BRA, CHE, CHI, CZE, FIN, FRA, GER, GRE, HUN, ITA, JPN, KOR, NED, NOR, NZE, POL, POR, RUS, SPA, SWE, TAI, TUR, UKI, UKR, and USA
 RELEASE_TYPE options include:  FULL (for full version), AC (full versions for older majors), SOLO, and START
-MINIMUM_OS_VERSION: AC 24: 10.13, AC 25: 10.15, AC 26: 11.3, AC 27: 12.6, AC 28: 12.6.7. These are the absolute minimum versions as stated by GRAPHISOFT. Some are listed as "untested but should run".
+MINIMUM_OS_VERSION: AC 24: 10.13, AC 25: 10.15, AC 26: 11.3, AC 27: 12.6, AC 28: 12.6.7, AC 29: 14.0. These are the absolute minimum versions as stated by GRAPHISOFT. Some are listed as "untested but should run".
 ARCHITECTURE:  INTEL or ARM, falls back to INTEL
 </string>
 	<key>Identifier</key>
@@ -48,6 +48,8 @@ ARCHITECTURE:  INTEL or ARM, falls back to INTEL
 			<string>GRAPHISOFT</string>
 			<key>installer_type</key>
 			<string>copy_from_dmg</string>
+			<key>name</key>
+			<string>%NAME%</string>
 			<key>unattended_install</key>
 			<true/>
 		</dict>
