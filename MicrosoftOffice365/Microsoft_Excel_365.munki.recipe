@@ -74,6 +74,21 @@
 	<key>Process</key>
 	<array>
 		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>faux_root</key>
+				<string>%RECIPE_CACHE_DIR%/downloads/payload</string>
+				<key>installs_item_paths</key>
+				<array>
+					<string>/Applications/Microsoft Excel.app</string>
+				</array>
+				<key>version_comparison_key</key>
+				<string>%VERSIONTYPE%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiInstallsItemsCreator</string>
+		</dict>
+		<dict>
 			<key>Processor</key>
 			<string>MunkiPkginfoMerger</string>
 		</dict>
