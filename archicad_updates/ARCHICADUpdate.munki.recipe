@@ -23,7 +23,7 @@ ARCHITECTURE:  INTEL or ARM, falls back to INTEL
 		<key>LOCALIZATION</key>
 		<string>INT</string>
 		<key>MAJOR_VERSION</key>
-		<string>26</string>
+		<string>29</string>
 		<key>MINIMUM_OS_VERSION</key>
 		<string>11.3</string>
 		<key>MUNKI_REPO_SUBDIR</key>
@@ -48,6 +48,8 @@ ARCHITECTURE:  INTEL or ARM, falls back to INTEL
 			<string>GRAPHISOFT</string>
 			<key>installer_type</key>
 			<string>copy_from_dmg</string>
+			<key>name</key>
+			<string>%NAME%</string>
 			<key>unattended_install</key>
 			<true/>
 		</dict>
