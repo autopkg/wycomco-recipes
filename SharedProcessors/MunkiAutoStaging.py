@@ -1,5 +1,4 @@
 #!/usr/local/autopkg/python
-# -*- coding: utf-8 -*-
 #
 # Copyright 2022 wycomco GmbH
 #
@@ -16,7 +15,6 @@
 # limitations under the License.
 """See docstring for MunkiAutoStaging class"""
 
-from __future__ import absolute_import
 
 import glob
 import os

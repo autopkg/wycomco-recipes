@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>Comment</key>
-	<string>Pesto (formerly named Pragli) is discontinued (see https://twitter.com/PestoHQ for more details.)</string>
+	<string>Created with Recipe Robot v2.3.2 (https://github.com/homebysix/recipe-robot)</string>
 	<key>Description</key>
-	<string>Downloads the latest version of Pragli and imports it into Munki.</string>
+	<string>Downloads the latest version of direct and imports it into Munki.</string>
 	<key>Identifier</key>
-	<string>com.github.wycomco.munki.Pragli</string>
+	<string>com.github.wycomco.munki.direct</string>
 	<key>Input</key>
 	<dict>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/%NAME%</string>
 		<key>NAME</key>
-		<string>Pragli</string>
+		<string>direct</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>catalogs</key>
@@ -21,13 +21,11 @@
 				<string>testing</string>
 			</array>
 			<key>description</key>
-			<string>Virtual office for remote teams</string>
+			<string>direct is the CTI software for macOS for IP phones, phone systems, or tiptel phones.</string>
 			<key>developer</key>
-			<string>Vivek Nair</string>
-            <key>category</key>
-	        <string>Social Media</string>
+			<string>ilink Kommunikationssysteme GmbH</string>
 			<key>display_name</key>
-			<string>Pesto</string>
+			<string>direct</string>
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>
@@ -37,9 +35,9 @@
 		</dict>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>1.1</string>
+	<string>2.3</string>
 	<key>ParentRecipe</key>
-	<string>com.github.wycomco.download.Pragli</string>
+	<string>com.github.wycomco.download.direct</string>
 	<key>Process</key>
 	<array>
 		<dict>

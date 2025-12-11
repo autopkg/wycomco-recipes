@@ -100,13 +100,11 @@ and selecting the language. The LANGUAGE_CODE can be found at the end of the URL
 					</array>
 					<key>id</key>
 					<string>org.libreoffice.langpack-%LANGUAGE_CODE%</string>
-					<key>options</key>
-					<string>purge_ds_store</string>
 					<key>pkgdir</key>
 					<string>%RECIPE_CACHE_DIR%</string>
+					<key>pkgname</key>
+					<string>%NAME%_%LANGUAGE_CODE%-%version%</string>
 				</dict>
-				<key>pkgname</key>
-				<string>%NAME%_%LANGUAGE_CODE%-%version%</string>
 			</dict>
 			<key>Processor</key>
 			<string>PkgCreator</string>
