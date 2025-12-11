@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Download the latest version of QGIS and imports it into Munki.
+
+Supports either the latest release or Long Term (support) Release.  Override the key "RELEASE_TYPE" to specify which you need:
+Latest Release = "pr"
+Long Term (support) Release = "ltr"
+
+Notes:
+- Python 3.6+ is a prerequisite before installing QGIS 3 -- the created .pkg will hard fail if Python 3.6+ is not installed.
+- The created .pkg will "uninstall" previous versions of QGIS.</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.munki.QGIS</string>
+	<key>Input</key>
+	<dict>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%</string>
+		<key>NAME</key>
+		<string>QGIS</string>
+		<key>RELEASE_TYPE</key>
+		<string>pr</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Mathematics</string>
+			<key>description</key>
+			<string>A Free and Open Source Geographic Information System</string>
+			<key>developer</key>
+			<string>QGIS.ORG</string>
+			<key>display_name</key>
+			<string>QGIS</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>ParentRecipe</key>
+	<string>com.github.mlbz521.pkg.QGIS</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%pathname%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
+</dict>
+</plist>
