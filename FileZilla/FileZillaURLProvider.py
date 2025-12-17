@@ -20,6 +20,7 @@ import base64
 import re
 from typing import List
 
+# pylint: disable=E0401
 from autopkglib import URLGetter
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -32,12 +33,14 @@ FILEZILLA_BASE_URL: str = (
 )
 
 
+# pylint: disable=E0239
 class FileZillaURLProvider(URLGetter):
     """
     Provides URL to the latest FileZilla release.
 
     Requires import of cryptography package:
-        sudo /Library/AutoPkg/Python3/Python.framework/Versions/Current/bin/pip3 install cryptography
+    sudo /Library/AutoPkg/Python3/Python.framework/Versions/Current/bin/pip3 \
+        install cryptography
     """
 
     description = __doc__
@@ -45,21 +48,22 @@ class FileZillaURLProvider(URLGetter):
         "ARCH": {
             "required": False,
             "default": "arm64",
-            "description": "Which architecture to download: 'arm64' (default), 'x86'.",
+            "description": (
+                "Which architecture to download: 'arm64' (default), 'x86'."
+            ),
         },
         "base_url": {
             "required": False,
             "description": (
-                f"(Advanced) URL for downloads.  Default is '{FILEZILLA_BASE_URL}'."
+                "(Advanced) URL for downloads.  Default is "
+                f"'{FILEZILLA_BASE_URL}'."
             ),
             "default": FILEZILLA_BASE_URL,
         },
     }
     output_variables = {
         "url": {"description": "URL to the latest FileZilla product release."},
-        "version": {
-            "description": ("Resolved version number for the release")
-        },
+        "version": {"description": "Resolved version number for the release"},
     }
 
     def parse_version_from_url(self, url: str) -> str:
@@ -74,17 +78,18 @@ class FileZillaURLProvider(URLGetter):
         """
         version_pattern = r"FileZilla_(\d+\.\d+\.\d+)_macos"
         match = re.search(version_pattern, url)
+
         if match:
             return match.group(1)
-        else:
-            raise ValueError("Could not parse version from URL")
+
+        raise ValueError("Could not parse version from URL")
 
     def parse_download_url(self, html_string: str, arch: str):
         """
         Parse the download URL from the HTML string based on architecture.
 
-        The HTML contains download links for multiple architectures and platforms
-
+        The HTML contains download links for multiple architectures
+        and platforms.
         """
 
         needle = f"macos-{arch}.app.tar.bz2"
@@ -99,68 +104,69 @@ class FileZillaURLProvider(URLGetter):
             f"Could not find download URL for architecture: {arch}"
         )
 
-    def decrypt_string(self, content: str, attributes: dict) -> str:
-        """
-        Decrypt the content of a div element that contains encrypted data.
+    def _validate_and_decode_attributes(self, content, attributes):
+        """Validate and decode base64-encoded encryption parameters."""
+        cipher_b64 = content
+        iv_b64 = attributes.get("v1")
+        rawkey_b64 = attributes.get("v2")
+        algorithm_b64 = attributes.get("v3")
 
-        This function replicates the JavaScript decryption logic:
-        1. Extracts base64-encoded cipher, IV, key, and algorithm from div attributes
-        2. Performs AES-CBC decryption using the extracted parameters
-        3. Returns the decrypted content as UTF-8 text
-
-        Args:
-            content (str): String containing the encrypted content (base64-encoded)
-            attributes (dict): Dictionary containing the div attributes.
-                                - v1 attribute: base64-encoded IV
-                                - v2 attribute: base64-encoded encryption key
-                                - v3 attribute: base64-encoded algorithm name
-
-        Returns:
-            str: Decrypted content as UTF-8 string
-
-        """
-        # Parse HTML to find the contentwrapper div
-        # Extract encrypted data and parameters from div attributes
-        cipher_b64 = content  # Base64 encrypted content
-        iv_b64 = attributes.get("v1")  # Base64 IV (initialization vector)
-        rawkey_b64 = attributes.get("v2")  # Base64 encryption key
-        algorithm_b64 = attributes.get("v3")  # Base64 algorithm name
-
-        # Validate all required components are present
         if not all([cipher_b64, iv_b64, rawkey_b64, algorithm_b64]):
             raise ValueError(
                 "Missing required attributes (v1, v2, v3) or content"
             )
 
-        # Base64 decode all components
         cipher = base64.b64decode(cipher_b64)
         iv = base64.b64decode(iv_b64)
         rawkey = base64.b64decode(rawkey_b64)
         algorithm = base64.b64decode(algorithm_b64).decode("utf-8")
 
-        # Verify algorithm is AES-CBC (as expected by the JavaScript)
         if algorithm != "AES-CBC":
             raise ValueError(
                 f"Unsupported algorithm: {algorithm}. Expected AES-CBC"
             )
 
-        # Create AES-CBC cipher with the extracted key and IV
+        return cipher, iv, rawkey
+
+    def _perform_aes_decryption(self, cipher, iv, rawkey):
+        """Perform AES-CBC decryption and remove padding."""
         cipher_obj = Cipher(
             algorithms.AES(rawkey), modes.CBC(iv), backend=default_backend()
         )
         decryptor = cipher_obj.decryptor()
-
-        # Decrypt the data
         padded_plaintext = decryptor.update(cipher) + decryptor.finalize()
 
-        # Remove PKCS7 padding (standard padding for AES-CBC)
+        # Remove PKCS7 padding
         padding_length = padded_plaintext[-1]
-        plaintext = padded_plaintext[:-padding_length]
+        return padded_plaintext[:-padding_length]
 
-        # Decode the decrypted bytes as UTF-8 text
-        decrypted_content = plaintext.decode("utf-8")
+    def decrypt_string(self, content: str, attributes: dict) -> str:
+        """
+        Decrypt the content of a div element that contains encrypted data.
 
-        return decrypted_content
+        This function replicates the JavaScript decryption logic:
+        1. Extracts base64-encoded cipher, IV, key, and algorithm
+           from div attributes
+        2. Performs AES-CBC decryption using the extracted parameters
+        3. Returns the decrypted content as UTF-8 text
+
+        Args:
+            content (str): String containing the encrypted content
+                (base64-encoded)
+            attributes (dict): Dictionary containing the div attributes.
+                - v1 attribute: base64-encoded IV
+                - v2 attribute: base64-encoded encryption key
+                - v3 attribute: base64-encoded algorithm name
+
+        Returns:
+            str: Decrypted content as UTF-8 string
+
+        """
+        cipher, iv, rawkey = self._validate_and_decode_attributes(
+            content, attributes
+        )
+        plaintext = self._perform_aes_decryption(cipher, iv, rawkey)
+        return plaintext.decode("utf-8")
 
     def parse_html_div(self, html_string):
         """
@@ -200,8 +206,11 @@ class FileZillaURLProvider(URLGetter):
     def get_filezilla_download_page(self, url: str) -> str:
         """Retrieve the FileZilla download page HTML content."""
         header = {
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) "
-            "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15"
+            "user-agent": (
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) "
+                "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+                "Version/13.1 Safari/605.1.15"
+            )
         }
         response = self.download(url, text=True, headers=header)
         return response

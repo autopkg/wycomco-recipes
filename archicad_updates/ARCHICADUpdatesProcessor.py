@@ -71,120 +71,113 @@ class ARCHICADUpdatesProcessor(URLGetter):
 
     description = __doc__
 
-    def main(self):
-        """Main process."""
-
-        # Define some variables.
-        major_version = self.env.get("major_version")
-        localization = self.env.get("localization")
-        release_type = self.env.get("release_type")
-        architecture = self.env.get("ARCHITECTURE", "INTEL")
-        available_builds = {}
-
-        # Grab the available public downloads page
-        response = self.download(
-            "https://graphisoft.com/de/service-support/"
-            "downloads?section=update"
-        )
-
-        # Parse the html to retrieve the actual json data for the categories.
+    def _get_category_id(self, response):
+        """Extract and return the category ID for updates."""
         json_response = re.search(
             r":categories='(.*)'", response.decode("utf-8")
         ).group(1)
         json_data = json.loads(json_response)
 
-        # Parse through the available categories to identify the category id
-        # for updates.
-        slug = None
-        category_id = None
         for json_object in json_data:
-            slug = "update"
+            if json_object.get("slug") == "update":
+                return json_object.get("id")
 
-            if json_object.get("slug") == slug:
-                category_id = json_object.get("id")
+        raise ProcessorError("Unable to find a url based on the type update.")
 
-        if not slug or not category_id:
-            raise ProcessorError(
-                "Unable to find a url based on the type update."
-            )
-
-        # Parse the html to retrieve the actual json data for the platforms.
+    def _get_platform_id(self, response, architecture):
+        """Extract and return the platform ID for the architecture."""
         json_response = re.search(
             r":platforms='(.*)'", response.decode("utf-8")
         ).group(1)
         json_data = json.loads(json_response)
 
-        # Parse through the available platforms to identify the platform id
-        # for the requested architecture.
-        slug = None
-        platform_id = None
+        if architecture == "INTEL":
+            slug = "mac-intel-processor"
+        elif architecture == "ARM":
+            slug = "mac-apple-silicon"
+        else:
+            raise ProcessorError("Invalid architecture specified.")
+
         for json_object in json_data:
-            if architecture == "INTEL":
-                slug = "mac-intel-processor"
-            elif architecture == "ARM":
-                slug = "mac-apple-silicon"
-
             if json_object.get("slug") == slug:
-                platform_id = json_object.get("id")
+                return json_object.get("id")
 
-        if not slug or not platform_id:
-            raise ProcessorError(
-                "Unable to find a url based on the provided architecture."
-            )
+        raise ProcessorError(
+            "Unable to find a url based on the provided architecture."
+        )
 
-        # Parse the html to retrieve the actual json data for the downloads.
+    def _find_available_builds(self, response, criteria):
+        """Find and return available builds matching the criteria."""
         json_response = re.search(
             r":downloads='(.*)'", response.decode("utf-8")
         ).group(1)
         json_data = json.loads(json_response)
+        available_builds = {}
 
-        # Parse through the available downloads for versions that match the
-        # requested paramters.
         for json_object in json_data:
-
-            # Only proceed if json_object is a dict, some items may be lists.
             if not isinstance(json_object, dict):
                 continue
 
             if all(
                 (
-                    json_object.get("category") == category_id,
-                    json_object.get("version") == major_version,
-                    json_object.get("locale") == localization,
-                    json_object.get("edition") == release_type,
-                    json_object.get("platform") == int(platform_id),
+                    json_object.get("category") == criteria["category_id"],
+                    json_object.get("version") == criteria["major_version"],
+                    json_object.get("locale") == criteria["localization"],
+                    json_object.get("edition") == criteria["release_type"],
+                    json_object.get("platform")
+                    == int(criteria["platform_id"]),
                     json_object.get("type") == "Archicad",
                     json_object.get("build"),
                 )
             ):
-                # Get the actual download url and map it to the build number.
                 mac_link = json_object.get("data", {}).get("url")
                 available_builds[str(json_object.get("build"))] = mac_link
 
-        # Get the latest version.
-        # Avoid unrelated errors and compute propper version
+        return available_builds
+
+    def _set_output_variables(self, url, build, version, architecture):
+        """Set output variables in the environment."""
+        self.env["url"] = url
+        self.output(f"Download URL: {url}")
+        self.env["build"] = build
+        self.output(f"build: {build}")
+        self.env["version"] = version
+        self.output(f"version: {version}")
+
+        if architecture == "ARM":
+            self.env["supported_architecture"] = "arm64"
+        else:
+            self.env["supported_architecture"] = "x86_64"
+
+    def main(self):
+        """Main process."""
+        major_version = self.env.get("major_version")
+        localization = self.env.get("localization")
+        release_type = self.env.get("release_type")
+        architecture = self.env.get("ARCHITECTURE", "INTEL")
+
+        response = self.download(
+            "https://graphisoft.com/de/service-support/"
+            "downloads?section=update"
+        )
+
+        category_id = self._get_category_id(response)
+        platform_id = self._get_platform_id(response, architecture)
+
+        criteria = {
+            "category_id": category_id,
+            "platform_id": platform_id,
+            "major_version": major_version,
+            "localization": localization,
+            "release_type": release_type,
+        }
+        available_builds = self._find_available_builds(response, criteria)
+
         if available_builds:
             build = sorted(available_builds.keys())[-1]
             version = f"{major_version}.0.0.{build}"
             url = available_builds[build]
-            build = str(build)
-        else:
-            build = "0"
-            version = "0"
-            url = None
-
-        if url:
-            self.env["url"] = url
-            self.output(f"Download URL: {url}")
-            # Build and version instead of build as version
-            self.env["build"] = build
-            self.output(f"build: {build}")
-            self.env["version"] = version
-            self.output(f"version: {version}")
-            if architecture == "ARM":
-                self.env["supported_architecture"] = "arm64"
-            else:
-                self.env["supported_architecture"] = "x86_64"
+            self._set_output_variables(url, build, version, architecture)
         else:
             raise ProcessorError(
                 "Unable to find a url based on the parameters provided."

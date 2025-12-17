@@ -16,6 +16,8 @@
 """See docstring for MunkiAutoStaging class"""
 
 
+# pylint: disable=E0401
+# pylint: disable=W4901
 import glob
 import os
 import plistlib
