@@ -48,7 +48,7 @@ and selecting the language. The LANGUAGE_CODE can be found at the end of the URL
 				<string>_langpack_%LANGUAGE_CODE%.dmg</string>
 			</dict>
 			<key>Processor</key>
-			<string>com.github.homebysix-recipes.FindAndReplace/FindAndReplace</string>
+			<string>com.github.autopkg.homebysix-recipes.FindAndReplace/FindAndReplace</string>
 		</dict>
 		<dict>
 			<key>Arguments</key>
