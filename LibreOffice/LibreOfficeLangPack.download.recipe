@@ -56,7 +56,7 @@ and selecting the language. The LANGUAGE_CODE can be found at the end of the URL
 				<key>filename</key>
 				<string>%NAME%_langpack_%LANGUAGE_CODE%.dmg</string>
 				<key>url</key>
-				<string>%output_string%</string>
+				<string>%match%</string>
 			</dict>
 			<key>Processor</key>
 			<string>URLDownloader</string>
