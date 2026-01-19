@@ -35,7 +35,7 @@ and selecting the language. The LANGUAGE_CODE can be found at the end of the URL
 				<string>pathname_app</string>
 			</dict>
 			<key>Processor</key>
-			<string>com.github.sebtomasi.SharedProcessors/RenameVar</string>
+			<string>com.github.wycomco.SharedProcessors/RenameVar</string>
 		</dict>
 		<dict>
 			<key>Arguments</key>
@@ -70,8 +70,6 @@ and selecting the language. The LANGUAGE_CODE can be found at the end of the URL
             <string>CodeSignatureVerifier</string>
             <key>Arguments</key>
             <dict>
-                <key>comment</key>
-                <string>Use wildcard matching for the app so it will also match FirefoxDeveloperEdition.app and FirefoxNightly.app</string>
                 <key>input_path</key>
                 <string>%pathname%/LibreOffice Language Pack.app</string>
                 <key>requirement</key>
