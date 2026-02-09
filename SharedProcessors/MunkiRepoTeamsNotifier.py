@@ -105,7 +105,7 @@ class MunkiRepoTeamsNotifier(URLGetter):
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
             ) as proc:
-                (out, err) = proc.communicate()
+                out, err = proc.communicate()
         except OSError as error:
             raise ProcessorError(error) from error
         if proc.returncode != 0 or err:
@@ -403,10 +403,10 @@ class MunkiRepoTeamsNotifier(URLGetter):
             self.set_activity_subtitle(
                 message, "MunkiImporter and AutoStaging"
             )
-            (message, munki_name) = self.munki_message(
+            message, munki_name = self.munki_message(
                 message, munki_summary, munki_info, verbosity
             )
-            (message, staging_name) = self.staging_message(
+            message, staging_name = self.staging_message(
                 message, autostaging_summary, munki_info, verbosity
             )
             if nice_name != munki_name:
@@ -415,7 +415,7 @@ class MunkiRepoTeamsNotifier(URLGetter):
                 name = f"{munki_name}"
         elif munki_repo_changed and munki_summary:
             self.set_activity_subtitle(message, "MunkiImporter")
-            (message, munki_name) = self.munki_message(
+            message, munki_name = self.munki_message(
                 message, munki_summary, munki_info, verbosity
             )
             if nice_name != munki_name:
@@ -424,7 +424,7 @@ class MunkiRepoTeamsNotifier(URLGetter):
                 name = f"{munki_name}"
         elif munki_repo_changed and autostaging_summary:
             self.set_activity_subtitle(message, "MunkiAutoStaging")
-            (message, staging_name) = self.staging_message(
+            message, staging_name = self.staging_message(
                 message, autostaging_summary, munki_info, verbosity
             )
             if nice_name != staging_name:
