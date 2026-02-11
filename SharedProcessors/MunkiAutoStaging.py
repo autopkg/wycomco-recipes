@@ -24,7 +24,7 @@ import plistlib
 from datetime import datetime, timedelta
 from distutils.version import StrictVersion
 
-from autopkglib import Processor, ProcessorError
+from autopkglib import APLooseVersion, Processor, ProcessorError
 from autopkglib.munkirepolibs.AutoPkgLib import AutoPkgLib
 from autopkglib.munkirepolibs.MunkiLib import MunkiLib
 
@@ -302,7 +302,7 @@ class MunkiAutoStaging(Processor):
                 del self.env["munki_autostaging_summary_result"]
 
             versions_promoted = self.promote_items(library)
-            versions_promoted.sort(key=StrictVersion, reverse=True)
+            versions_promoted.sort(key=APLooseVersion, reverse=True)
 
             if len(versions_promoted) > 0:
                 self.env["munki_repo_changed"] = True
