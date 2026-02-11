@@ -15,7 +15,6 @@
 # limitations under the License.
 """See docstring for FileZillaURLProvider class"""
 
-
 import base64
 import re
 from typing import List

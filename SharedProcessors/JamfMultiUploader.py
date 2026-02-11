@@ -15,7 +15,6 @@
 # limitations under the License.
 """See docstring for JamfMultiUploader class"""
 
-
 import copy
 import os
 import pathlib
