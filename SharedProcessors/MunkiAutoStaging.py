@@ -1,6 +1,7 @@
 #!/usr/local/autopkg/python
+# Requires AutoPkg 2.9
 #
-# Copyright 2022 wycomco GmbH
+# Copyright 2026 wycomco GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +22,6 @@ import glob
 import os
 import plistlib
 from datetime import datetime, timedelta
-from distutils.version import StrictVersion
 
 from autopkglib import APLooseVersion, Processor, ProcessorError
 from autopkglib.munkirepolibs.AutoPkgLib import AutoPkgLib
