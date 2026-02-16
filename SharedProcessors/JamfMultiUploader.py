@@ -22,8 +22,12 @@ import pprint
 import sys
 import traceback
 
-from autopkglib import (AutoPackagerError, AutoPackagerLoadError, Processor,
-                        get_processor)
+from autopkglib import (
+    AutoPackagerError,
+    AutoPackagerLoadError,
+    Processor,
+    get_processor,
+)
 
 __all__ = ["JamfMultiUploader"]
 
