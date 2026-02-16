@@ -21,6 +21,7 @@
 import glob
 import os
 import plistlib
+import sys
 from datetime import datetime, timedelta
 
 from autopkglib import APLooseVersion, Processor, ProcessorError
@@ -28,6 +29,16 @@ from autopkglib.munkirepolibs.AutoPkgLib import AutoPkgLib
 from autopkglib.munkirepolibs.MunkiLib import MunkiLib
 
 __all__ = ["MunkiAutoStaging"]
+
+
+MIN_AUTOPKG_VERSION = "2.9"
+if APLooseVersion(sys.modules["autopkglib"].__version__) < APLooseVersion(
+    MIN_AUTOPKG_VERSION
+):
+    sys.exit(
+        f"{__file__}: Requires AutoPkg {MIN_AUTOPKG_VERSION} or later; "
+        f"found AutoPkg {sys.modules['autopkglib'].__version__}"
+    )
 
 
 def _find_matching_item(repo_library, name):
