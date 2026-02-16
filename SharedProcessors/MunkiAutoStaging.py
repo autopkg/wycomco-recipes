@@ -21,7 +21,6 @@ import glob
 import os
 import plistlib
 from datetime import datetime, timedelta
-from distutils.version import StrictVersion
 
 from autopkglib import APLooseVersion, Processor, ProcessorError
 from autopkglib.munkirepolibs.AutoPkgLib import AutoPkgLib
