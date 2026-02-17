@@ -156,8 +156,7 @@ class ARCHICADUpdatesProcessor(URLGetter):
         architecture = self.env.get("ARCHITECTURE", "INTEL")
 
         response = self.download(
-            "https://graphisoft.com/de/service-support/"
-            "downloads?section=update"
+            "https://graphisoft.com/de-de/" "downloads?section=update"
         )
 
         category_id = self._get_category_id(response)
