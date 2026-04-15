@@ -94,9 +94,9 @@ For the processor used by this recipe to work you need to import the cryptograph
 			<key>Arguments</key>
 			<dict>
 				<key>dmg_path</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
+				<string>%RECIPE_CACHE_DIR%/%NAME%-%ARCH%.dmg</string>
 				<key>dmg_root</key>
-				<string>%RECIPE_CACHE_DIR%/FileZilla.app</string>
+				<string>%RECIPE_CACHE_DIR%/unpacked/FileZilla.app</string>
 			</dict>
 			<key>Processor</key>
 			<string>DmgCreator</string>
