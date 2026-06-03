@@ -406,14 +406,15 @@ class MunkiRepoTeamsNotifier(URLGetter):
         if icon_url:
             self.message.set_image(icon_url)
 
-        self.message.add_link(
-            {
-                "url": "munki://detail-" + name,
-                "name": "Show in Munki",
-                "icon": "Open",
-                "style": "positive",
-            }
-        )
+        # Teams does not support Munki links
+        # self.message.add_link(
+        #     {
+        #         "url": "munki://detail-" + name,
+        #         "name": "Show in Munki",
+        #         "icon": "Open",
+        #         "style": "positive",
+        #     }
+        # )
 
         return name
 
@@ -463,14 +464,15 @@ class MunkiRepoTeamsNotifier(URLGetter):
         if icon_url:
             self.message.set_image(icon_url)
 
-        self.message.add_link(
-            {
-                "url": "munki://detail-" + name,
-                "name": "Show in Munki",
-                "icon": "Open",
-                "style": "positive",
-            }
-        )
+        # Teams does not support Munki links
+        # self.message.add_link(
+        #     {
+        #         "url": "munki://detail-" + name,
+        #         "name": "Show in Munki",
+        #         "icon": "Open",
+        #         "style": "positive",
+        #     }
+        # )
 
         return name
 
