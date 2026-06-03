@@ -26,64 +26,68 @@ from autopkglib.URLGetter import URLGetter
 __all__ = ["MunkiRepoTeamsNotifier"]
 
 
-class MunkiRepoTeamsNotifier(URLGetter):
-    description = (
-        "Posts changes to Teams via webhook based on output of a "
-        "MunkiImporter or MunkiAutoStaging process."
-    )
-    input_variables = {
-        "NAME": {"required": False, "description": ("Generic product name.")},
-        "teams_webhook_url": {
-            "required": True,
-            "description": ("Teams webhook."),
-        },
-        "teams_username": {
-            "required": False,
-            "description": ("Teams MessageCard display name."),
-            "default": "AutoPkg",
-        },
-        "verbosity": {
-            "required": False,
-            "description": ("Verbosity of messages. 0=brief - 3=all details."),
-            "default": 0,
-        },
-        "teams_icon_url": {
-            "required": False,
-            "description": ("Teams display icon URL."),
-            "default": "https://munkibuilds.org/logo.jpg",
-        },
-        "ICON_BASE_URL": {
-            "required": False,
-            "description": (
-                "Base url to icons folder, corresponds to Munki's IconURL"
-            ),
-        },
-        "munki_repo_changed": {
-            "required": False,
-            "description": (
-                "Indicates if an item was imported by "
-                "MunkiImporter or modified by MunkiAutoStaging."
-            ),
-            "default": False,
-        },
-        "munki_importer_summary_result": {
-            "required": False,
-            "description": (
-                "The pkginfo property list. Empty if item was not " "imported."
-            ),
-        },
-        "munki_autostaging_summary_result": {
-            "required": False,
-            "description": ("Result of the MunkiAutoStaging processor."),
-        },
-    }
-    output_variables = {}
+class TeamsMessage:
+    """
+    Class to create and send messages to Microsoft Teams through a webhook.
+    """
 
-    __doc__ = description
+    title = ""
+    subtitle = ""
+    facts = []
+    links = []
+    image_url = ""
+    set_webhook_url = ""
+    verbose_level = 1
+
+    def __init__(
+        self,
+        title="",
+        image_url="",
+        webhook_url="",
+        verbose_level=1,
+    ):
+        self.title = title
+        self.image_url = image_url
+        self.facts = []
+        self.links = []
+        self.verbose_level = verbose_level
+        self.set_webhook_url = webhook_url
+
+    def output(self, msg, verbose_level=1) -> None:
+        """Print a message if verbosity is >= verbose_level"""
+        if self.verbose_level >= verbose_level:
+            print(f"{self.__class__.__name__}: {msg}")
+
+    def set_title(self, title):
+        self.title = title
+
+    def set_subtitle(self, subtitle):
+        self.subtitle = subtitle
+
+    def add_fact(self, name, value):
+        self.facts += [{"name": name, "value": value}]
+
+    def add_link(self, link_options):
+        self.links += [
+            {
+                "url": link_options.get("url", ""),
+                "name": link_options.get("name", ""),
+                "tooltip": link_options.get("tooltip", ""),
+                "icon": link_options.get("icon", ""),
+                "mode": link_options.get("mode", ""),
+                "style": link_options.get("style", ""),
+            }
+        ]
+
+    def set_image(self, image_url):
+        self.image_url = image_url
+
+    def set_webhook(self, webhook_url):
+        self.set_webhook_url = webhook_url
 
     def _curl_json_poster(self, message_json, teams_webhook_url):
         """
-        Sends a JSON formatted message via curl through a teams webhook.
+        Sends a JSON formatted Adaptive Card via curl through a teams webhook.
         Essentially:
         curl -H "Content-Type: application/json" -d "${JSON}" "${WEBHOOK_URL}"
         """
@@ -126,15 +130,117 @@ class MunkiRepoTeamsNotifier(URLGetter):
             # return False
         return True
 
-    def send_teams_message(self, teams_webhook_url, message):
+    def create_content_items(self):
+        content_items = []
+        if self.title:
+            content_items += [
+                {
+                    "type": "TextBlock",
+                    "text": self.title,
+                    "wrap": True,
+                    "style": "heading",
+                }
+            ]
+
+        if self.subtitle:
+            content_items += [
+                {
+                    "type": "TextBlock",
+                    "text": self.subtitle,
+                    "wrap": True,
+                    "style": "columnHeader",
+                }
+            ]
+
+        if self.facts:
+            fact_items = []
+            for fact in self.facts:
+                fact_items += [{"title": fact["name"], "value": fact["value"]}]
+            content_items += [{"type": "FactSet", "facts": fact_items}]
+
+        if self.links:
+            action_items = []
+            for link in self.links:
+                action_items += [
+                    {
+                        "type": "Action.OpenUrl",
+                        "title": link["name"],
+                        "url": link["url"],
+                        "iconUrl": (
+                            (f"icon:{link.get('icon')}")
+                            if link.get("icon")
+                            else None
+                        ),
+                        "tooltip": link.get("tooltip"),
+                        "mode": link.get("mode", "primary"),
+                        "style": link.get("style", "default"),
+                    }
+                ]
+            content_items += [{"type": "ActionSet", "actions": action_items}]
+
+        return content_items
+
+    def send(self, webhook_url=None):
         """
-        Converts a Teams message-dictionary to a JSON formatted string and
+        Converts the TeamsMessage to a JSON formatted string and
         invokes _curl_json_poster to send it to teams.
         """
+
+        if not webhook_url and not self.set_webhook_url:
+            raise ProcessorError("No webhook url set for Teams Message.")
+
+        if webhook_url:
+            self.set_webhook(webhook_url)
+
+        message = {
+            "type": "AdaptiveCard",
+            "$schema": "https://adaptivecards.io/schemas/adaptive-card.json",
+            "version": "1.5",
+            "body": [],
+        }
+
+        content_items = self.create_content_items()
+
+        if self.image_url:
+            body = [
+                {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "width": "auto",
+                            "items": [
+                                {
+                                    "type": "Image",
+                                    "url": self.image_url,
+                                    "size": "Medium",
+                                }
+                            ],
+                        },
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": content_items,
+                        },
+                    ],
+                }
+            ]
+        else:
+            body = [{"type": "Container", "items": content_items}]
+
+        message["body"] = body
+
         message_json = json.dumps(message)
+
+        self.output(
+            f"Prepared Teams message JSON: {message_json}", verbose_level=3
+        )
+
         for count in range(1, 6):
             self.output(f"Teams webhook post attempt {count}", verbose_level=2)
-            success = self._curl_json_poster(message_json, teams_webhook_url)
+            success = self._curl_json_poster(
+                message_json, self.set_webhook_url
+            )
             if success:
                 break
             sleep(10)
@@ -145,93 +251,69 @@ class MunkiRepoTeamsNotifier(URLGetter):
                 "ERROR: Teams webhook failed to send 5 times."
             )
 
-    def new_message(
-        self,
-        title="",
-        activity_title="",
-        activity_subtitle="",
-        activity_image="",
-    ):
-        """
-        Creates an empty Teams activity message dictionary. This empty
-        dictionary is accepted when sent to teams.
-        Optional parameters like titles can be set / changed through named
-        methods of this module.
-        """
-        message = {
-            "@type": "AdaptiveCard",
-            "@context": "http://schema.org/extensions",
-            "themeColor": "778eb1",
-            "summary": title,
-            "sections": [
-                {
-                    "activityTitle": activity_title,
-                    "activitySubtitle": activity_subtitle,
-                    "facts": [],
-                }
-            ],
-            "potentialAction": [],
-        }
 
-        self.set_activity_image(message, activity_image)
+class MunkiRepoTeamsNotifier(URLGetter):
+    description = (
+        "Posts changes to Teams via webhook based on output of a "
+        "MunkiImporter or MunkiAutoStaging process."
+    )
+    input_variables = {
+        "NAME": {"required": False, "description": ("Generic product name.")},
+        "teams_webhook_url": {
+            "required": True,
+            "description": ("Teams webhook."),
+        },
+        "teams_username": {
+            "required": False,
+            "description": ("Teams MessageCard display name."),
+            "default": "AutoPkg",
+        },
+        "verbosity": {
+            "required": False,
+            "description": ("Verbosity of messages. 0=brief - 3=all details."),
+            "default": 0,
+        },
+        "teams_icon_url": {
+            "required": False,
+            "description": ("Teams display icon URL."),
+            "default": (
+                "https://github.com/munki/munki/blob/"
+                "c3ea21c9c754611c5d78364f05a94abc0a45adf7/code/apps/"
+                "Managed%20Software%20Center/Managed%20Software%20Center/"
+                "Assets.xcassets/AppIcon.appiconset/"
+                "MunkiStatus_128_1x.png?raw=true"
+            ),
+        },
+        "ICON_BASE_URL": {
+            "required": False,
+            "description": (
+                "Base url to icons folder, corresponds to Munki's IconURL"
+            ),
+        },
+        "munki_repo_changed": {
+            "required": False,
+            "description": (
+                "Indicates if an item was imported by "
+                "MunkiImporter or modified by MunkiAutoStaging."
+            ),
+            "default": False,
+        },
+        "munki_importer_summary_result": {
+            "required": False,
+            "description": (
+                "The pkginfo property list. Empty if item was not " "imported."
+            ),
+        },
+        "munki_autostaging_summary_result": {
+            "required": False,
+            "description": ("Result of the MunkiAutoStaging processor."),
+        },
+    }
+    output_variables = {}
 
-        return message
+    message = None
 
-    def set_title(self, message, title):
-        """
-        Set summary and title in an existing Teams message dictionary.
-        """
-        message["summary"] = title
-        return message
-
-    def set_activity_title(self, message, activity_title):
-        """
-        Set activityTitle in an existing Teams message dictionary.
-        """
-        message["sections"][0]["activityTitle"] = activity_title
-        return message
-
-    def set_activity_subtitle(self, message, activity_subtitle):
-        """
-        Set activitySubtitle in an existing Teams message dictionary.
-        """
-        message["sections"][0]["activitySubtitle"] = activity_subtitle
-        return message
-
-    def set_activity_image(self, message, activity_image=""):
-        """
-        Set activityImage in an existing Teams message dictionary. If no image
-        link is given or any other value that is considered False is given, the
-        image will be removed.
-        """
-        if activity_image:
-            message["sections"][0]["activityImage"] = activity_image
-        else:
-            try:
-                del message["sections"][0]["activityImage"]
-            except KeyError:
-                pass
-        return message
-
-    def add_fact(self, message, name, value):
-        """
-        Adds a facts dictionary to a Teams message dictionary.
-        """
-        message["sections"][0]["facts"] += [{"name": name, "value": value}]
-        return message
-
-    def add_link(self, message, name, url):
-        """
-        Adds a link to a Teams message dictionary.
-        """
-        message["potentialAction"] += [
-            {
-                "@type": "OpenUri",
-                "name": name,
-                "targets": [{"os": "default", "uri": url}],
-            }
-        ]
-        return message
+    __doc__ = description
 
     def gen_icon_url(self, munki_info):
         """
@@ -277,7 +359,7 @@ class MunkiRepoTeamsNotifier(URLGetter):
 
         return header.get("http_result_code") == "200"
 
-    def munki_message(self, message, munki_summary, munki_info, verbosity):
+    def munki_message(self, munki_summary, munki_info, verbosity):
         """
         Compiles the important results of MunkiImporter into a teams message.
         """
@@ -300,37 +382,42 @@ class MunkiRepoTeamsNotifier(URLGetter):
         self.output(f"MunkiImporter icon_repo_path: {icon_repo_path}")
         self.output(f"     Supported architectures: {supported_archs}")
         if verbosity >= 3:
-            message = self.add_fact(message, "Name", name)
-        message = self.add_fact(message, "new Version", version)
+            self.message.add_fact("Name", name)
+
+        self.message.add_fact("new Version", version)
+
         if verbosity >= 1:
-            message = self.add_fact(message, "in Catalogs", catalogs)
+            self.message.add_fact("in Catalogs", catalogs)
             if supported_archs:
-                message = self.add_fact(
-                    message, "supported architectures", supported_archs
+                self.message.add_fact(
+                    "supported architectures", supported_archs
                 )
         if verbosity >= 2:
-            message = self.add_fact(message, "PkgInfo Path", pkginfo_path)
-            message = self.add_fact(message, "Package Path", pkg_repo_path)
+            self.message.add_fact("PkgInfo Path", pkginfo_path)
+            self.message.add_fact("Package Path", pkg_repo_path)
         if verbosity >= 3:
             if icon_repo_path:
-                message = self.add_fact(message, "Icon Path", icon_repo_path)
+                self.message.add_fact("Icon Path", icon_repo_path)
             else:
-                message = self.add_fact(
-                    message, "Icon Path", "no icon path given"
-                )
+                self.message.add_fact("Icon Path", "no icon path given")
 
         icon_url = self.gen_icon_url(munki_info)
 
         if icon_url:
-            self.set_activity_image(message, icon_url)
+            self.message.set_image(icon_url)
 
-        # self.add_link(message, "Show in Munki", "munki://detail-" + name)
+        self.message.add_link(
+            {
+                "url": "munki://detail-" + name,
+                "name": "Show in Munki",
+                "icon": "Open",
+                "style": "positive",
+            }
+        )
 
-        return (message, name)
+        return name
 
-    def staging_message(
-        self, message, autostaging_summary, munki_info, verbosity
-    ):
+    def staging_message(self, autostaging_summary, munki_info, verbosity):
         """
         Compiles the important results of MunkiAutoStaging into a teams
         message.
@@ -353,27 +440,39 @@ class MunkiRepoTeamsNotifier(URLGetter):
             f"AutoStaging munki_production_catalog: {munki_production_catalog}"
         )
         self.output(f"     Supported architectures: {supported_archs}")
+
         if verbosity >= 3:
-            message = self.add_fact(message, "Name", name)
-        message = self.add_fact(message, "autostaged Versions", versions)
+            self.message.add_fact("Name", name)
+
+        self.message.add_fact("autostaged Versions", versions)
+
         if verbosity >= 1:
-            message = self.add_fact(
-                message, "from Staging Catalog", munki_staging_catalog
+            self.message.add_fact(
+                "from Staging Catalog", munki_staging_catalog
             )
-            message = self.add_fact(
-                message, "to Production Catalogs", munki_production_catalog
+            self.message.add_fact(
+                "to Production Catalogs", munki_production_catalog
             )
             if supported_archs:
-                message = self.add_fact(
-                    message, "supported architectures", supported_archs
+                self.message.add_fact(
+                    "supported architectures", supported_archs
                 )
 
         icon_url = self.gen_icon_url(munki_info)
 
         if icon_url:
-            self.set_activity_image(message, icon_url)
+            self.message.set_image(icon_url)
 
-        return (message, name)
+        self.message.add_link(
+            {
+                "url": "munki://detail-" + name,
+                "name": "Show in Munki",
+                "icon": "Open",
+                "style": "positive",
+            }
+        )
+
+        return name
 
     def main(self):
         """
@@ -387,46 +486,62 @@ class MunkiRepoTeamsNotifier(URLGetter):
         teams_webhook_url = self.env.get("teams_webhook_url")
         teams_username = self.env.get("teams_username") or "AutoPkg"
         verbosity = int(self.env.get("verbosity")) or 0
-        teams_icon_url = (
-            self.env.get("teams_icon_url")
-            or "https://munkibuilds.org/logo.jpg"
+        teams_icon_url = self.env.get("teams_icon_url", None) or (
+            "https://github.com/munki/munki/blob/"
+            "c3ea21c9c754611c5d78364f05a94abc0a45adf7/code/apps/"
+            "Managed%20Software%20Center/Managed%20Software%20Center/"
+            "Assets.xcassets/AppIcon.appiconset/"
+            "MunkiStatus_128_1x.png?raw=true"
         )
         munki_repo_changed = self.env.get("munki_repo_changed") or False
         munki_summary = self.env.get("munki_importer_summary_result")
         autostaging_summary = self.env.get("munki_autostaging_summary_result")
 
-        message = self.new_message(
-            title=teams_username, activity_image=teams_icon_url
+        self.message = TeamsMessage(
+            title=teams_username,
+            image_url=teams_icon_url,
+            webhook_url=teams_webhook_url,
+            verbose_level=self.env.get("verbose", 0),
         )
 
         if munki_repo_changed and munki_summary and autostaging_summary:
-            self.set_activity_subtitle(
-                message, "MunkiImporter and AutoStaging"
+
+            self.message.set_subtitle("MunkiImporter and AutoStaging")
+
+            munki_name = self.munki_message(
+                munki_summary, munki_info, verbosity
             )
-            message, munki_name = self.munki_message(
-                message, munki_summary, munki_info, verbosity
+
+            staging_name = self.staging_message(
+                autostaging_summary, munki_info, verbosity
             )
-            message, staging_name = self.staging_message(
-                message, autostaging_summary, munki_info, verbosity
-            )
+
             if nice_name != munki_name:
                 name = f"{nice_name} ({munki_name})"
             else:
                 name = f"{munki_name}"
+
         elif munki_repo_changed and munki_summary:
-            self.set_activity_subtitle(message, "MunkiImporter")
-            message, munki_name = self.munki_message(
-                message, munki_summary, munki_info, verbosity
+
+            self.message.set_subtitle("MunkiImporter")
+
+            munki_name = self.munki_message(
+                munki_summary, munki_info, verbosity
             )
+
             if nice_name != munki_name:
                 name = f"{nice_name} ({munki_name})"
             else:
                 name = f"{munki_name}"
+
         elif munki_repo_changed and autostaging_summary:
-            self.set_activity_subtitle(message, "MunkiAutoStaging")
-            message, staging_name = self.staging_message(
-                message, autostaging_summary, munki_info, verbosity
+
+            self.message.set_subtitle("MunkiAutoStaging")
+
+            staging_name = self.staging_message(
+                autostaging_summary, munki_info, verbosity
             )
+
             if nice_name != staging_name:
                 name = f"{nice_name} ({staging_name})"
             else:
@@ -434,9 +549,11 @@ class MunkiRepoTeamsNotifier(URLGetter):
         else:
             self.output("Nothing to report to Teams")
             return
-        self.set_activity_title(message, name)
 
-        self.send_teams_message(teams_webhook_url, message)
+        if name:
+            self.message.set_title(name)
+
+        self.message.send()
 
 
 if __name__ == "__main__":
