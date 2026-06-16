@@ -35,7 +35,7 @@ repos:
       - id: isort
         args: ["--profile", "black"]
   - repo: https://github.com/pycqa/pylint
-    rev: v4.0.5
+    rev: v4.0.6
     hooks:
       - id: pylint
   - repo: https://github.com/asottile/blacken-docs
