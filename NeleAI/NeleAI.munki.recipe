@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads the latest version of Nele AI and imports it into Munki.</string>
+	<key>Identifier</key>
+	<string>com.github.wycomco.munki.NeleAI</string>
+	<key>Input</key>
+	<dict>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%</string>
+		<key>NAME</key>
+		<string>NeleAI</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>description</key>
+			<string>The nele.ai desktop client enables users to interact with AI assistants in a secure and user-friendly environment. Data is processed in accordance with strict European privacy and security requirements.</string>
+			<key>developer</key>
+			<string>GAL Digital GmbH</string>
+			<key>display_name</key>
+			<string>Nele AI</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>2.3</string>
+	<key>ParentRecipe</key>
+	<string>com.github.wycomco.pkg.NeleAI</string>
+	<key>Process</key>
+	<array>
+        <dict>
+    		<key>Arguments</key>
+    			<dict>
+    				<key>info_path</key>
+    				<string>%pkgroot%/Applications/neleai.app/Contents/Info.plist</string>
+    				<key>plist_keys</key>
+    				<dict>
+    					<key>CFBundleShortVersionString</key>
+    					<string>version</string>
+    					<key>CFBundleIdentifier</key>
+    					<string>identifier</string>
+    				</dict>
+    			</dict>
+    		<key>Processor</key>
+    		<string>PlistReader</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>derive_minimum_os_version</key>
+				<string>%DERIVE_MIN_OS%</string>
+				<key>faux_root</key>
+				<string>%RECIPE_CACHE_DIR%/pkg</string>
+				<key>installs_item_paths</key>
+				<array>
+					<string>/Applications/neleai.app</string>
+				</array>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiInstallsItemsCreator</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%pkg_path%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
+</dict>
+</plist>
