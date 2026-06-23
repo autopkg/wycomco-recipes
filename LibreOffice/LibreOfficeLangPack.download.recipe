@@ -21,7 +21,7 @@ and selecting the language. The LANGUAGE_CODE can be found at the end of the URL
 		<string>Latest</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>0.3.1</string>
+	<string>1.1</string>
 	<key>ParentRecipe</key>
 	<string>io.github.hjuutilainen.download.LibreOffice</string>
 	<key>Process</key>
