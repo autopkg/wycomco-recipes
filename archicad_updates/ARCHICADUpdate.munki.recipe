@@ -55,7 +55,7 @@ ARCHITECTURE:  INTEL or ARM, falls back to INTEL
 		</dict>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>0.3.1</string>
+	<string>1.1</string>
 	<key>ParentRecipe</key>
 	<string>com.github.wycomco.download.ARCHICADUpdate</string>
 	<key>Process</key>

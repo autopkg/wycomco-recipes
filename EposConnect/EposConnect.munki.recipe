@@ -54,7 +54,7 @@ done
 		</dict>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>0.2.5</string>
+	<string>1.1</string>
 	<key>ParentRecipe</key>
 	<string>com.github.wycomco.download.EposConnect</string>
 	<key>Process</key>

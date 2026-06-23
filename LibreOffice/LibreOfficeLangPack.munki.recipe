@@ -50,7 +50,7 @@ and selecting the language. The LANGUAGE_CODE can be found at the end of the URL
 		</dict>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>0.4.0</string>
+	<string>1.1</string>
 	<key>ParentRecipe</key>
 	<string>com.github.wycomco.pkg.LibreOfficeLangPack</string>
 	<key>Process</key>
