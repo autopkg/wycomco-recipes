@@ -14,7 +14,7 @@
 		<string>Unclack</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>1.4.0</string>
+	<string>2.7.1</string>
 	<key>Process</key>
 	<array>
 		<dict>
@@ -22,6 +22,8 @@
 			<dict>
 				<key>github_repo</key>
 				<string>robotsquidward/unclack-releases</string>
+				<key>latest_only</key>
+				<true/>
 			</dict>
 			<key>Processor</key>
 			<string>GitHubReleasesInfoProvider</string>
