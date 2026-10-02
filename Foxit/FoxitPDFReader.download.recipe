@@ -23,48 +23,9 @@
 				<key>url</key>
 				<string>https://www.foxit.com/pdf-reader/version-history.html</string>
 				<key>re_pattern</key>
-				<string>Version (\d+\.\d+\.\d+\.\d+)</string>
+				<string>Version (?P&lt;latest_version>(?P&lt;MAJOR>\d+)\.(?P&lt;MINOR>\d+)\.(?P&lt;SUBMINOR>(?:0(?=\.))?(?P&lt;FILE_SUBMINOR>\d*))\.\d+)</string>
 				<key>result_output_var_name</key>
 				<string>latest_version</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>URLTextSearcher</string>
-			<key>Arguments</key>
-			<dict>
-				<key>url</key>
-				<string>https://www.foxit.com/pdf-reader/version-history.html</string>
-				<key>re_pattern</key>
-				<string>Version (\d+)\.</string>
-				<key>result_output_var_name</key>
-				<string>MAJOR</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>URLTextSearcher</string>
-			<key>Arguments</key>
-			<dict>
-				<key>url</key>
-				<string>https://www.foxit.com/pdf-reader/version-history.html</string>
-				<key>re_pattern</key>
-				<string>Version \d+\.(\d+)\.</string>
-				<key>result_output_var_name</key>
-				<string>MINOR</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>URLTextSearcher</string>
-			<key>Arguments</key>
-			<dict>
-				<key>url</key>
-				<string>https://www.foxit.com/pdf-reader/version-history.html</string>
-				<key>re_pattern</key>
-				<string>Version \d+\.\d+\.(\d+)\.</string>
-				<key>result_output_var_name</key>
-				<string>SUBMINOR</string>
 			</dict>
 		</dict>
 		<dict>
@@ -73,7 +34,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>url</key>
-				<string>https://cdn01.foxitsoftware.com/pub/foxit/reader/desktop/mac/%MAJOR%.%MINOR%.%SUBMINOR%/FoxitPDFReader%MAJOR%%MINOR%.L10N.Setup.pkg</string>
+				<string>https://cdn01.foxitsoftware.com/pub/foxit/reader/desktop/mac/%MAJOR%.%MINOR%.%SUBMINOR%/FoxitPDFReader%MAJOR%%MINOR%%FILE_SUBMINOR%.L10N.Setup.pkg</string>
 				<key>filename</key>
 				<string>%NAME%.pkg</string>
 			</dict>
