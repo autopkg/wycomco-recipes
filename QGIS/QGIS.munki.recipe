@@ -11,7 +11,9 @@ Long Term (support) Release = "ltr"
 
 Notes:
 - Python 3.6+ is a prerequisite before installing QGIS 3 -- the created .pkg will hard fail if Python 3.6+ is not installed.
-- The created .pkg will "uninstall" previous versions of QGIS.</string>
+- The created .pkg will "uninstall" previous versions of QGIS.
+- The installs array does not contain a min_os_version key. See https://qgis.org/resources/installation-guide/#mac-os-x--macos
+  for current requirements.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.QGIS</string>
 	<key>Input</key>
@@ -36,6 +38,8 @@ Notes:
 			<string>QGIS.ORG</string>
 			<key>display_name</key>
 			<string>QGIS</string>
+			<key>minimum_os_version</key>
+			<string>10.14</string>
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>

@@ -1,6 +1,6 @@
 #!/usr/local/autopkg/python
 #
-# Copyright 2023 wycomco GmbH
+# Copyright 2026 wycomco GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,8 +22,12 @@ import pprint
 import sys
 import traceback
 
-from autopkglib import (AutoPackagerError, AutoPackagerLoadError, Processor,
-                        get_processor)
+from autopkglib import (
+    AutoPackagerError,
+    AutoPackagerLoadError,
+    Processor,
+    get_processor,
+)
 
 __all__ = ["JamfMultiUploader"]
 
@@ -46,6 +50,7 @@ class JamfMultiUploader(Processor):
 
     def __init__(self, env=None, infile=None, outfile=None):
         super().__init__(env, infile, outfile)
+        self.env = env or {}
         self.verbose = 0
         self.options = {}
         self.processor_results = []

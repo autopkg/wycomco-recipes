@@ -9,7 +9,7 @@
 	<key>Input</key>
 	<dict/>
 	<key>MinimumVersion</key>
-	<string>1.0.0</string>
+	<string>1.1</string>
 	<key>ParentRecipe</key>
 	<string>com.github.wycomco.download.Unclack</string>
 	<key>Process</key>

@@ -2,10 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>Comment</key>
+	<string>Created with Recipe Robot v2.5.0 (https://github.com/homebysix/recipe-robot)</string>
 	<key>Description</key>
-	<string>Downloads the latest Bitwarden universal binary disk image and imports it into Munki.
-
-Override NAME and MUNKI_REPO_SUBDIR to your own preferences. Download is performed by using drewdiver's download recipe.</string>
+	<string>Downloads the latest version of Bitwarden and imports it into Munki.</string>
 	<key>Identifier</key>
 	<string>com.github.wycomco.munki.Bitwarden</string>
 	<key>Input</key>
@@ -27,7 +27,7 @@ Override NAME and MUNKI_REPO_SUBDIR to your own preferences. Download is perform
 			<key>developer</key>
 			<string>Bitwarden, Inc.</string>
 			<key>display_name</key>
-			<string>%NAME%</string>
+			<string>Bitwarden</string>
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>
@@ -36,8 +36,10 @@ Override NAME and MUNKI_REPO_SUBDIR to your own preferences. Download is perform
 			<true/>
 		</dict>
 	</dict>
+	<key>MinimumVersion</key>
+	<string>2.3</string>
 	<key>ParentRecipe</key>
-	<string>com.github.grumpydrew.download.Bitwarden</string>
+	<string>com.github.wycomco.download.Bitwarden</string>
 	<key>Process</key>
 	<array>
 		<dict>

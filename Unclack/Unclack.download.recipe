@@ -14,27 +14,25 @@
 		<string>Unclack</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>1.4.0</string>
+	<string>2.7.1</string>
 	<key>Process</key>
 	<array>
 		<dict>
 			<key>Arguments</key>
 			<dict>
-				<key>re_pattern</key>
-				<string>/app/\d.*/Unclack\.dmg</string>
-				<key>url</key>
-				<string>https://unclack.app</string>
+				<key>github_repo</key>
+				<string>robotsquidward/unclack-releases</string>
+				<key>latest_only</key>
+				<true/>
 			</dict>
 			<key>Processor</key>
-			<string>URLTextSearcher</string>
+			<string>GitHubReleasesInfoProvider</string>
 		</dict>
 		<dict>
 			<key>Arguments</key>
 			<dict>
 				<key>filename</key>
 				<string>%NAME%.dmg</string>
-				<key>url</key>
-				<string>https://unclack.app%match%</string>
 			</dict>
 			<key>Processor</key>
 			<string>URLDownloader</string>

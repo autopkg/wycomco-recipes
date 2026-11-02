@@ -41,7 +41,7 @@ This recipe requires com.github.jazzace.processors/TextSearcher to identify the 
 		</dict>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>2.3</string>
+	<string>2.6</string>
 	<key>ParentRecipe</key>
 	<string>com.github.wycomco.download.PDFStudio</string>
 	<key>Process</key>

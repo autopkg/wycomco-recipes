@@ -2,16 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Description</key>
-	<string>Imports the latest version of Easybell App into Munki.</string>
-	<key>Identifier</key>
-	<string>com.github.wycomco.munki.easybell</string>
+        <key>Description</key>
+        <string>Downloads the latest Keka version from GitHub and imports into Munki.</string>
+        <key>Identifier</key>
+        <string>com.github.wycomco.munki.Keka</string>
 	<key>Input</key>
 	<dict>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/%NAME%</string>
 		<key>NAME</key>
-		<string>easybell</string>
+		<string>Keka</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>catalogs</key>
@@ -21,11 +21,11 @@
 			<key>category</key>
 			<string>Utilities</string>
 			<key>description</key>
-			<string>Desktop client for the easybell server Cloud Telefonanlage Pro.</string>
+			<string>Keka is a free file archiving programme for macOS that can optionally encrypt archives. It can create many formats and reads even more, including exotic ones.</string>
 			<key>developer</key>
-			<string>Easybell GmbH</string>
+			<string>aOne</string>
 			<key>display_name</key>
-			<string>Easybell Desktop App</string>
+			<string>Keka</string>
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>unattended_install</key>
@@ -34,10 +34,8 @@
 			<true/>
 		</dict>
 	</dict>
-	<key>MinimumVersion</key>
-	<string>2.3</string>
 	<key>ParentRecipe</key>
-	<string>com.github.wycomco.download.easybell</string>
+	<string>com.github.hansen-m.download.Keka</string>
 	<key>Process</key>
 	<array>
 		<dict>
