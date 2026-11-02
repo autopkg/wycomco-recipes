@@ -21,9 +21,9 @@
 			<key>Arguments</key>
 			<dict>
 				<key>re_pattern</key>
-				<string>href="(https://www\.eposaudio\.com/globalassets/.*/eposconnect_(\d+\.\d+\.\d+\.\d+)\.pkg)"</string>
+				<string>href="(/globalassets/[^"]*/eposconnect_\d+\.\d+\.\d+\.\d+\.pkg)"</string>
 				<key>url</key>
-				<string>https://www.eposaudio.com/de/de/software/epos-connect</string>
+				<string>https://www.eposaudio.com/en-us/software/epos-connect/</string>
 			</dict>
 		</dict>
 		<dict>
@@ -34,7 +34,7 @@
 				<key>filename</key>
 				<string>%NAME%.pkg</string>
 				<key>url</key>
-				<string>%match%</string>
+				<string>https://www.eposaudio.com%match%</string>
 			</dict>
 		</dict>
 		<dict>
