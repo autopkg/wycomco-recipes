@@ -10,10 +10,10 @@ Set ARCH to an empty string for the Intel build (default) or to "-arm64" for the
 	<string>com.github.wycomco.download.tldv</string>
 	<key>Input</key>
 	<dict>
-		<key>NAME</key>
-		<string>tldv</string>
 		<key>ARCH</key>
 		<string></string>
+		<key>NAME</key>
+		<string>tldv</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>2.3</string>
