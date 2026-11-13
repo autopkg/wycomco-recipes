@@ -21,7 +21,7 @@
 				<key>filename</key>
 				<string>%NAME%.dmg</string>
 				<key>url</key>
-				<string>https://admin.nele.ai/download/nele-ai-mac.dmg</string>
+				<string>https://app.nele.ai/storage/auto-updates/nele-ai-mac.dmg</string>
 			</dict>
 			<key>Processor</key>
 			<string>URLDownloader</string>
